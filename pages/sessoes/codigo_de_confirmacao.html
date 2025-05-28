@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma de cursos</title>
+    <link rel="stylesheet" href="../../css/sessoes/codigo_de_confirmacao.css">
+    <link rel="shortcut icon" href="../../assets/img/logo.png" type="image/x-icon">
+</head>
+<body>
+    <div class="main">
+        <div class="img-login">
+          <div class="go-back">
+            <a href="./esqueceu_senha.html">Voltar </a>
+        </div>
+            <img src="../../assets/college project-rafiki.png" alt="">
+            <p>
+                Essa página fornece instruções claras sobre como os usuários podem redefinir suas senhas caso as
+                 esqueçam, e também oferece suporte caso encontrem problemas durante o processo de recuperação.
+            </p>
+        </div>
+        <div class="form">
+            <img class="logo" src="../../assets/img/logo.png" alt="">
+            <div class="form-content">
+                <h1>Código de Confirmação</h1>
+                <p>Para concluir o processo de recuperação de senha, por favor, insira o código 
+                  de confirmação que você recebeu no seu email.</p>
+                <div id="form">
+                    <div class="inputs"> 
+                        <input type="number" name="" id="n1"  maxlength="1">
+                        <input type="number" name="" id="n2"  maxlength="1">
+                        <input type="number" name="" id="n3"  maxlength="1">
+                        <input type="number" name="" id="n4"  maxlength="1">
+                    </div>
+                    <div class = "btn-form" >
+                      <a href="nova_senha.html">
+
+                        <button id="confirmar">
+                          Avançar
+                      </button>
+                      </a>
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+            // Seleciona todos os inputs com a classe 'inputs'
+        var inputs = document.querySelectorAll('.inputs input');
+
+        // Adiciona um ouvinte de eventos de entrada a cada input
+        inputs.forEach(function(input) {
+            input.addEventListener('input', function() {
+                // Se o valor do input for maior que 1, ajusta para apenas o primeiro caractere
+                if (this.value.length > 1) {
+                    this.value = this.value.slice(0, 1);
+                }
+            });
+        });
+    </script>
+    <script></script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendarios - Sistema de Inscrição</title>
+    <link rel="stylesheet" href="../../css/global.css">
+    <link rel="stylesheet" href="../../css/admin/admin-calendario.css">
+    <link rel="stylesheet" href="../../css/usuarios/table.css">
+    <link rel="stylesheet" href="../../css/usuarios/modal-inscricao.css">
+    <link rel="stylesheet" href="../../css/notificacao.css">
+   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Barra Lateral -->
+        <aside class="sidebar">
+            <img src="../../assets/img/logo-branco.png" alt="Logo do Instituto">
+            <h2 class="title-side-bar">30 de Setembro</h2>
+            <nav>
+                <ul>
+                    <li ><i data-lucide="circle-gauge"></i> <a href="admin-home.html">Análise</a></li>
+                    <li><i data-lucide="file-text"></i> <a href="admin-inscricoes.html">Inscrições</a> </li> 
+                    <li><i data-lucide="users"></i> <a href="">Avaliadores</a> </li> 
+                    <li><i data-lucide="book-text"></i> <a href="">Cursos</a> </li> 
+                    <li class="active"> <i data-lucide="calendar-days"></i>  <a href="#">Calendário</a> </li>
+                    <li><i data-lucide="settings"></i><a href="admin-definicoes.html">Configurações</a>  </li>
+                    <li class="logout"> <i data-lucide="log-out"></i><a href="../../index.html"> Sair do sistema</a> </li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <!-- Conteúdo Principal -->
+        <main class="content">
+            <header>
+                <div class="title-header">
+                    <h1>Calendarios</h1>
+                </div>
+                <div class="container-notification">
+                    <div id="notificacao-modal-container"></div>
+                </div>
+                <div class="user-info">
+                    <i onclick="openModalNotifications()" class="fa-solid fa-bell notificacao" id="notificacao-inscricao-abrirModal"></i>
+                    <i data-lucide="user"></i>
+                    <span>Asidaini Pinto</span><span>(Administrador)</span>
+                </div>
+            </header>
+          <!-- Barra de Pesquisa -->
+          <div class="search-bar">
+            <input type="text" placeholder="Pesquisar">
+            <button class="filter-btn"><i class="fa-solid fa-filter"></i> Filtrar pesquisa</button>
+        </div>
+       <hr>
+       <section class="datas-publicadas">
+        <div class="header">
+            <h2>Datas publicadas</h2>
+            <button class="btn-publicar">Publicar Evento</button>
+        </div>
+        <div class="eventos-grid">
+            <div class="evento-card">
+                <div class="card-actions">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <i class="fa-solid fa-trash"></i>
+                </div>
+                <h3 class="evento-titulo">Inscrição</h3>
+                <p><strong>Data:</strong> 15 de Agosto de 2024</p>
+                <p><strong>Local:</strong> Centro de Treinamento de Aviação, São Paulo</p>
+                <p><strong>Inscrições Até:</strong> 1 de Agosto de 2024</p>
+            </div>
+            <div class="evento-card">
+                <div class="card-actions">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <i class="fa-solid fa-trash"></i>
+                </div>
+                <h3 class="evento-titulo">Matrículas</h3>
+                <p><strong>Data:</strong> 15 de Agosto de 2024</p>
+                <p><strong>Local:</strong> Escola 30 de Setembro</p>
+                <p><strong>Inscrições Até:</strong> 1 de Agosto de 2024</p>
+            </div>
+            <div class="evento-card">
+                <div class="card-actions">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <i class="fa-solid fa-trash"></i>
+                </div>
+                <h3 class="evento-titulo">Teste de admissão</h3>
+                <p><strong>Data:</strong> 15 de Agosto de 2024</p>
+                <p><strong>Local:</strong> Escola 30 de Setembro</p>
+                <p><strong>Inscrições Até:</strong> 1 de Agosto de 2024</p>
+            </div>
+            <div class="evento-card">
+                <div class="card-actions">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <i class="fa-solid fa-trash"></i>
+                </div>
+                <h3 class="evento-titulo">Actividade Aleatória</h3>
+                <p><strong>Data:</strong> 15 de Agosto de 2024</p>
+                <p><strong>Local:</strong> Escola 30 de Setembro</p>
+                <p><strong>Inscrições Até:</strong> 1 de Agosto de 2024</p>
+            </div>
+            <div class="evento-card">
+                <div class="card-actions">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <i class="fa-solid fa-trash"></i>
+                </div>
+                <h3 class="evento-titulo">Inscrição</h3>
+                <p><strong>Data:</strong> 15 de Agosto de 2024</p>
+                <p><strong>Local:</strong> Centro de Treinamento de Aviação, São Paulo</p>
+                <p><strong>Inscrições Até:</strong> 1 de Agosto de 2024</p>
+            </div>
+            <div class="evento-card">
+                <div class="card-actions">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <i class="fa-solid fa-trash"></i>
+                </div>
+                <h3 class="evento-titulo">Matrículas</h3>
+                <p><strong>Data:</strong> 15 de Agosto de 2024</p>
+                <p><strong>Local:</strong> Escola 30 de Setembro</p>
+                <p><strong>Inscrições Até:</strong> 1 de Agosto de 2024</p>
+            </div>
+            <div class="evento-card">
+                <div class="card-actions">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <i class="fa-solid fa-trash"></i>
+                </div>
+                <h3 class="evento-titulo">Teste de admissão</h3>
+                <p><strong>Data:</strong> 15 de Agosto de 2024</p>
+                <p><strong>Local:</strong> Escola 30 de Setembro</p>
+                <p><strong>Inscrições Até:</strong> 1 de Agosto de 2024</p>
+            </div>
+            <div class="evento-card">
+                <div class="card-actions">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <i class="fa-solid fa-trash"></i>
+                </div>
+                <h3 class="evento-titulo">Actividade Aleatória</h3>
+                <p><strong>Data:</strong> 15 de Agosto de 2024</p>
+                <p><strong>Local:</strong> Escola 30 de Setembro</p>
+                <p><strong>Inscrições Até:</strong> 1 de Agosto de 2024</p>
+            </div>
+        </div>
+    </section>
+        
+        </main>
+    </div>
+
+    <!-- Modal de Inscrição -->
+    <div id="inscricao-modal-container"></div>
+
+    <!-- Inicialização dos scripts -->
+    <script src="../../js/usuarios/modalConfig.js"></script>
+    
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

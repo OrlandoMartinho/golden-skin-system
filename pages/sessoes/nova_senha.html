@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma de cursos</title>
+    <link rel="stylesheet" href="../../css/sessoes/nova_senha.css">
+    <link rel="shortcut icon" href="../../assets/img/logo.png" type="image/x-icon">
+</head>
+<body>
+    <div class="main">
+        <div class="img-login">
+            <img src="../../assets/college project-rafiki.png" alt="">
+            <p>
+                Essa página fornece instruções claras sobre como os usuários podem redefinir suas senhas caso as
+                 esqueçam, e também oferece suporte caso encontrem problemas durante o processo de recuperação.
+            </p>
+        </div>
+        <div class="form">
+            <img class="logo" src="../../assets/img/logo.png" alt="">
+            <div class="form-content">
+                <h1>Esqueceu a Senha?</h1>
+                <p>Para avançar, por favor insira a sua nova senha</p>
+                <div id="form">
+                    <div class="input-group">
+                        <input type="password" id="senha" placeholder="Insira sua senha">
+                        <button type="button" onclick="togglePassword('senha')">👁️</button>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="re_senha" placeholder="Reintroduza sua senha">
+                        <button type="button" onclick="togglePassword('re_senha')">👁️</button>
+                    </div>
+                    <button class="button">
+                        <a href="home.html" style="color: #fff;">Entrar</a>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+  function togglePassword(id) {
+      let input = document.getElementById(id);
+      if (input.type === "password") {
+          input.type = "text";
+      } else {
+          input.type = "password";
+      }
+  }
+</script>
+</html>

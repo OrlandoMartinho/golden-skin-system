@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendários - Sistema de Inscrição</title>
+    <link rel="stylesheet" href="../../css/usuarios/home.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../../css/global.css">
+    <link rel="stylesheet" href="../../css/usuarios/table.css">
+    <link rel="stylesheet" href="../../css/usuarios/modal-inscricao.css">
+    <link rel="stylesheet" href="../../css/notificacao.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+ 
+</head>
+<body>
+    <div class="container">
+        <!-- Barra Lateral -->
+        <aside class="sidebar">
+            <img src="../../assets/img/logo-branco.png" alt="">
+            <h2 class="title-side-bar">30 de Setembro</h2>
+            <nav>
+                <ul>
+                    <li class="active"><i data-lucide="calendar-days"></i> Calendário</li>
+                    <a href="inscricoes.html"><li><i data-lucide="file-text"></i> Inscrições</li> </a>   
+                    
+                    <a href="definicoes.html"><li><i data-lucide="settings"></i> Configurações</li></a>
+                    <li class="logout"><i data-lucide="log-out"></i> Sair do sistema</li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <!-- Conteúdo Principal -->
+        <main class="content">
+            <header>
+
+                <div class="title-header">
+                    <h1>Calendários</h1>
+                    <p>Controle tudo sobre os calendários</p>
+                </div>
+
+                <div class="container-notification">
+                    <div id="notificacao-modal-container"></div>
+                </div>
+             
+                <div class="user-info">
+                    
+                    <i onclick="openModalNotifications()" class="fa-solid fa-bell  notificacao" id="notificacao-inscricao-abrirModal"></i>
+                   
+                    <i data-lucide="user"></i>
+                    <span>Asidaini Pinto</span><span>(Candidato)</span>
+                </div>
+            </header>
+            
+            <!-- Barra de Pesquisa -->
+            <div class="search-bar">
+                <input type="text" placeholder="Pesquisar">
+                <button class="filter-btn"><i class="fa-solid fa-filter"></i> Filtrar pesquisa</button>
+            </div>
+           <hr>
+            <!-- Tabela de Calendários -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Requisitos</th>
+                        <th>Curso</th>
+                        <th>Data de Término</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>01</td>
+                        <td>BI, Certificado</td>
+                        <td>Regulamentação da Aviação Civil</td>
+                        <td>15/08/2024</td>
+                        <td><button class="apply-btn" onclick="openModalInscricao()"><i class="fa-solid fa-user-plus" ></i> Candidatar-se</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+
+    <!-- Aqui será carregado o modal -->
+
+            <div id="inscricao-modal-container"></div> <!-- O modal será carregado aqui -->
+
+    <!-- Inicialização dos ícones da Lucide -->
+   
+    <script src="../../js/usuarios/modalConfig.js"></script>
+    
+  
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

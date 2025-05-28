@@ -1,0 +1,135 @@
+/* Estilos gerais do modal */
+dialog#seguranca-modalDialog {
+    width: 400px;
+    padding: 20px;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    font-family: "Arial", sans-serif;
+    background: #fff;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Exibe o modal quando aberto */
+dialog[open]#seguranca-modalDialog {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Cabeçalho do modal */
+.seguranca-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.seguranca-modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.seguranca-close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #ff4b4b;
+}
+
+/* Estilos das abas */
+.seguranca-tabs {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.seguranca-tab {
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #555;
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s, border-bottom 0.3s;
+}
+
+.seguranca-tab.ativa {
+    color: #ff4b4b;
+    border-bottom: 2px solid #ff4b4b;
+}
+
+/* Conteúdo das abas */
+.seguranca-tab-content {
+    display: none;
+    padding: 15px;
+}
+
+.seguranca-tab-content.ativo {
+    display: block;
+}
+
+/* Estilos do formulário */
+.seguranca-form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.seguranca-form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.seguranca-form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Botões */
+.seguranca-btn {
+    width: 100%;
+    padding: 10px;
+    background: #ff4b4b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.seguranca-btn:hover {
+    background: #d63c3c;
+}
+
+/* Botão de excluir conta */
+.seguranca-btn-danger {
+    width: 100%;
+    padding: 10px;
+    background: #b30000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.seguranca-btn-danger:hover {
+    background: #800000;
+}

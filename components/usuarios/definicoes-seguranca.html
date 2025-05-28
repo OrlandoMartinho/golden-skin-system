@@ -1,0 +1,48 @@
+<dialog id="seguranca-modalDialog">
+    <div class="seguranca-modal">
+        <header class="seguranca-modal-header">
+            <h2>Definições Gerais</h2>
+            <button class="seguranca-close-btn" id="seguranca-closeModal" aria-label="Fechar">&times;</button>
+        </header>
+
+        <!-- Abas de navegação -->
+        <div class="seguranca-tabs">
+            <div class="seguranca-tab ativa" data-tab="tab-email">Alterar Email</div>
+            <div class="seguranca-tab" data-tab="tab-password">Alterar Senha</div>
+            <div class="seguranca-tab" data-tab="tab-eliminar">Eliminar Conta</div>
+        </div>
+
+        <!-- Conteúdo das abas -->
+        <div class="seguranca-tab-content ativo" id="tab-email">
+            <form id="seguranca-form-email">
+                <div class="seguranca-form-group">
+                    <label for="seguranca-email">Novo Email</label>
+                    <input type="email" id="seguranca-email" name="email" placeholder="Digite seu novo email" required>
+                </div>
+
+                <button class="seguranca-btn" type="submit">Atualizar Email</button>
+            </form>
+        </div>
+
+        <div class="seguranca-tab-content" id="tab-password">
+            <form id="seguranca-form-password">
+                <div class="seguranca-form-group">
+                    <label for="seguranca-senha-atual">Senha Atual</label>
+                    <input type="password" id="seguranca-senha-atual" name="senha_atual" placeholder="Digite sua senha atual" required>
+                </div>
+
+                <div class="seguranca-form-group">
+                    <label for="seguranca-senha-nova">Nova Senha</label>
+                    <input type="password" id="seguranca-senha-nova" name="senha_nova" placeholder="Digite sua nova senha" required>
+                </div>
+
+                <button class="seguranca-btn" type="submit">Alterar Senha</button>
+            </form>
+        </div>
+
+        <div class="seguranca-tab-content" id="tab-eliminar">
+            <p>Tem certeza de que deseja excluir sua conta? Essa ação não pode ser desfeita.</p>
+            <button class="seguranca-btn-danger" id="seguranca-eliminar-conta">Excluir Conta</button>
+        </div>
+    </div>
+</dialog>
