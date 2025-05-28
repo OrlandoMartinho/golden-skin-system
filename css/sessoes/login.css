@@ -19,6 +19,7 @@ html {
 
 body {
   overflow-x: hidden;
+  overflow-y: hidden;
   background-color: var(--color-background);
 }
 
@@ -34,10 +35,12 @@ p {
 }
 
 
-
-.img-login img {
+.img-login{
   width: 100%;
-  height: auto;
+}
+.img-login img {
+  width: 100vw;
+  height: 100vw;
 
  
  
@@ -197,5 +200,21 @@ a:hover {
   
   .form input, .btn-form button {
     padding: 1.2rem 1rem;
+  }
+}
+
+.login-img img {
+  width: 50vw;
+  height: 100vh;
+}
+
+/* Adicione esta media query no final do seu CSS */
+@media (max-width: 767px) {
+  .login-img img {
+    display: none;
+  }
+  
+  .form {
+    width: 100%;
   }
 }
