@@ -1,55 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma de Inscrição</title>
+    <title>Pele Douro - Cadastro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/sessoes/cadastro.css">
-    <link rel="shortcut icon" href="../../assets/img/logo.png" type="image/x-icon">
-    
-    <link rel="stylesheet" href="../../css/global.css">
 </head>
 <body>
-    <div class="main">
-        <div class="login">
-            <div class="go-back">
-                <a href="../../index.html">Voltar para Login</a>
-            </div>
-            <div class="img-login"> 
-                <img src="../../assets/college project-pana.png" alt="">
-                <p>
-                  Crie sua conta para acessar o sistema e realizar sua inscrição de forma rápida e segura. Preencha os campos obrigatórios com suas informações corretas e crie uma senha forte. 
-                  Após o cadastro, você poderá fazer login e acompanhar todo o processo.
-                </p>     
-            </div>
-        </div>
+    <main class="main">
         <div class="form">
-            <img class="logo" src="../../assets/img/logo.png" alt="">
+            <img class="logo" src="../../assets/img/WhatsApp_Image_2024-10-15_at_21.21.30-removebg-preview.png" alt="Logo Pele Douro">
             <div class="form-content">
                 <h1>Cadastro</h1>
-                <p>Cria uma conta para ter acesso ao calendario de incrição</p>
-                <div class="form2" action="">
+                <p>Crie sua conta na Pele Douro e descubra um mundo de cuidados para sua pele e cabelo!</p>
+                
+                <form>
+                    <div class="form-group">
+                        
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" placeholder="Digite o seu nome" required>
+                        </div>
+                    </div>
                     
-                    <div>
-                        <input type="text" id="nome" placeholder="Seu nome">
+                    <div class="form-group">
+                       
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" placeholder="Digite o seu email" required>
+                        </div>
                     </div>
-                    <div>
-                        <input type="email" name="" id="email" placeholder="Seu E-mail" >
+                    
+                    <div class="form-group">
+                     
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" placeholder="Criar uma Senha" required>
+                        </div>
                     </div>
-                    <div>
-                        <input type="password" name="" id="senha1" placeholder="Sua senha">
+                    
+                    <div class="form-group">
+                      
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" placeholder="Confirmar Senha" required>
+                        </div>
                     </div>
-                    <div>
-                        <input type="password" name="" id="senha2" placeholder="Confirmar senha">
+                    
+                    <div class="forgot-password">
+                        <a href="#">Esqueceu sua senha? Recuperar senha</a>
                     </div>
+                    
                     <div class="btn-form">
-                        <button id="botao_cadastrar">Cadastrar</button>
+                        <button type="submit">Criar Conta</button>
                     </div>
-                    <p class="cadastrar">Ao se registrar, você aceitar os nosso termos de uso e a política de <span>privacidade</span> </a></p>
-                </div>
+                    
+                    <p class="login-link">Já tem uma conta? <a href="../../index.html">Fazer Login</a></p>
+                </form>
             </div>
         </div>
-    </div>
+        
+        <div class="img-register">
+            <img src="../../assets/img/fundo-register.png" alt="Produtos de beleza Pele Douro">
+        </div>
+    </main>
 </body>
-<script></script>
 </html>

@@ -19,7 +19,6 @@ html {
 
 body {
   overflow-x: hidden;
-  overflow-y: hidden;
   background-color: var(--color-background);
 }
 
@@ -34,16 +33,14 @@ p {
   justify-content: center;
 }
 
-
-.img-login{
+.img-login {
   width: 100%;
 }
-.img-login img {
-  width: 100vw;
-  height: 100vw;
 
- 
- 
+.img-login img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
 }
 
 .form {
@@ -87,7 +84,7 @@ p {
   margin: 1rem 0;
   border: none;
   outline: none;
-  border: 2px solid var(--color-secondary);
+  border: 2px solid #161616;
   transition: var(--transition);
 }
 
@@ -174,16 +171,27 @@ a:hover {
   
   .img-login {
     width: 50%;
-    padding: 0 2rem;
+    height: 100vh;
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  .img-login img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   
   .form {
     width: 50%;
     padding: 0 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   
   .logo {
-    padding-top: 6rem;
+    padding-top: 0;
   }
 }
 
@@ -203,18 +211,36 @@ a:hover {
   }
 }
 
-.login-img img {
-  width: 50vw;
-  height: 100vh;
+/* Estilo para os inputs com ícones */
+.input-with-icon {
+  position: relative;
+  margin: 1rem 0;
 }
 
-/* Adicione esta media query no final do seu CSS */
+.input-with-icon i {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-secondary);
+  font-size: 1.4rem;
+}
+
+.input-with-icon input {
+  width: 100%;
+  padding: 1.4rem 1rem 1.4rem 3rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--color-secondary);
+  outline: none;
+  transition: var(--transition);
+}
+
+.input-with-icon input:focus + i {
+  color: #6b4d20;
+}
+
 @media (max-width: 767px) {
-  .login-img img {
+  .img-login {
     display: none;
-  }
-  
-  .form {
-    width: 100%;
   }
 }
