@@ -58,6 +58,7 @@ body {
 .logo {
   display: block;
   margin: 1vh auto 0;
+  margin-top: -25vh;
   max-width: 150px;
   transition: var(--transition);
   padding-top: 2rem;
@@ -229,3 +230,28 @@ a:hover {
     padding-left: 3rem;
   }
 }
+
+
+
+        .code-inputs {
+            display: flex;
+            justify-content: space-between;
+            gap: 1px;
+            margin-bottom: 20px;
+        }
+        .code-inputs input {
+            width: 80px;
+            height: 80px;
+            text-align: center;
+            font-size: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            -moz-appearance: textfield; /* Firefox */
+        }
+        /* Remove as setas dos inputs number no Chrome/Safari */
+        .code-inputs input::-webkit-outer-spin-button,
+        .code-inputs input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+   

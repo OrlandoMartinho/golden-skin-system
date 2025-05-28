@@ -6,6 +6,7 @@
     <title>Pele Douro - Recuperação de Senha</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/sessoes/recovery.css">
+    
 </head>
 <body>
     <main class="main">
@@ -17,9 +18,11 @@
                 
                 <form>
                     <div class="form-group">
-                        <div class="input-with-icon">
-                            <i class="fas fa-key"></i>
-                            <input type="text" placeholder="Confirma o código" required>
+                        <div class="code-inputs">
+                            <input type="number" min="0" max="9" maxlength="1" required>
+                            <input type="number" min="0" max="9" maxlength="1" required>
+                            <input type="number" min="0" max="9" maxlength="1" required>
+                            <input type="number" min="0" max="9" maxlength="1" required>
                         </div>
                     </div>
                     
@@ -36,5 +39,36 @@
             <img src="../../assets/img/fundo-register.png" alt="Produtos de beleza Pele Douro">
         </div>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('.code-inputs input');
+            
+            inputs.forEach((input, index) => {
+                // Move para o próximo input quando um número é digitado
+                input.addEventListener('input', function() {
+                    if (this.value.length === 1 && index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                    
+                    // Garante que o valor não ultrapasse 1 dígito
+                    if (this.value.length > 1) {
+                        this.value = this.value.slice(0, 1);
+                    }
+                });
+                
+                // Permite navegar entre os inputs
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
+                        inputs[index - 1].focus();
+                    } else if (e.key === 'ArrowLeft' && index > 0) {
+                        inputs[index - 1].focus();
+                    } else if (e.key === 'ArrowRight' && index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
