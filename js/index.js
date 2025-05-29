@@ -1,23 +1,4 @@
- // Navbar Scroll Effect
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
-            if (window.scrollY > 100) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-
-        // Mobile Menu Toggle
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-
-        hamburger.addEventListener('click', function() {
-            navLinks.classList.toggle('active');
-            hamburger.innerHTML = navLinks.classList.contains('active') ? 
-                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
-        });
-
+ //
        // Smooth Scrolling for Anchor Links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
@@ -70,14 +51,7 @@
          // Loader Script Premium
         window.addEventListener('load', function() {
             const loader = document.querySelector('.loader');
-            // Adiciona classe fade-out após 2.5 segundos (tempo para animação completa)
-            setTimeout(function() {
-                loader.classList.add('fade-out');
-                // Remove o loader do DOM após a animação terminar
-                setTimeout(function() {
-                    loader.style.display = 'none';
-                }, 800); // Deve corresponder à duração da transição
-            }, 2500);
+           
             
             // Adiciona folhas caindo aleatoriamente
             setInterval(function() {
@@ -96,4 +70,19 @@
             }, 500);
         });
 
-        
+               // Adicionando funcionalidade para o menu mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            menuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+            
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+        });

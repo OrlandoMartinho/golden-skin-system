@@ -1,98 +1,370 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendários - Sistema de Inscrição</title>
-    <link rel="stylesheet" href="../../css/usuarios/home.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="../../css/global.css">
-    <link rel="stylesheet" href="../../css/usuarios/table.css">
-    <link rel="stylesheet" href="../../css/usuarios/modal-inscricao.css">
-    <link rel="stylesheet" href="../../css/notificacao.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
- 
+    <title>Pele Douro - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/usuarios/user-home.css">
 </head>
 <body>
     <div class="container">
-        <!-- Barra Lateral -->
-        <aside class="sidebar">
-            <img src="../../assets/img/logo-branco.png" alt="">
-            <h2 class="title-side-bar">30 de Setembro</h2>
-            <nav>
-                <ul>
-                    <li class="active"><i data-lucide="calendar-days"></i> Calendário</li>
-                    <a href="inscricoes.html"><li><i data-lucide="file-text"></i> Inscrições</li> </a>   
-                    
-                    <a href="definicoes.html"><li><i data-lucide="settings"></i> Configurações</li></a>
-                    <li class="logout"><i data-lucide="log-out"></i> Sair do sistema</li>
-                </ul>
-            </nav>
-        </aside>
+        <div class="overlay"></div>
         
-        <!-- Conteúdo Principal -->
-        <main class="content">
-            <header>
-
-                <div class="title-header">
-                    <h1>Calendários</h1>
-                    <p>Controle tudo sobre os calendários</p>
-                </div>
-
-                <div class="container-notification">
-                    <div id="notificacao-modal-container"></div>
-                </div>
-             
-                <div class="user-info">
-                    
-                    <i onclick="openModalNotifications()" class="fa-solid fa-bell  notificacao" id="notificacao-inscricao-abrirModal"></i>
-                   
-                    <i data-lucide="user"></i>
-                    <span>Asidaini Pinto</span><span>(Candidato)</span>
-                </div>
-            </header>
-            
-            <!-- Barra de Pesquisa -->
-            <div class="search-bar">
-                <input type="text" placeholder="Pesquisar">
-                <button class="filter-btn"><i class="fa-solid fa-filter"></i> Filtrar pesquisa</button>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-spa"></i>
+                <span>Pele Douro</span>
             </div>
-           <hr>
-            <!-- Tabela de Calendários -->
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Requisitos</th>
-                        <th>Curso</th>
-                        <th>Data de Término</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>01</td>
-                        <td>BI, Certificado</td>
-                        <td>Regulamentação da Aviação Civil</td>
-                        <td>15/08/2024</td>
-                        <td><button class="apply-btn" onclick="openModalInscricao()"><i class="fa-solid fa-user-plus" ></i> Candidatar-se</button></td>
-                    </tr>
-                </tbody>
-            </table>
+            
+            <a href="#" class="nav-item active">
+                <i class="far fa-calendar-alt"></i>
+                <span>Agendamentos</span>
+            </a>
+            
+            <a href="#" class="nav-item">
+                <i class="fas fa-store"></i>
+                <span>Loja de Produtos</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <i class="far fa-comments"></i>
+                <span>Chat</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Serviços</span>
+            </a>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="page-title">
+                    <h1>Agendamentos</h1>
+                    <p>Agenda os serviços que combinam com você</p>
+                </div>
+                <div class="header-icons">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">2</span>
+                    </div>
+                    <div class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">3</span>
+                    </div>
+                    <div class="user-profile dropdown">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User">
+                        <span>Admin <i class="fas fa-chevron-down"></i></span>
+                        <div class="dropdown-content">
+                            <a href="#"><i class="fas fa-cog"></i> Definições</a>
+                            <a href="#"><i class="fas fa-sign-out-alt"></i> Terminar sessão</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barra de pesquisa e filtro -->
+            <div class="search-filter-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Pesquisar agendamentos...">
+                </div>
+                <div class="filter-dropdown">
+                    <select>
+                        <option value="">Todos os status</option>
+                        <option value="ativo">Ativo</option>
+                        <option value="pendente">Pendente</option>
+                        <option value="concluido">Concluído</option>
+                    </select>
+                </div>
+                <div class="date-filter">
+                    <input type="date" id="filter-date">
+                </div>
+            </div>
+                    <hr>
+            <section class="section-agendaments">
+                <!-- Card 1 -->
+                <div class="card">
+                    <h3>Detalhes do agendamento</h3>
+                    <label>Data e Hora</label>
+                    <div class="field">12/01/2025 - 14:30</div>
+                    <label>Tipo de Serviço</label>
+                    <div class="field">Spa & Relaxamento em Casa</div>
+                    <label>Informações do serviço</label>
+                    <p class="info">
+                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
+                    </p>
+                    <label>Status</label>
+                    <div class="status ativo">Ativo</div>
+                    <div class="buttons">
+                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
+                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
+                    </div>
+                </div>
+
+
+                <!-- Card 1 -->
+                <div class="card">
+                    <h3>Detalhes do agendamento</h3>
+                    <label>Data e Hora</label>
+                    <div class="field">12/01/2025 - 14:30</div>
+                    <label>Tipo de Serviço</label>
+                    <div class="field">Spa & Relaxamento em Casa</div>
+                    <label>Informações do serviço</label>
+                    <p class="info">
+                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
+                    </p>
+                    <label>Status</label>
+                    <div class="status ativo">Ativo</div>
+                    <div class="buttons">
+                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
+                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
+                    </div>
+                </div>
+
+
+                <!-- Card 1 -->
+                <div class="card">
+                    <h3>Detalhes do agendamento</h3>
+                    <label>Data e Hora</label>
+                    <div class="field">12/01/2025 - 14:30</div>
+                    <label>Tipo de Serviço</label>
+                    <div class="field">Spa & Relaxamento em Casa</div>
+                    <label>Informações do serviço</label>
+                    <p class="info">
+                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
+                    </p>
+                    <label>Status</label>
+                    <div class="status ativo">Ativo</div>
+                    <div class="buttons">
+                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
+                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
+                    </div>
+                </div>
+
+
+
+                <!-- Card 1 -->
+                <div class="card">
+                    <h3>Detalhes do agendamento</h3>
+                    <label>Data e Hora</label>
+                    <div class="field">12/01/2025 - 14:30</div>
+                    <label>Tipo de Serviço</label>
+                    <div class="field">Spa & Relaxamento em Casa</div>
+                    <label>Informações do serviço</label>
+                    <p class="info">
+                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
+                    </p>
+                    <label>Status</label>
+                    <div class="status ativo">Ativo</div>
+                    <div class="buttons">
+                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
+                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
+                    </div>
+                </div>
+
+
+
+                <!-- Card 1 -->
+                <div class="card">
+                    <h3>Detalhes do agendamento</h3>
+                    <label>Data e Hora</label>
+                    <div class="field">12/01/2025 - 14:30</div>
+                    <label>Tipo de Serviço</label>
+                    <div class="field">Spa & Relaxamento em Casa</div>
+                    <label>Informações do serviço</label>
+                    <p class="info">
+                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
+                    </p>
+                    <label>Status</label>
+                    <div class="status ativo">Ativo</div>
+                    <div class="buttons">
+                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
+                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
+                    </div>
+                </div>
+                <!-- Card 1 -->
+                <div class="card">
+                    <h3>Detalhes do agendamento</h3>
+                    <label>Data e Hora</label>
+                    <div class="field">12/01/2025 - 14:30</div>
+                    <label>Tipo de Serviço</label>
+                    <div class="field">Spa & Relaxamento em Casa</div>
+                    <label>Informações do serviço</label>
+                    <p class="info">
+                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
+                    </p>
+                    <label>Status</label>
+                    <div class="status ativo">Ativo</div>
+                    <div class="buttons">
+                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
+                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="card">
+                    <h3>Detalhes do agendamento</h3>
+                    <label>Data e Hora</label>
+                    <div class="field">15/01/2025 - 10:00</div>
+                    <label>Tipo de Serviço</label>
+                    <div class="field">Massagem Terapêutica</div>
+                    <label>Informações do serviço</label>
+                    <p class="info">
+                        Massagem profissional para alívio de tensões musculares e relaxamento profundo.
+                    </p>
+                    <label>Status</label>
+                    <div class="status pendente">Pendente</div>
+                    <div class="buttons">
+                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
+                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="card">
+                    <h3>Detalhes do agendamento</h3>
+                    <label>Data e Hora</label>
+                    <div class="field">20/01/2025 - 16:45</div>
+                    <label>Tipo de Serviço</label>
+                    <div class="field">Tratamento Facial Premium</div>
+                    <label>Informações do serviço</label>
+                    <p class="info">
+                        Tratamento completo para rejuvenescimento e hidratação facial profunda.
+                    </p>
+                    <label>Status</label>
+                    <div class="status concluido">Concluído</div>
+                    <div class="buttons">
+                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
+                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
+                    </div>
+                </div>
+            </section>
         </main>
+
+        <!-- Modal de Exclusão -->
+        <div id="excluir-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('excluir-modal')">&times;</span>
+                <h3>Confirmar Exclusão</h3>
+                <p>Tem certeza que deseja excluir este agendamento?</p>
+                <div class="modal-buttons">
+                    <button class="cancel" onclick="closeModal('excluir-modal')">Cancelar</button>
+                    <button class="confirm">Confirmar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Reagendamento -->
+        <div id="reagendar-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('reagendar-modal')">&times;</span>
+                <h3>Reagendar Serviço</h3>
+                <div class="form-group">
+                    <label>Nova Data</label>
+                    <input type="date">
+                </div>
+                <div class="form-group">
+                    <label>Novo Horário</label>
+                    <input type="time">
+                </div>
+                <div class="modal-buttons">
+                    <button class="cancel" onclick="closeModal('reagendar-modal')">Cancelar</button>
+                    <button class="confirm">Confirmar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notificações Dropdown -->
+        <div class="notifications-dropdown">
+            <div class="notification-item">
+                <i class="fas fa-calendar-check"></i>
+                <div>
+                    <p>Novo agendamento confirmado</p>
+                    <small>10 minutos atrás</small>
+                </div>
+            </div>
+            <div class="notification-item">
+                <i class="fas fa-shopping-cart"></i>
+                <div>
+                    <p>Seu pedido foi enviado</p>
+                    <small>Ontem, 15:30</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carrinho Dropdown -->
+        <div class="cart-dropdown">
+            <div class="cart-item">
+                <img src="https://via.placeholder.com/50" alt="Produto">
+                <div>
+                    <p>Creme Hidratante</p>
+                    <small>1x R$ 59,90</small>
+                </div>
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="cart-item">
+                <img src="https://via.placeholder.com/50" alt="Produto">
+                <div>
+                    <p>Óleo Corporal</p>
+                    <small>2x R$ 39,90</small>
+                </div>
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="cart-total">
+                <p>Total: R$ 139,70</p>
+                <button>Finalizar Compra</button>
+            </div>
+        </div>
     </div>
 
-    <!-- Aqui será carregado o modal -->
-
-            <div id="inscricao-modal-container"></div> <!-- O modal será carregado aqui -->
-
-    <!-- Inicialização dos ícones da Lucide -->
-   
-    <script src="../../js/usuarios/modalConfig.js"></script>
-    
-  
     <script>
-        lucide.createIcons();
+        // Funções para os modais
+        function openModal(id) {
+            document.getElementById(id).style.display = 'block';
+            document.querySelector('.overlay').style.display = 'block';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+            document.querySelector('.overlay').style.display = 'none';
+        }
+
+        // Dropdown do usuário
+        document.querySelector('.user-profile').addEventListener('click', function() {
+            this.querySelector('.dropdown-content').classList.toggle('show');
+        });
+
+        // Fechar dropdowns ao clicar fora
+        window.onclick = function(event) {
+            if (!event.target.matches('.user-profile') && !event.target.matches('.user-profile *')) {
+                var dropdowns = document.querySelectorAll('.dropdown-content');
+                dropdowns.forEach(function(dropdown) {
+                    if (dropdown.classList.contains('show')) {
+                        dropdown.classList.remove('show');
+                    }
+                });
+            }
+        }
+
+        // Menu toggle para mobile
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+            document.querySelector('.overlay').style.display = 
+                document.querySelector('.overlay').style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Fechar sidebar ao clicar no overlay
+        document.querySelector('.overlay').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.remove('active');
+            this.style.display = 'none';
+        });
     </script>
 </body>
 </html>
