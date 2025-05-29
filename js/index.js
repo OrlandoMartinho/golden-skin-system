@@ -87,7 +87,7 @@
                 leaf.style.animationDuration = (Math.random() * 2 + 2) + 's';
                 leaf.style.fontSize = (Math.random() * 10 + 18) + 'px';
                 leaf.innerHTML = '<i class="fas fa-leaf"></i>';
-                loader.querySelector('.loader-content').appendChild(leaf);
+               
                 
                 // Remove a folha após a animação terminar
                 setTimeout(function() {
