@@ -1,44 +1,417 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma de Cursos</title>
-    <link rel="stylesheet" href="css/sessoes/login.css">
-    <link rel="shortcut icon" href="assets/img/WhatsApp_Image_2024-10-15_at_21.21.30-removebg-preview.png" type="image/x-icon">
+    <title>Pele Douro - Beleza Natural</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-    <main class="main">
-        <section class="form">
-            <img class="logo" src="assets/img/WhatsApp_Image_2024-10-15_at_21.21.30-removebg-preview.png" alt="Logo da plataforma">
-            <div class="form-content">
-                <h1>Login</h1>
-                <p>Acesse sua conta para continuar sua jornada de beleza natural.</p>
-                <form action="#" method="post">
-                    <div class="input-with-icon">
-                        <i class="fas fa-envelope" aria-hidden="true"></i>
-                        <input type="email" name="email" id="email" placeholder="Seu E-mail" required autofocus="false">
-                    </div>
-                    <div class="input-with-icon">
-                        <i class="fas fa-lock" aria-hidden="true"></i>
-                        <input type="password" name="senha" id="senha" placeholder="Sua senha" required autofocus ="false">
-                    </div>
-                    <div class="forgot-password">
-                        <a href="pages/sessoes/esqueceu_senha.html">Esqueceu a sua senha?</a>
-                    </div>
-                    <div class="btn-form">
-                        <button type="submit" id="entrar">Entrar</button>
-                    </div>
-                    <p class="cadastrar">Ainda não tem uma conta? <a href="pages/sessoes/cadastro.html">Criar uma conta</a></p>
-                </form>
-            </div>
-        </section>
-       
-        <div class="img-login">
-            <img src="assets/img/99a37bb3-8fa7-4f0e-8b99-1e0ca8398540.png" alt="Mulher utilizando produtos de beleza natural">
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <i class="fas fa-leaf"></i> Pele Douro
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#home">Página Inicial</a></li>
+                    <li><a href="#about">Sobre Nós</a></li>
+                    <li><a href="#services">Serviços</a></li>
+                    <li><a href="#plans">Planos</a></li>
+                    <li><a href="#gallery">Galeria</a></li>
+                    <li><a href="#products">Produtos</a></li>
+                    <li><a href="#contact">Contacto</a></li>
+                    <li><a href="pages/sessoes/cadastro.html">Entrar</a></li>
+                </ul>
+
+ 
+                   
+                <div class="hamburger">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
         </div>
-    </main>
-    <script src="js/sessoes/login.js"></script>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Beleza Natural Inspirada no Douro</h1>
+            <p>Produtos cosméticos naturais e sustentáveis, formulados com ingredientes puros da região do Douro para uma pele radiante e saudável.</p>
+            <a href="#products" class="btn">Conheça Nossos Produtos</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="text-center">Sobre Nós</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>A Pele Douro nasceu da paixão por cosméticos naturais e do desejo de criar produtos que respeitam a pele e o meio ambiente.</p>
+                    <p>Inspirados na riqueza da região do Douro, utilizamos ingredientes exclusivos, como azeite, extratos de uva e ervas medicinais, para proporcionar hidratação e rejuvenescimento profundo.</p>
+                    
+                    <div class="mission-item">
+                        <i class="fas fa-seedling"></i>
+                        <h3>Nossa Missão</h3>
+                        <p>Criar cosméticos naturais e eficazes que garantam uma beleza livre de crueldade animal e contribuam para um mundo mais sustentável.</p>
+                    </div>
+                    
+                    <div class="mission-item">
+                        <i class="fas fa-heart"></i>
+                        <h3>Nossa Essência</h3>
+                        <p>Utilizamos extratos puros da região do Douro para criar cosméticos que nutrem e revitalizam sua pele.</p>
+                    </div>
+                    
+                    <div class="mission-item">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <h3>Nosso Compromisso</h3>
+                        <p>Ingredientes 100% naturais e orgânicos, fórmulas livres de parabenos, sulfatos e silicones, com testes rigorosos para garantir segurança e qualidade.</p>
+                    </div>
+                </div>
+                <div class="about-img">
+                    <img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Ingredientes naturais">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services bg-light" id="services">
+        <div class="container">
+            <h2 class="text-center">Nossos Serviços</h2>
+            <p class="text-center">Bem-vindo a Pele Douro, onde a beleza natural encontra a sofisticação! Nossos serviços foram pensados para oferecer uma experiência única de cuidados com a pele, os cabelos e o bem-estar.</p>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <i class="fas fa-spa"></i>
+                    <h3>Consultoria de Skincare</h3>
+                    <p>Descubra quais produtos são ideais para o seu tipo de pele! Nossa equipe especializada analisa suas necessidades e recomenda a rotina perfeita.</p>
+                </div>
+                
+                <div class="service-card">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3>Assinatura Mensal</h3>
+                    <p>Receba todo mês um kit especial com os melhores produtos Pele Douro, selecionados para a sua rotina de cuidados.</p>
+                </div>
+                
+                <div class="service-card">
+                    <i class="fas fa-shopping-bag"></i>
+                    <h3>Venda de Cosméticos</h3>
+                    <p>Explore nossa linha exclusiva de produtos feitos com ingredientes naturais do Douro para realçar sua beleza de forma saudável.</p>
+                </div>
+                
+                <div class="service-card">
+                    <i class="fas fa-home"></i>
+                    <h3>Spa em Casa</h3>
+                    <p>Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar com nossos produtos que criam uma experiência sensorial única.</p>
+                </div>
+                
+                <div class="service-card">
+                    <i class="fas fa-gift"></i>
+                    <h3>Kits Personalizados</h3>
+                    <p>Monte um kit sob medida para suas necessidades ou para presentear alguém especial em lindas embalagens ecológicas.</p>
+                </div>
+                
+                <div class="service-card">
+                    <i class="fas fa-handshake"></i>
+                    <h3>Parcerias & Revenda</h3>
+                    <p>Seja um revendedor oficial da Pele Douro! Oferecemos condições especiais para lojistas e profissionais de beleza.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plans Section -->
+    <section class="plans" id="plans">
+        <div class="container">
+            <h2 class="text-center">Nossos Planos</h2>
+            <p class="text-center">Escolha o plano ideal para você e receba os melhores produtos de forma prática, com benefícios especiais.</p>
+            
+            <div class="plans-grid">
+                <div class="plan-card">
+                    <h3>Plano Essencial</h3>
+                    <div class="plan-price">39,90KZ/mês</div>
+                    <ul class="plan-features">
+                        <li>2 produtos básicos de skincare ou cabelo</li>
+                        <li>Acesso a dicas e tutoriais exclusivos</li>
+                        <li>10% de desconto em compras avulsas</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline">Assinar Agora</a>
+                </div>
+                
+                <div class="plan-card popular">
+                    <h3>Plano Premium</h3>
+                    <div class="plan-price">59,90KZ/mês</div>
+                    <ul class="plan-features">
+                        <li>3 produtos selecionados para sua pele e cabelos</li>
+                        <li>Acesso antecipado a lançamentos</li>
+                        <li>15% de desconto em toda a loja</li>
+                        <li>Frete reduzido</li>
+                    </ul>
+                    <a href="#" class="btn">Assinar Agora</a>
+                </div>
+                
+                <div class="plan-card">
+                    <h3>Plano Luxo</h3>
+                    <div class="plan-price">89,90KZ/mês</div>
+                    <ul class="plan-features">
+                        <li>5 produtos premium personalizados</li>
+                        <li>Consultoria de skincare exclusiva</li>
+                        <li>20% de desconto em compras avulsas</li>
+                        <li>Frete grátis</li>
+                        <li>Kit especial todo mês</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline">Assinar Agora</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery bg-light" id="gallery">
+        <div class="container">
+            <h2 class="text-center">Nossa Galeria</h2>
+            <p class="text-center">Explore nossa galeria de imagens e veja como nossos produtos transformam a pele de nossos clientes.</p>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Produtos Pele Douro">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Ingredientes naturais">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Produtos de beleza">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Mulher usando produtos">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="container">
+            <h2 class="text-center">Nossos Produtos</h2>
+            <p class="text-center">Descubra a Beleza Natural com Pele Douro. Nossos produtos são formulados com ingredientes naturais, inspirados na riqueza do Douro.</p>
+            
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1556228578-71d01b1e1d3b?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Máscara Facial Detox">
+                    </div>
+                    <div class="product-info">
+                        <h3>Máscara Facial Detox</h3>
+                        <p>Carvão Ativado & Argila Verde - Remove impurezas e deixa a pele fresca e renovada.</p>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <div class="product-price">25,000 AOA <del>37,500 AOA</del></div>
+                        <a href="#" class="btn">Comprar Agora</a>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Creme Hidratante">
+                    </div>
+                    <div class="product-info">
+                        <h3>Creme Hidratante Nutritivo</h3>
+                        <p>Com Azeite do Douro e manteiga de karité - Hidrata intensamente e protege contra o ressecamento.</p>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <div class="product-price">23,000 AOA</div>
+                        <a href="#" class="btn">Comprar Agora</a>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Espuma de Limpeza">
+                    </div>
+                    <div class="product-info">
+                        <h3>Espuma de Limpeza Facial</h3>
+                        <p>Com aloe vera e camomila - Remove impurezas e maquiagem sem agredir a pele.</p>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="product-price">23,000 AOA</div>
+                        <a href="#" class="btn">Comprar Agora</a>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1608248544923-0ac26f20a537?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Shampoo Hidratante">
+                    </div>
+                    <div class="product-info">
+                        <h3>Shampoo Hidratante</h3>
+                        <p>Combina alecrim e camomila para uma limpeza suave que fortalece os fios.</p>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <div class="product-price">23,000 AOA</div>
+                        <a href="#" class="btn">Comprar Agora</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact bg-light" id="contact">
+        <div class="container">
+            <h2 class="text-center">Entre em Contacto</h2>
+            <div class="footer-content">
+                <div class="footer-col">
+                    <h3>Pele Douro</h3>
+                    <p>Beleza Natural, Inspirada no Douro. Produtos cosméticos naturais e sustentáveis para cuidar da sua pele com amor e respeito pela natureza.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Links Rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Página Inicial</a></li>
+                        <li><a href="#about">Sobre Nós</a></li>
+                        <li><a href="#services">Serviços</a></li>
+                        <li><a href="#plans">Planos</a></li>
+                        <li><a href="#products">Produtos</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contacto</h3>
+                    <ul class="footer-links">
+                        <li> <p><i class="fas fa-phone"></i> <span></span>+244 999 999 999</p></li>
+                        <li><p><i class="fas fa-envelope"></i><span></span> contato@peledouro.com</p></li>
+                        <li><p><i class="fas fa-map-marker-alt"></i> <span></span> Rua das Oliveiras 123 - Douro, Angola</p>  </li>
+                        <li><p><i class="fab fa-whatsapp"></i>+244 999 888 777</p> </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2023 Pele Douro. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            hamburger.innerHTML = navLinks.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+       // Smooth Scrolling for Anchor Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Fechar menu mobile após clicar em um link
+                    if (navLinks.classList.contains('active')) {
+                        navLinks.classList.remove('active');
+                        hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+                    }
+                }
+            });
+        });
+
+        // Animação ao rolar a página
+        const animateOnScroll = function() {
+            const elements = document.querySelectorAll('.mission-item, .service-card, .plan-card, .product-card, .gallery-item');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementPosition < windowHeight - 100) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        };
+
+        // Adiciona opacidade inicial e transform para animação
+        document.querySelectorAll('.mission-item, .service-card, .plan-card, .product-card, .gallery-item').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(30px)';
+            element.style.transition = 'all 0.6s ease';
+        });
+
+        // Dispara a animação quando a página carrega e ao rolar
+        window.addEventListener('load', animateOnScroll);
+        window.addEventListener('scroll', animateOnScroll);
+    </script>
 </body>
 </html>
