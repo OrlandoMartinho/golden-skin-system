@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pele Douro - Chat</title>
+    <title>Pele Douro - Definições</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/global.css">
-    <link rel="stylesheet" href="../../css/usuarios/user-chat.css">
+    <link rel="stylesheet" href="../../css/usuarios/user-settings.css">
 </head>
 <body>
     <div class="container">
@@ -31,7 +31,7 @@
                     <i class="fas fa-store"></i>
                     <span>Loja de Produtos</span>
                 </a>
-                <a href="user-chat.html" class="nav-item active">
+                <a href="user-chat.html" class="nav-item">
                     <i class="far fa-comments"></i>
                     <span>Chat</span>
                 </a>
@@ -49,8 +49,8 @@
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="page-title">
-                    <h1>Chat</h1>
-                    <p>Converse com nossos profissionais</p>
+                    <h1>Definições</h1>
+                    <p>Gerencie suas informações pessoais e de segurança</p>
                 </div>
                 <div class="header-icons">
                     <div class="notification-icon">
@@ -68,7 +68,7 @@
                             <a href="user-history.html">
                                 <i class="fa-solid fa-clock-rotate-left"></i> Histórico
                             </a>
-                            <a href="user-settings.html">
+                            <a href="user-settings.html" class="active">
                                 <i class="fas fa-cog"></i> Definições
                             </a>
                             <a href="#">
@@ -79,107 +79,88 @@
                 </div>
             </div>
 
-            <!-- Search Bar -->
-            <div class="search-filter-container">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Pesquisar conversas...">
-                </div>
-            </div>
-
             <hr>
 
-            <!-- Chat Section -->
-            <section class="section-chat">
-                <div class="chat-list">
-                    <!-- Chat Item 1 -->
-                    <div class="chat-item" onclick="openChat(1)">
-                        <img src="https://via.placeholder.com/50" alt="Avatar Ana Silva">
-                        <div class="chat-item-info">
-                            <h4>Ana Silva - Massagista</h4>
-                            <p>Olá, gostaria de confirmar seu horário amanhã...</p>
-                        </div>
-                        <div class="chat-item-time">10:30</div>
-                        <div class="unread-count">3</div>
+            <!-- Settings Container -->
+            <div class="settings-container">
+                <!-- Tabs Navigation -->
+                <div class="settings-tabs">
+                    <div class="settings-tab active" data-tab="general">
+                        <i class="fas fa-user-cog"></i> Geral
                     </div>
-
-                    <!-- Chat Item 2 -->
-                    <div class="chat-item" onclick="openChat(2)">
-                        <img src="https://via.placeholder.com/50" alt="Avatar Carlos Mendes">
-                        <div class="chat-item-info">
-                            <h4>Carlos Mendes - Esteticista</h4>
-                            <p>Seu produto já está disponível para retirada...</p>
-                        </div>
-                        <div class="chat-item-time">Ontem</div>
-                    </div>
-
-                    <!-- Chat Item 3 -->
-                    <div class="chat-item" onclick="openChat(3)">
-                        <img src="https://via.placeholder.com/50" alt="Avatar Atendimento">
-                        <div class="chat-item-info">
-                            <h4>Atendimento Pele Douro</h4>
-                            <p>Obrigado por entrar em contato, como podemos ajudar?</p>
-                        </div>
-                        <div class="chat-item-time">15/01</div>
+                    <div class="settings-tab" data-tab="security">
+                        <i class="fas fa-shield-alt"></i> Segurança
                     </div>
                 </div>
 
-                <!-- Chat Window -->
-                <div class="chat-container" id="chat-window" style="display: none;">
-                    <div class="chat-header">
-                        <img src="https://via.placeholder.com/50" alt="Avatar" id="chat-avatar">
-                        <div class="chat-header-info">
-                            <h4 id="chat-name">Ana Silva - Massagista</h4>
-                            <p id="chat-status">Online</p>
-                        </div>
-                        <button class="close-chat" onclick="closeChat()">
-                            <i class="fas fa-times"></i>
-                        </button>
+                <!-- General Tab Content -->
+                <div id="general-tab" class="settings-content active">
+                    <div class="settings-header">
+                        <h2>Configurações Gerais</h2>
                     </div>
 
-                    <div class="chat-messages" id="chat-messages">
-                        <div class="message received">
-                            <div class="message-content">
-                                Olá, como posso ajudar você hoje?
-                            </div>
-                            <div class="message-time">10:30</div>
+                    <div class="settings-form">
+                        <!-- Alterar Nome -->
+                        <div class="form-group">
+                            <label for="user-name">Nome</label>
+                            <input type="text" id="user-name" placeholder="Digite seu nome" value="Admin">
+                            <button class="save-btn" onclick="saveName()">Salvar</button>
                         </div>
-                        <div class="message sent">
-                            <div class="message-content">
-                                Olá Ana, gostaria de confirmar meu horário de amanhã
-                            </div>
-                            <div class="message-time">10:32</div>
-                        </div>
-                        <div class="message received">
-                            <div class="message-content">
-                                Seu horário está confirmado para amanhã às 14h. Poderia chegar 10 minutos antes?
-                            </div>
-                            <div class="message-time">10:33</div>
-                        </div>
-                        <div class="message sent">
-                            <div class="message-content">
-                                Claro, sem problemas! Obrigado pela confirmação.
-                            </div>
-                            <div class="message-time">10:35</div>
-                        </div>
-                    </div>
 
-                    <div class="chat-input">
-                        <input type="text" placeholder="Digite sua mensagem..." id="message-input">
-                        <button onclick="sendMessage()">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
+                        <!-- Alterar Número -->
+                        <div class="form-group">
+                            <label for="user-phone">Número de Telefone</label>
+                            <input type="tel" id="user-phone" placeholder="Digite seu número" value="+55 11 98765-4321">
+                            <button class="save-btn" onclick="savePhone()">Salvar</button>
+                        </div>
+
+                        <!-- Atualizar Foto de Perfil -->
+                        <div class="form-group">
+                            <label for="user-photo">Foto de Perfil</label>
+                            <div class="profile-photo-upload">
+                                <img src="https://via.placeholder.com/100" alt="Foto de Perfil" id="profile-photo-preview">
+                                <input type="file" id="user-photo" accept="image/*" onchange="previewPhoto(event)">
+                                <button class="upload-btn" onclick="uploadPhoto()">Atualizar Foto</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </section>
+
+                <!-- Security Tab Content -->
+                <div id="security-tab" class="settings-content">
+                    <div class="settings-header">
+                        <h2>Configurações de Segurança</h2>
+                    </div>
+
+                    <div class="settings-form">
+                        <!-- Alterar E-mail -->
+                        <div class="form-group">
+                            <label for="user-email">E-mail</label>
+                            <input type="email" id="user-email" placeholder="Digite seu e-mail" value="admin@peledouro.com">
+                            <button class="save-btn" onclick="saveEmail()">Salvar</button>
+                        </div>
+
+                        <!-- Alterar Senha -->
+                        <div class="form-group">
+                            <label for="current-password">Senha Atual</label>
+                            <input type="password" id="current-password" placeholder="Digite sua senha atual">
+                            <label for="new-password">Nova Senha</label>
+                            <input type="password" id="new-password" placeholder="Digite sua nova senha">
+                            <label for="confirm-password">Confirmar Nova Senha</label>
+                            <input type="password" id="confirm-password" placeholder="Confirme sua nova senha">
+                            <button class="save-btn" onclick="savePassword()">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
 
         <!-- Confirmation Modal -->
         <div id="confirm-modal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal('confirm-modal')">×</span>
-                <h3>Confirmar ação</h3>
-                <p id="confirm-message">Tem certeza que deseja excluir esta conversa?</p>
+                <h3>Confirmar Alteração</h3>
+                <p id="confirm-message">Tem certeza que deseja salvar as alterações?</p>
                 <div class="modal-buttons">
                     <button class="cancel" onclick="closeModal('confirm-modal')">Cancelar</button>
                     <button class="confirm" onclick="confirmAction()">Confirmar</button>
@@ -196,7 +177,9 @@
                     <small>10 minutos atrás</small>
                 </div>
             </div>
-            <div class="notification-item">
+            <div
+
+ class="notification-item">
                 <i class="fas fa-shopping-cart"></i>
                 <div>
                     <p>Seu pedido foi enviado</p>
@@ -231,6 +214,6 @@
     </div>
 
     <script src="../../js/global.js"></script>
-    <script src="../../js/usuarios/user-chat.js"></script>
+    <script src="../../js/usuarios/user-settings.js"></script>
 </body>
 </html>
