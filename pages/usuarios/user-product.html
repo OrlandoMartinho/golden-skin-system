@@ -14,14 +14,14 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo">
-                <img src="../../assets/img/logo.png" alt="">
+                <img src="../../assets/img/logo.png" alt="Logo Pele Douro">
             </div>
 
-            <button class="close-sidebar">
-                <i class="fa-solid fa-x .close-sidebar"></i>
+            <button class="close-sidebar" aria-label="Fechar menu">
+                <i class="fa-solid fa-x"></i>
             </button>
             
-            <a href="user-home.html"" class="nav-item">
+            <a href="user-home.html" class="nav-item">
                 <i class="far fa-calendar-alt"></i>
                 <span>Agendamentos</span>
             </a>
@@ -44,13 +44,13 @@
 
         <!-- Main Content -->
         <main class="main-content">
-     <div class="header">
-                <button class="menu-toggle">
+            <div class="header">
+                <button class="menu-toggle" aria-label="Abrir menu">
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="page-title">
-                    <h1>Produtos</h1>
-                    <p>Encontra os nossos produtos em único lugar</p>
+                    <h1>Loja de Produtos</h1>
+                    <p>Encontre os melhores produtos para sua pele</p>
                 </div>
                 <div class="header-icons">
                     <div class="notification-icon">
@@ -73,24 +73,14 @@
                 </div>
             </div>
 
-            <!-- Barra de pesquisa -->
-            <div class="search-filter-container">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Pesquisar conversas...">
-                </div>
-            </div>
-            
-
-
             <!-- Barra de pesquisa e filtro -->
             <div class="search-filter-container">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Pesquisar produtos...">
+                    <input type="text" placeholder="Pesquisar produtos..." aria-label="Pesquisar produtos">
                 </div>
                 <div class="filter-dropdown">
-                    <select>
+                    <select aria-label="Filtrar por categoria">
                         <option value="">Todas as categorias</option>
                         <option value="hidratantes">Hidratantes</option>
                         <option value="limpeza">Limpeza Facial</option>
@@ -99,7 +89,7 @@
                     </select>
                 </div>
                 <div class="filter-dropdown">
-                    <select>
+                    <select aria-label="Ordenar produtos">
                         <option value="">Ordenar por</option>
                         <option value="preco-asc">Preço: menor para maior</option>
                         <option value="preco-desc">Preço: maior para menor</option>
@@ -109,30 +99,30 @@
                 </div>
             </div>
             
-    
+            <hr>
             
             <!-- Categorias -->
-            <div class="product-categories">
-                <button class="category-btn active">Todos</button>
-                <button class="category-btn">Hidratantes</button>
-                <button class="category-btn">Limpeza Facial</button>
-                <button class="category-btn">Anti-idade</button>
-                <button class="category-btn">Protetores Solares</button>
-                <button class="category-btn">Máscaras</button>
-                <button class="category-btn">Óleos Corporais</button>
-                <button class="category-btn">Kits Especiais</button>
+            <div class="product-categories" role="tablist">
+                <button class="category-btn active" role="tab">Todos</button>
+                <button class="category-btn" role="tab">Hidratantes</button>
+                <button class="category-btn" role="tab">Limpeza Facial</button>
+                <button class="category-btn" role="tab">Anti-idade</button>
+                <button class="category-btn" role="tab">Protetores Solares</button>
+                <button class="category-btn" role="tab">Máscaras</button>
+                <button class="category-btn" role="tab">Óleos Corporais</button>
+                <button class="category-btn" role="tab">Kits Especiais</button>
             </div>
             
             <!-- Grid de Produtos -->
             <section class="products-grid">
                 <!-- Produto 1 -->
-                <div class="product-card">
+                <article class="product-card">
                     <div class="product-image">
-                        <img src="https://via.placeholder.com/250x250" alt="Creme Hidratante">
+                        <img src="https://via.placeholder.com/250x250" alt="Creme Hidratante" loading="lazy">
                     </div>
                     <div class="product-info">
                         <h3 class="product-title">Creme Hidratante 24h</h3>
-                        <div class="rating">
+                        <div class="rating" aria-label="Avaliação: 4 estrelas e meia">
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
@@ -143,24 +133,24 @@
                         <p class="product-description">Hidratação profunda e duradoura para todos os tipos de pele.</p>
                         <div class="product-price">R$ 89,90</div>
                         <div class="product-actions">
-                            <button class="add-to-cart" onclick="addToCart(1)">
+                            <button class="add-to-cart" onclick="addToCart(1)" aria-label="Adicionar ao carrinho">
                                 <i class="fas fa-shopping-cart"></i> Add
                             </button>
-                            <button class="view-details" onclick="openModal('product-detail-modal')">
+                            <button class="view-details" onclick="openModal('product-detail-modal')" aria-label="Ver detalhes">
                                 Detalhes
                             </button>
                         </div>
                     </div>
-                </div>
+                </article>
                 
                 <!-- Produto 2 -->
-                <div class="product-card">
+                <article class="product-card">
                     <div class="product-image">
-                        <img src="https://via.placeholder.com/250x250" alt="Óleo Corporal">
+                        <img src="https://via.placeholder.com/250x250" alt="Óleo Corporal" loading="lazy">
                     </div>
                     <div class="product-info">
                         <h3 class="product-title">Óleo Corporal Relaxante</h3>
-                        <div class="rating">
+                        <div class="rating" aria-label="Avaliação: 4 estrelas">
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
@@ -171,24 +161,24 @@
                         <p class="product-description">Óleo com essência de lavanda para relaxamento muscular.</p>
                         <div class="product-price">R$ 59,90</div>
                         <div class="product-actions">
-                            <button class="add-to-cart" onclick="addToCart(2)">
+                            <button class="add-to-cart" onclick="addToCart(2)" aria-label="Adicionar ao carrinho">
                                 <i class="fas fa-shopping-cart"></i> Add
                             </button>
-                            <button class="view-details" onclick="openModal('product-detail-modal')">
+                            <button class="view-details" onclick="openModal('product-detail-modal')" aria-label="Ver detalhes">
                                 Detalhes
                             </button>
                         </div>
                     </div>
-                </div>
+                </article>
                 
                 <!-- Produto 3 -->
-                <div class="product-card">
+                <article class="product-card">
                     <div class="product-image">
-                        <img src="https://via.placeholder.com/250x250" alt="Máscara Facial">
+                        <img src="https://via.placeholder.com/250x250" alt="Máscara Facial" loading="lazy">
                     </div>
                     <div class="product-info">
                         <h3 class="product-title">Máscara Facial de Argila</h3>
-                        <div class="rating">
+                        <div class="rating" aria-label="Avaliação: 5 estrelas">
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
@@ -199,24 +189,24 @@
                         <p class="product-description">Purifica e revitaliza a pele, controlando a oleosidade.</p>
                         <div class="product-price">R$ 45,90</div>
                         <div class="product-actions">
-                            <button class="add-to-cart" onclick="addToCart(3)">
+                            <button class="add-to-cart" onclick="addToCart(3)" aria-label="Adicionar ao carrinho">
                                 <i class="fas fa-shopping-cart"></i> Add
                             </button>
-                            <button class="view-details" onclick="openModal('product-detail-modal')">
+                            <button class="view-details" onclick="openModal('product-detail-modal')" aria-label="Ver detalhes">
                                 Detalhes
                             </button>
                         </div>
                     </div>
-                </div>
+                </article>
                 
                 <!-- Produto 4 -->
-                <div class="product-card">
+                <article class="product-card">
                     <div class="product-image">
-                        <img src="https://via.placeholder.com/250x250" alt="Protetor Solar">
+                        <img src="https://via.placeholder.com/250x250" alt="Protetor Solar" loading="lazy">
                     </div>
                     <div class="product-info">
                         <h3 class="product-title">Protetor Solar FPS 60</h3>
-                        <div class="rating">
+                        <div class="rating" aria-label="Avaliação: 4 estrelas e meia">
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
@@ -227,24 +217,24 @@
                         <p class="product-description">Proteção avançada contra raios UVA/UVB com toque seco.</p>
                         <div class="product-price">R$ 79,90</div>
                         <div class="product-actions">
-                            <button class="add-to-cart" onclick="addToCart(4)">
+                            <button class="add-to-cart" onclick="addToCart(4)" aria-label="Adicionar ao carrinho">
                                 <i class="fas fa-shopping-cart"></i> Add
                             </button>
-                            <button class="view-details" onclick="openModal('product-detail-modal')">
+                            <button class="view-details" onclick="openModal('product-detail-modal')" aria-label="Ver detalhes">
                                 Detalhes
                             </button>
                         </div>
                     </div>
-                </div>
+                </article>
                 
                 <!-- Produto 5 -->
-                <div class="product-card">
+                <article class="product-card">
                     <div class="product-image">
-                        <img src="https://via.placeholder.com/250x250" alt="Sérum Anti-idade">
+                        <img src="https://via.placeholder.com/250x250" alt="Sérum Anti-idade" loading="lazy">
                     </div>
                     <div class="product-info">
                         <h3 class="product-title">Sérum Anti-idade</h3>
-                        <div class="rating">
+                        <div class="rating" aria-label="Avaliação: 5 estrelas">
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
@@ -255,24 +245,24 @@
                         <p class="product-description">Reduz sinais de envelhecimento com ácido hialurônico e vitamina C.</p>
                         <div class="product-price">R$ 129,90</div>
                         <div class="product-actions">
-                            <button class="add-to-cart" onclick="addToCart(5)">
+                            <button class="add-to-cart" onclick="addToCart(5)" aria-label="Adicionar ao carrinho">
                                 <i class="fas fa-shopping-cart"></i> Add
                             </button>
-                            <button class="view-details" onclick="openModal('product-detail-modal')">
+                            <button class="view-details" onclick="openModal('product-detail-modal')" aria-label="Ver detalhes">
                                 Detalhes
                             </button>
                         </div>
                     </div>
-                </div>
+                </article>
                 
                 <!-- Produto 6 -->
-                <div class="product-card">
+                <article class="product-card">
                     <div class="product-image">
-                        <img src="https://via.placeholder.com/250x250" alt="Kit Beleza Completa">
+                        <img src="https://via.placeholder.com/250x250" alt="Kit Beleza Completa" loading="lazy">
                     </div>
                     <div class="product-info">
                         <h3 class="product-title">Kit Beleza Completa</h3>
-                        <div class="rating">
+                        <div class="rating" aria-label="Avaliação: 4 estrelas e meia">
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
@@ -283,24 +273,24 @@
                         <p class="product-description">Kit com 5 produtos essenciais para uma rotina de beleza completa.</p>
                         <div class="product-price">R$ 199,90</div>
                         <div class="product-actions">
-                            <button class="add-to-cart" onclick="addToCart(6)">
+                            <button class="add-to-cart" onclick="addToCart(6)" aria-label="Adicionar ao carrinho">
                                 <i class="fas fa-shopping-cart"></i> Add
                             </button>
-                            <button class="view-details" onclick="openModal('product-detail-modal')">
+                            <button class="view-details" onclick="openModal('product-detail-modal')" aria-label="Ver detalhes">
                                 Detalhes
                             </button>
                         </div>
                     </div>
-                </div>
+                </article>
                 
                 <!-- Produto 7 -->
-                <div class="product-card">
+                <article class="product-card">
                     <div class="product-image">
-                        <img src="https://via.placeholder.com/250x250" alt="Gel de Limpeza">
+                        <img src="https://via.placeholder.com/250x250" alt="Gel de Limpeza" loading="lazy">
                     </div>
                     <div class="product-info">
                         <h3 class="product-title">Gel de Limpeza Facial</h3>
-                        <div class="rating">
+                        <div class="rating" aria-label="Avaliação: 4 estrelas">
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
@@ -311,24 +301,24 @@
                         <p class="product-description">Remove impurezas sem ressecar, ideal para pele sensível.</p>
                         <div class="product-price">R$ 49,90</div>
                         <div class="product-actions">
-                            <button class="add-to-cart" onclick="addToCart(7)">
+                            <button class="add-to-cart" onclick="addToCart(7)" aria-label="Adicionar ao carrinho">
                                 <i class="fas fa-shopping-cart"></i> Add
                             </button>
-                            <button class="view-details" onclick="openModal('product-detail-modal')">
+                            <button class="view-details" onclick="openModal('product-detail-modal')" aria-label="Ver detalhes">
                                 Detalhes
                             </button>
                         </div>
                     </div>
-                </div>
+                </article>
                 
                 <!-- Produto 8 -->
-                <div class="product-card">
+                <article class="product-card">
                     <div class="product-image">
-                        <img src="https://via.placeholder.com/250x250" alt="Água Micelar">
+                        <img src="https://via.placeholder.com/250x250" alt="Água Micelar" loading="lazy">
                     </div>
                     <div class="product-info">
                         <h3 class="product-title">Água Micelar 3 em 1</h3>
-                        <div class="rating">
+                        <div class="rating" aria-label="Avaliação: 5 estrelas">
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
@@ -339,31 +329,29 @@
                         <p class="product-description">Limpa, tonifica e remove maquiagem em um único passo.</p>
                         <div class="product-price">R$ 39,90</div>
                         <div class="product-actions">
-                            <button class="add-to-cart" onclick="addToCart(8)">
+                            <button class="add-to-cart" onclick="addToCart(8)" aria-label="Adicionar ao carrinho">
                                 <i class="fas fa-shopping-cart"></i> Add
                             </button>
-                            <button class="view-details" onclick="openModal('product-detail-modal')">
+                            <button class="view-details" onclick="openModal('product-detail-modal')" aria-label="Ver detalhes">
                                 Detalhes
                             </button>
                         </div>
                     </div>
-                </div>
+                </article>
             </section>
-            
-          
         </main>
 
         <!-- Modal de Detalhes do Produto -->
         <div id="product-detail-modal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeModal('product-detail-modal')">&times;</span>
+                <span class="close" onclick="closeModal('product-detail-modal')" aria-label="Fechar modal">&times;</span>
                 <div class="product-detail-container">
                     <div class="product-detail-image">
-                        <img src="https://via.placeholder.com/400x400" alt="Creme Hidratante 24h">
+                        <img src="https://via.placeholder.com/400x400" alt="Creme Hidratante 24h" loading="lazy">
                     </div>
                     <div class="product-detail-info">
                         <h3 class="product-detail-title">Creme Hidratante 24h</h3>
-                        <div class="rating">
+                        <div class="rating" aria-label="Avaliação: 4 estrelas e meia">
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
@@ -385,11 +373,11 @@
                             <div><strong>Ingredientes principais:</strong> Ácido Hialurônico, Ceramidas, Vitamina E</div>
                         </div>
                         <div class="quantity-selector">
-                            <button onclick="decreaseQuantity()">-</button>
-                            <input type="number" value="1" min="1" id="product-quantity">
-                            <button onclick="increaseQuantity()">+</button>
+                            <button onclick="decreaseQuantity()" aria-label="Diminuir quantidade">-</button>
+                            <input type="number" value="1" min="1" id="product-quantity" aria-label="Quantidade">
+                            <button onclick="increaseQuantity()" aria-label="Aumentar quantidade">+</button>
                         </div>
-                        <button class="add-to-cart-large" onclick="addToCartFromModal()">
+                        <button class="add-to-cart-large" onclick="addToCartFromModal()" aria-label="Adicionar ao carrinho">
                             <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
                         </button>
                     </div>
@@ -400,7 +388,7 @@
         <!-- Modal de Confirmação de Adição ao Carrinho -->
         <div id="add-to-cart-modal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeModal('add-to-cart-modal')">&times;</span>
+                <span class="close" onclick="closeModal('add-to-cart-modal')" aria-label="Fechar modal">&times;</span>
                 <h3>Produto adicionado ao carrinho!</h3>
                 <div class="modal-buttons">
                     <button class="cancel" onclick="closeModal('add-to-cart-modal')">Continuar comprando</button>
@@ -427,9 +415,8 @@
             </div>
         </div>
 
-      
-     <script src="../../js/global.js"></script>
-    <script src="../../js/usuarios/user-product.js"></script>
-   
-    
+        <script src="../../js/global.js"></script>
+        <script src="../../js/usuarios/user-product.js"></script>
+    </div>
+</body>
 </html>

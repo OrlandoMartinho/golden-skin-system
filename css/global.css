@@ -829,3 +829,214 @@ html {
         display: block;
     }
 }
+
+/* Adicionar estas regras no final do seu CSS */
+
+/* Ajustes para telas muito pequenas (até 480px) */
+@media (max-width: 480px) {
+    html {
+        font-size: 60%; /* Reduzir tamanho base da fonte para melhor ajuste */
+    }
+    
+    .main-content {
+        padding: 15px 10px;
+    }
+    
+    .search-filter-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .search-box,
+    .filter-dropdown,
+    .date-filter {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .page-title {
+        order: 1;
+        width: 100%;
+        text-align: left;
+    }
+    
+    .header-icons {
+        order: 2;
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .menu-toggle {
+        order: 3;
+        margin-right: 0;
+    }
+    
+    .card {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 0 10px;
+    }
+    
+    .sidebar {
+        width: 85%;
+    }
+    
+    .user-profile img {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .notification-badge, 
+    .cart-count {
+        width: 16px;
+        height: 16px;
+        font-size: 9px;
+    }
+}
+
+/* Ajustes para tablets em modo retrato (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+    .card {
+        flex: 1 1 45%;
+        max-width: calc(50% - 10px);
+    }
+    
+    .search-filter-container {
+        gap: 10px;
+    }
+    
+    .search-box {
+        min-width: 200px;
+    }
+}
+
+/* Melhorias para o menu mobile */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 280px;
+    }
+    
+    .close-sidebar {
+        display: block;
+        font-size: 1.5rem;
+        top: 15px;
+        right: 15px;
+    }
+    
+    .sidebar-header {
+        padding-top: 40px; /* Dar espaço para o botão de fechar */
+    }
+    
+    .overlay {
+        display: block;
+    }
+}
+
+/* Ajustes para o dropdown em mobile */
+@media (max-width: 768px) {
+    .notifications-dropdown, 
+    .cart-dropdown {
+        width: 280px;
+        right: 10px;
+    }
+    
+    .dropdown-content {
+        min-width: 200px;
+    }
+}
+
+/* Ajustes para botões em mobile */
+@media (max-width: 480px) {
+    .btn {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+    
+    .modal-buttons {
+        flex-direction: column;
+    }
+    
+    .modal-buttons button {
+        width: 100%;
+    }
+}
+
+/* Ajustes para cards em grades */
+@media (max-width: 768px) {
+    .cards-container {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+    }
+}
+
+/* Melhorias para formulários em mobile */
+@media (max-width: 480px) {
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 12px 15px;
+    }
+    
+    .modal-content {
+        padding: 20px 15px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+    
+    
+    .sidebar {
+        width: 220px;
+        padding: 15px;
+    }
+    
+    .nav-item {
+        padding: 10px 8px;
+        font-size: 14px;
+    }
+    
+    .main-content {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .search-box i {
+        left: 10px;
+    }
+    
+    .search-box input {
+        padding-left: 35px;
+    }
+    
+    .filter-dropdown select {
+        padding: 10px 12px;
+        background-position: right 8px center;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-profile .dropdown-content {
+        min-width: 160px;
+        right: -10px;
+    }
+    
+    .user-profile .dropdown-content a {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    
+    .header-icons {
+        gap: 12px;
+    }
+}
