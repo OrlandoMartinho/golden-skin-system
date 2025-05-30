@@ -2,7 +2,30 @@
 
 
 /* global.css */
-
+:root {
+    --background-white: #fff;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.3);
+    --overlay-dark: rgba(0, 0, 0, 0.5);
+    --modal-overlay: rgba(0, 0, 0, 0.7);
+    --text-dark: #333;
+    --text-light: #999;
+    --text-gray: #aaa;
+    --border-light: #ddd;
+    --border-lighter: #eee;
+    --modal-background: #f0f0f0;
+    --primary-color: var(--primary);
+    --secondary-color: var(--secondary); /* Assumed for var(--secondary) */
+    --accent-purple:  var(--secondary);
+    --status-active-bg: #e6f7ee;
+    --status-active-text: #00a859;
+    --status-inactive-bg: #fee;
+    --status-inactive-text: #e74c3c;
+    --table-header-bg: #f8f9fa;
+    --table-hover-bg: #f9f9f9;
+    --tab-background: #f5f5f5;
+    --tab-hover: #e0e0e0;
+  }
 /* ============ BASE STYLES ============ */
 .services-container,
 .plans-container {

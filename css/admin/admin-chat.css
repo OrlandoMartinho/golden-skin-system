@@ -1,6 +1,9 @@
 @import url('../global.css');
 
-
+/* global.css */
+:root {
+  
+}
 
 .search-filter-container{
   margin-top: 2vh;
