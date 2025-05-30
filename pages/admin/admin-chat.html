@@ -82,56 +82,85 @@
 
             <hr>
 
+            <!-- Search Bar -->
+            <div class="search-filter-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Pesquisar conversas..." id="chat-search">
+                </div>
+                <select id="chat-status-filter">
+                    <option value="all">Todos os status</option>
+                    <option value="open">Abertos</option>
+                    <option value="closed">Fechados</option>
+                </select>
+            </div>
+
             <!-- Chat Container -->
-            <div class="chat-container">
-                <!-- Chat List -->
-                <div class="chat-list">
-                    <div class="chat-list-header">
-                        <h2>Conversas</h2>
-                        <div class="search-filter">
-                            <div class="search-box">
-                                <i class="fas fa-search"></i>
-                                <input type="text" placeholder="Pesquisar conversas..." id="chat-search">
-                            </div>
-                            <select id="chat-status-filter">
-                                <option value="all">Todos os status</option>
-                                <option value="open">Abertos</option>
-                                <option value="closed">Fechados</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="chat-list-items">
-                        <div class="chat-item active" onclick="selectChat(1)">
-                            <div class="chat-item-info">
+            <div class="dashboard-container">
+                <!-- Chat List Section -->
+                <section class="overview-section">
+                    <h2>Conversas</h2>
+                    <div class="overview-cards">
+                        <div class="chat-item active" onclick="selectChat(1)" data-chat-id="1">
+                            <i class="far fa-comments"></i>
+                            <div>
                                 <h3>Ana Silva</h3>
                                 <p>Última mensagem: Olá, gostaria de saber sobre...</p>
                                 <small>Hoje, 14:30</small>
+                                <span class="unread-count">2</span>
                             </div>
-                            <span class="unread-count">2</span>
                         </div>
-                        <div class="chat-item" onclick="selectChat(2)">
-                            <div class="chat-item-info">
+                        <div class="chat-item" onclick="selectChat(2)" data-chat-id="2">
+                            <i class="far fa-comments"></i>
+                            <div>
                                 <h3>Carlos Mendes</h3>
                                 <p>Última mensagem: Qual o prazo de entrega do...</p>
                                 <small>Ontem, 10:15</small>
                             </div>
                         </div>
-                        <div class="chat-item" onclick="selectChat(3)">
-                            <div class="chat-item-info">
+                        <div class="chat-item" onclick="selectChat(3)" data-chat-id="3">
+                            <i class="far fa-comments"></i>
+                            <div>
                                 <h3>Maria Costa</h3>
                                 <p>Última mensagem: Preciso reagendar meu...</p>
                                 <small>2025-05-28, 16:00</small>
+                                <span class="unread-count">1</span>
                             </div>
-                            <span class="unread-count">1</span>
                         </div>
                     </div>
-                </div>
+                </section>
 
-                <!-- Chat Window -->
-                <div class="chat-window">
-                    <div class="chat-window-header">
+                <!-- Chat Content -->
+                <div class="chat-content">
+                    <!-- Chat Window Section -->
+                    <section class="recent-activity-section">
                         <h2 id="chat-user-name">Ana Silva</h2>
-                        <div class="chat-actions">
+                        <div class="activity-list" id="chat-messages">
+                            <div class="message received">
+                                <p>Olá, gostaria de saber sobre a disponibilidade de massagem relaxante.</p>
+                                <small>14:25</small>
+                            </div>
+                            <div class="message sent">
+                                <p>Olá, Ana! Temos horários disponíveis amanhã às 10h e 14h. Qual prefere?</p>
+                                <small>14:28</small>
+                            </div>
+                            <div class="message received">
+                                <p>14h seria ótimo! Como faço para reservar?</p>
+                                <small>14:30</small>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <textarea id="chat-message-input" placeholder="Digite sua mensagem..."></textarea>
+                            <button onclick="sendMessage()">
+                                <i class="fas fa-paper-plane"></i> Enviar
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- Quick Actions Section -->
+                    <section class="quick-actions-section">
+                        <h2>Ações Rápidas</h2>
+                        <div class="quick-actions">
                             <button class="action-btn" onclick="closeChat()">
                                 <i class="fas fa-check"></i> Fechar Chat
                             </button>
@@ -139,40 +168,33 @@
                                 <i class="fas fa-trash"></i> Excluir
                             </button>
                         </div>
-                    </div>
-                    <div class="chat-messages" id="chat-messages">
-                        <div class="message received">
-                            <p>Olá, gostaria de saber sobre a disponibilidade de massagem relaxante.</p>
-                            <small>14:25</small>
-                        </div>
-                        <div class="message sent">
-                            <p>Olá, Ana! Temos horários disponíveis amanhã às 10h e 14h. Qual prefere?</p>
-                            <small>14:28</small>
-                        </div>
-                        <div class="message received">
-                            <p>14h seria ótimo! Como faço para reservar?</p>
-                            <small>14:30</small>
-                        </div>
-                    </div>
-                    <div class="chat-input">
-                        <textarea id="chat-message-input" placeholder="Digite sua mensagem..."></textarea>
-                        <button onclick="sendMessage()">
-                            <i class="fas fa-paper-plane"></i> Enviar
-                        </button>
-                    </div>
+                    </section>
                 </div>
             </div>
         </main>
 
-        <!-- Confirmation Modal -->
-        <div id="confirm-modal" class="modal">
+        <!-- Close Chat Modal -->
+        <div id="close-chat-modal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeModal('confirm-modal')">×</span>
-                <h3>Confirmar Ação</h3>
-                <p id="confirm-message">Tem certeza que deseja executar esta ação?</p>
+                <span class="close" onclick="closeModal('close-chat-modal')">×</span>
+                <h3>Fechar Chat</h3>
+                <p id="close-chat-message">Tem certeza que deseja fechar este chat?</p>
                 <div class="modal-buttons">
-                    <button class="cancel" onclick="closeModal('confirm-modal')">Cancelar</button>
-                    <button class="confirm" onclick="confirmAction()">Confirmar</button>
+                    <button class="cancel" onclick="closeModal('close-chat-modal')">Cancelar</button>
+                    <button class="confirm" onclick="confirmCloseChat()">Confirmar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Chat Modal -->
+        <div id="delete-chat-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('delete-chat-modal')">×</span>
+                <h3>Excluir Chat</h3>
+                <p id="delete-chat-message">Tem certeza que deseja excluir este chat? Esta ação é irreversível.</p>
+                <div class="modal-buttons">
+                    <button class="cancel" onclick="closeModal('delete-chat-modal')">Cancelar</button>
+                    <button class="confirm" onclick="confirmDeleteChat()">Confirmar</button>
                 </div>
             </div>
         </div>
