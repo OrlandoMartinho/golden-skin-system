@@ -71,6 +71,10 @@
     transition: background-color 0.3s ease;
 }
 
+.tab-nav{
+    margin-top: 2vh;
+}
+
 .add-service-btn:hover,
 .add-plan-btn:hover {
     background: var(--secondary-color);
