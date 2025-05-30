@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pele Douro - Serviços</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link rel="stylesheet" href="../../css/global.css">
     <link rel="stylesheet" href="../../css/usuarios/user-service.css">
 </head>
 <body>
@@ -19,7 +19,7 @@
             </div>
 
             <button class="close-sidebar">
-                <i class="fa-solid fa-x .close-sidebar"></i>
+                <i class="fa-solid fa-x"></i>
             </button>
             
             <a href="user-home.html" class="nav-item">
@@ -45,13 +45,13 @@
 
         <!-- Main Content -->
         <main class="main-content">
-         <div class="header">
+            <div class="header">
                 <button class="menu-toggle">
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="page-title">
                     <h1>Serviços</h1>
-                    <p>Encontra os nosso serviço em um único lugar com menor preço do mercado.</p>
+                    <p>Descubra os melhores serviços para cuidar da sua pele</p>
                 </div>
                 <div class="header-icons">
                     <div class="notification-icon">
@@ -74,15 +74,6 @@
                 </div>
             </div>
 
-            <!-- Barra de pesquisa -->
-            <div class="search-filter-container">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Pesquisar conversas...">
-                </div>
-            </div>
-            
-
             <!-- Barra de pesquisa e filtro -->
             <div class="search-filter-container">
                 <div class="search-box">
@@ -94,239 +85,217 @@
                         <option value="">Todas as categorias</option>
                         <option value="facial">Tratamentos Faciais</option>
                         <option value="corporal">Tratamentos Corporais</option>
-                        <option value="spa">Spa & Relaxamento</option>
-                        <option value="esteticos">Procedimentos Estéticos</option>
+                        <option value="estetica">Estética Avançada</option>
+                        <option value="relaxamento">Relaxamento</option>
                     </select>
                 </div>
                 <div class="filter-dropdown">
                     <select>
                         <option value="">Ordenar por</option>
-                        <option value="popular">Mais populares</option>
                         <option value="preco-asc">Preço: menor para maior</option>
                         <option value="preco-desc">Preço: maior para menor</option>
-                        <option value="duracao">Duração</option>
+                        <option value="avaliacao">Melhor avaliados</option>
+                        <option value="novidades">Novidades</option>
                     </select>
                 </div>
             </div>
             
-        
+            <hr>
             
-            <!-- Categorias -->
-            <div class="service-categories">
-                <button class="category-btn active">Todos</button>
-                <button class="category-btn">Tratamentos Faciais</button>
-                <button class="category-btn">Tratamentos Corporais</button>
-                <button class="category-btn">Spa & Relaxamento</button>
-                <button class="category-btn">Massagens</button>
-                <button class="category-btn">Depilação</button>
-                <button class="category-btn">Manicure & Pedicure</button>
-            </div>
-            
-            <!-- Grid de Serviços -->
-            <section class="services-container">
+            <!-- Lista de Serviços -->
+            <section class="section-services">
                 <!-- Serviço 1 -->
                 <div class="service-card">
                     <div class="service-image">
-                        <img src="" alt="Limpeza de Pele">
-                        <span class="service-badge">Mais Popular</span>
+                        <img src="https://via.placeholder.com/200" alt="Limpeza de Pele Profunda">
                     </div>
-                    <div class="service-content">
-                        <h3 class="service-title">Limpeza de Pele Profissional</h3>
-                        <p class="service-description">
-                            Remoção de cravos e impurezas com hidratação e finalização. Ideal para todos os tipos de pele.
-                        </p>
-                        <div class="service-meta">
-                            <span class="service-duration"><i class="far fa-clock"></i> 60 min</span>
-                            <span class="service-rating"><i class="fas fa-star"></i> 4.9 (128)</span>
+                    <div class="service-info">
+                        <h3>Limpeza de Pele Profunda</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>(150)</span>
                         </div>
-                        <div class="service-price">R$ 120,00</div>
-                        <div class="service-actions">
-                            <button class="btn-details" onclick="openModal('details-modal')">Detalhes</button>
-                            <button class="btn-schedule" onclick="openModal('schedule-modal')">Agendar</button>
-                        </div>
+                        <div class="price">R$ 120,00</div>
+                        <button class="schedule-service" onclick="openModal('service-detail-modal')">
+                            <i class="fas fa-calendar-alt"></i> Agendar
+                        </button>
                     </div>
                 </div>
-                
 
+                <!-- Serviço 2 -->
                 <div class="service-card">
                     <div class="service-image">
-                        <img src="" alt="Limpeza de Pele">
-                        <span class="service-badge">Mais Popular</span>
+                        <img src="https://via.placeholder.com/200" alt="Massagem Relaxante">
                     </div>
-                    <div class="service-content">
-                        <h3 class="service-title">Limpeza de Pele Profissional</h3>
-                        <p class="service-description">
-                            Remoção de cravos e impurezas com hidratação e finalização. Ideal para todos os tipos de pele.
-                        </p>
-                        <div class="service-meta">
-                            <span class="service-duration"><i class="far fa-clock"></i> 60 min</span>
-                            <span class="service-rating"><i class="fas fa-star"></i> 4.9 (128)</span>
+                    <div class="service-info">
+                        <h3>Massagem Relaxante</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>(95)</span>
                         </div>
-                        <div class="service-price">R$ 120,00</div>
-                        <div class="service-actions">
-                            <button class="btn-details" onclick="openModal('details-modal')">Detalhes</button>
-                            <button class="btn-schedule" onclick="openModal('schedule-modal')">Agendar</button>
-                        </div>
+                        <div class="price">R$ 90,00</div>
+                        <button class="schedule-service" onclick="openModal('service-detail-modal')">
+                            <i class="fas fa-calendar-alt"></i> Agendar
+                        </button>
                     </div>
                 </div>
 
-
+                <!-- Serviço 3 -->
                 <div class="service-card">
                     <div class="service-image">
-                        <img src="" alt="Limpeza de Pele">
-                        <span class="service-badge">Mais Popular</span>
+                        <img src="https://via.placeholder.com/200" alt="Peeling Químico">
                     </div>
-                    <div class="service-content">
-                        <h3 class="service-title">Limpeza de Pele Profissional</h3>
-                        <p class="service-description">
-                            Remoção de cravos e impurezas com hidratação e finalização. Ideal para todos os tipos de pele.
-                        </p>
-                        <div class="service-meta">
-                            <span class="service-duration"><i class="far fa-clock"></i> 60 min</span>
-                            <span class="service-rating"><i class="fas fa-star"></i> 4.9 (128)</span>
+                    <div class="service-info">
+                        <h3>Peeling Químico</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(200)</span>
                         </div>
-                        <div class="service-price">R$ 120,00</div>
-                        <div class="service-actions">
-                            <button class="btn-details" onclick="openModal('details-modal')">Detalhes</button>
-                            <button class="btn-schedule" onclick="openModal('schedule-modal')">Agendar</button>
-                        </div>
+                        <div class="price">R$ 180,00</div>
+                        <button class="schedule-service" onclick="openModal('service-detail-modal')">
+                            <i class="fas fa-calendar-alt"></i> Agendar
+                        </button>
                     </div>
                 </div>
 
-
+                <!-- Serviço 4 -->
                 <div class="service-card">
                     <div class="service-image">
-                        <img src="" alt="Limpeza de Pele">
-                        <span class="service-badge">Mais Popular</span>
+                        <img src="https://via.placeholder.com/200" alt="Microagulhamento">
                     </div>
-                    <div class="service-content">
-                        <h3 class="service-title">Limpeza de Pele Profissional</h3>
-                        <p class="service-description">
-                            Remoção de cravos e impurezas com hidratação e finalização. Ideal para todos os tipos de pele.
-                        </p>
-                        <div class="service-meta">
-                            <span class="service-duration"><i class="far fa-clock"></i> 60 min</span>
-                            <span class="service-rating"><i class="fas fa-star"></i> 4.9 (128)</span>
+                    <div class="service-info">
+                        <h3>Microagulhamento</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>(110)</span>
                         </div>
-                        <div class="service-price">R$ 120,00</div>
-                        <div class="service-actions">
-                            <button class="btn-details" onclick="openModal('details-modal')">Detalhes</button>
-                            <button class="btn-schedule" onclick="openModal('schedule-modal')">Agendar</button>
-                        </div>
+                        <div class="price">R$ 250,00</div>
+                        <button class="schedule-service" onclick="openModal('service-detail-modal')">
+                            <i class="fas fa-calendar-alt"></i> Agendar
+                        </button>
                     </div>
                 </div>
-     
-             
-           
+
+                <!-- Serviço 5 -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://via.placeholder.com/200" alt="Drenagem Linfática">
+                    </div>
+                    <div class="service-info">
+                        <h3>Drenagem Linfática</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>(130)</span>
+                        </div>
+                        <div class="price">R$ 100,00</div>
+                        <button class="schedule-service" onclick="openModal('service-detail-modal')">
+                            <i class="fas fa-calendar-alt"></i> Agendar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Serviço 6 -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://via.placeholder.com/200" alt="Hidratação Facial">
+                    </div>
+                    <div class="service-info">
+                        <h3>Hidratação Facial</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(175)</span>
+                        </div>
+                        <div class="price">R$ 140,00</div>
+                        <button class="schedule-service" onclick="openModal('service-detail-modal')">
+                            <i class="fas fa-calendar-alt"></i> Agendar
+                        </button>
+                    </div>
+                </div>
             </section>
-            
-            
         </main>
 
         <!-- Modal de Detalhes do Serviço -->
-        <div id="details-modal" class="modal">
+        <div id="service-detail-modal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeModal('details-modal')">&times;</span>
-                <div class="service-image">
-                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e" alt="Limpeza de Pele">
-                </div>
-                <div class="service-content" style="padding: 20px;">
-                    <h3 class="service-title">Limpeza de Pele Profissional</h3>
-                    <div class="service-meta">
-                        <span class="service-duration"><i class="far fa-clock"></i> 60 min</span>
-                        <span class="service-rating"><i class="fas fa-star"></i> 4.9 (128 avaliações)</span>
+                <span class="close" onclick="closeModal('service-detail-modal')">×</span>
+                <div class="service-detail-container">
+                    <div class="service-detail-image">
+                        <img src="https://via.placeholder.com/400x400" alt="Limpeza de Pele Profunda">
                     </div>
-                    <div class="service-price">R$ 120,00</div>
-                    <div class="service-description">
-                        <p>Nossa Limpeza de Pele Profissional é um tratamento completo que remove impurezas, cravos e células mortas, devolvendo a vitalidade e luminosidade à sua pele.</p>
-                        <p><strong>Benefícios:</strong></p>
-                        <ul>
-                            <li>Desobstrução dos poros</li>
-                            <li>Remoção de cravos e impurezas</li>
-                            <li>Hidratação profunda</li>
-                            <li>Uniformização do tom da pele</li>
-                            <li>Prevenção de acne</li>
-                        </ul>
-                        <p><strong>Indicações:</strong> Todos os tipos de pele, especialmente peles oleosas e com tendência a acne.</p>
-                        <p><strong>Contraindicações:</strong> Peles com irritações ou alergias ativas.</p>
-                    </div>
-                    <div class="service-actions" style="margin-top: 20px;">
-                        <button class="btn-schedule" style="width: 100%;" onclick="closeModal('details-modal'); openModal('schedule-modal')">Agendar Este Serviço</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal de Agendamento -->
-        <div id="schedule-modal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal('schedule-modal')">&times;</span>
-                <h3 style="padding: 20px 20px 0; margin-bottom: 0;">Agendar Serviço</h3>
-                <div class="schedule-form">
-                    <div class="form-group">
-                        <label>Serviço selecionado</label>
-                        <input type="text" value="Limpeza de Pele Profissional" readonly>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Data</label>
-                            <input type="date" id="schedule-date">
+                    <div class="service-detail-info">
+                        <h3>Limpeza de Pele Profunda</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>150 avaliações</span>
                         </div>
-                        <div class="form-group">
-                            <label>Horário</label>
-                            <select id="schedule-time">
+                        <div class="service-detail-price">R$ 120,00</div>
+                        <p class="service-detail-description">
+                            A Limpeza de Pele Profunda remove impurezas, células mortas e cravos, promovendo uma pele mais saudável e radiante. 
+                            Inclui esfoliação, extração, máscaras calmantes e hidratação. Ideal para todos os tipos de pele, especialmente peles oleosas e acneicas.
+                        </p>
+                        <div class="service-detail-meta">
+                            <div><strong>Duração:</strong> 60 minutos</div>
+                            <div><strong>Tipo de pele:</strong> Todos os tipos</div>
+                            <div><strong>Benefícios:</strong> Renovação celular, redução de oleosidade, pele revitalizada</div>
+                            <div><strong>Profissional:</strong> Esteticista certificado</div>
+                        </div>
+                        <div class="date-time-selector">
+                            <label for="service-date">Escolha a data:</label>
+                            <input type="date" id="service-date">
+                            <label for="service-time">Escolha o horário:</label>
+                            <select id="service-time">
                                 <option value="">Selecione um horário</option>
                                 <option value="09:00">09:00</option>
                                 <option value="10:00">10:00</option>
                                 <option value="11:00">11:00</option>
-                                <option value="13:00">13:00</option>
                                 <option value="14:00">14:00</option>
                                 <option value="15:00">15:00</option>
-                                <option value="16:00">16:00</option>
-                                <option value="17:00">17:00</option>
                             </select>
                         </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Profissional</label>
-                        <select>
-                            <option value="">Qualquer profissional</option>
-                            <option value="ana">Ana Silva</option>
-                            <option value="carlos">Carlos Mendes</option>
-                            <option value="marina">Marina Oliveira</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Observações (opcional)</label>
-                        <textarea placeholder="Alguma observação importante?"></textarea>
-                    </div>
-                    
-                    <div class="modal-buttons">
-                        <button class="cancel" onclick="closeModal('schedule-modal')">Cancelar</button>
-                        <button class="confirm" onclick="confirmSchedule()">Confirmar Agendamento</button>
+                        <button class="schedule-service-large" onclick="scheduleServiceFromModal()">
+                            <i class="fas fa-calendar-alt"></i> Agendar Serviço
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Modal de Confirmação de Agendamento -->
-        <div id="confirmation-modal" class="modal">
+        <div id="schedule-service-modal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeModal('confirmation-modal')">&times;</span>
-                <div style="text-align: center; padding: 30px;">
-                    <i class="far fa-calendar-check" style="font-size: 50px; color: #8B4513; margin-bottom: 20px;"></i>
-                    <h3>Agendamento Confirmado!</h3>
-                    <p>Seu serviço foi agendado com sucesso.</p>
-                    <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                        <p><strong>Limpeza de Pele Profissional</strong></p>
-                        <p>12 de Janeiro de 2025 - 14:00</p>
-                        <p>Com: Ana Silva</p>
-                    </div>
-                    <p>Você receberá um e-mail de confirmação com todos os detalhes.</p>
-                    <button class="confirm" style="width: 100%; margin-top: 20px;" onclick="closeModal('confirmation-modal')">OK</button>
+                <span class="close" onclick="closeModal('schedule-service-modal')">×</span>
+                <h3>Serviço agendado com sucesso!</h3>
+                <div class="modal-buttons">
+                    <button class="cancel" onclick="closeModal('schedule-service-modal')">Continuar explorando</button>
+                    <button class="confirm" onclick="goToAppointments()">Ver agendamentos</button>
                 </div>
             </div>
         </div>
@@ -372,9 +341,9 @@
                 <button>Finalizar Compra</button>
             </div>
         </div>
-    </div>
 
-    <script src="../../js/global.js"></script>
-    <script src="../../js/usuarios/user-service.js"></script>
+        <script src="../../js/global.js"></script>
+        <script src="../../js/usuarios/user-service.js"></script>
+    </div>
 </body>
 </html>
