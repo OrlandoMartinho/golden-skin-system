@@ -121,3 +121,42 @@ document.addEventListener('DOMContentLoaded', () => {
       modal.classList.add('active');
   }
 });
+
+
+function openTab(tabName) {
+    // Hide all tab contents
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabContents.forEach(content => {
+        content.classList.remove('active');
+    });
+
+    // Remove active class from all tab links
+    const tabLinks = document.querySelectorAll('.tab-link');
+    tabLinks.forEach(link => {
+        link.classList.remove('active');
+    });
+
+    // Show the selected tab content and set the active tab link
+    document.getElementById(tabName).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
+
+function openAddPlanModal() {
+    document.getElementById('plan-modal').style.display = 'block';
+    document.getElementById('plan-modal-title').textContent = 'Adicionar Plano';
+    document.getElementById('plan-form').reset();
+}
+
+function editPlan(id) {
+    // Placeholder for edit plan logic
+    document.getElementById('plan-modal').style.display = 'block';
+    document.getElementById('plan-modal-title').textContent = 'Editar Plano';
+    // Populate form with plan data (requires backend integration)
+}
+
+function deletePlan(id) {
+    document.getElementById('confirm-modal').style.display = 'block';
+    document.getElementById('confirm-message').textContent = 'Tem certeza que deseja excluir este plano?';
+    // Store the id for confirmation action
+    document.getElementById('confirm-modal').dataset.planId = id;
+}
