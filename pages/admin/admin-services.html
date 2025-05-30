@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pele Douro - Gerenciar Serviços e Planos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/global.css">
+    <link rel="stylesheet" href="../../css/admin/admin-services.css">
+</head>
+<body>
+    <div class="container">
+        <div class="overlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="../../assets/img/logo.png" alt="Logo Pele Douro">
+            </div>
+
+            <button class="close-sidebar">
+                <i class="fa-solid fa-x"></i>
+            </button>
+
+            <nav class="sidebar-nav">
+                <a href="admin-home.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Painel</span>
+                </a>
+                <a href="admin-users.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Usuários</span>
+                </a>
+                <a href="admin-services.html" class="nav-item active">
+                    <i class="fas fa-concierge-bell"></i>
+                    <span>Serviços e Planos</span>
+                </a>
+                <a href="admin-products.html" class="nav-item">
+                    <i class="fas fa-store"></i>
+                    <span>Produtos</span>
+                </a>
+                <a href="admin-reports.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Relatórios</span>
+                </a>
+                <a href="admin-chat.html" class="nav-item">
+                    <i class="far fa-comments"></i>
+                    <span>Chat</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="page-title">
+                    <h1>Gerenciar Serviços e Planos</h1>
+                    <p>Administre os serviços e planos oferecidos pela clínica</p>
+                </div>
+                <div class="header-icons">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Admin <i class="fas fa-chevron-down"></i></span>
+                        <div class="dropdown-content">
+                            <a href="admin-settings.html">
+                                <i class="fas fa-cog"></i> Definições
+                            </a>
+                            <a href="#">
+                                <i class="fas fa-sign-out-alt"></i> Terminar sessão
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Tab Navigation -->
+            <div class="tab-nav">
+                <button class="tab-link active" onclick="openTab('services-tab')">Serviços</button>
+                <button class="tab-link" onclick="openTab('plans-tab')">Planos</button>
+            </div>
+
+            <!-- Services Tab -->
+            <div id="services-tab" class="tab-content active">
+                <!-- Search and Filter -->
+                <div class="search-filter-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Pesquisar serviços..." id="service-search">
+                    </div>
+                    <div class="filter-box">
+                        <select id="service-status-filter">
+                            <option value="all">Todos os status</option>
+                            <option value="active">Ativos</option>
+                            <option value="inactive">Inativos</option>
+                        </select>
+                        <select id="service-category-filter">
+                            <option value="all">Todas as categorias</option>
+                            <option value="massage">Massagem</option>
+                            <option value="facial">Tratamento Facial</option>
+                            <option value="laser">Depilação a Laser</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Services Container -->
+                <div class="services-container">
+                    <div class="services-header">
+                        <h2>Lista de Serviços</h2>
+                        <button class="add-service-btn" onclick="openAddServiceModal()">
+                            <i class="fas fa-plus"></i> Adicionar Serviço
+                        </button>
+                    </div>
+
+                    <div class="services-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Categoria</th>
+                                    <th>Duração</th>
+                                    <th>Preço</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Service 1 -->
+                                <tr>
+                                    <td>Massagem Relaxante</td>
+                                    <td>Massagem</td>
+                                    <td>60 min</td>
+                                    <td>R$ 120,00</td>
+                                    <td><span class="status-active">Ativo</span></td>
+                                    <td>
+                                        <button class="action-btn" onclick="editService(1)">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="action-btn" onclick="deleteService(1)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Service 2 -->
+                                <tr>
+                                    <td>Tratamento Facial</td>
+                                    <td>Tratamento Facial</td>
+                                    <td>45 min</td>
+                                    <td>R$ 85,00</td>
+                                    <td><span class="status-active">Ativo</span></td>
+                                    <td>
+                                        <button class="action-btn" onclick="editService(2)">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="action-btn" onclick="deleteService(2)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Service 3 -->
+                                <tr>
+                                    <td>Depilação a Laser</td>
+                                    <td>Depilação a Laser</td>
+                                    <td>30 min</td>
+                                    <td>R$ 150,00</td>
+                                    <td><span class="status-inactive">Inativo</span></td>
+                                    <td>
+                                        <button class="action-btn" onclick="editService(3)">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="action-btn" onclick="deleteService(3)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plans Tab -->
+            <div id="plans-tab" class="tab-content">
+                <!-- Search and Filter -->
+                <div class="search-filter-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Pesquisar planos..." id="plan-search">
+                    </div>
+                    <div class="filter-box">
+                        <select id="plan-status-filter">
+                            <option value="all">Todos os status</option>
+                            <option value="active">Ativos</option>
+                            <option value="inactive">Inativos</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Plans Container -->
+                <div class="plans-container">
+                    <div class="plans-header">
+                        <h2>Lista de Planos</h2>
+                        <button class="add-plan-btn" onclick="openAddPlanModal()">
+                            <i class="fas fa-plus"></i> Adicionar Plano
+                        </button>
+                    </div>
+
+                    <div class="plans-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Descrição</th>
+                                    <th>Preço Mensal</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Plan 1 -->
+                                <tr>
+                                    <td>Plano Básico</td>
+                                    <td>1 sessão de massagem por mês</td>
+                                    <td>R$ 100,00</td>
+                                    <td><span class="status-active">Ativo</span></td>
+                                    <td>
+                                        <button class="action-btn" onclick="editPlan(1)">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="action-btn" onclick="deletePlan(1)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Plan 2 -->
+                                <tr>
+                                    <td>Plano Premium</td>
+                                    <td>4 sessões de qualquer serviço por mês</td>
+                                    <td>R$ 350,00</td>
+                                    <td><span class="status-active">Ativo</span></td>
+                                    <td>
+                                        <button class="action-btn" onclick="editPlan(2)">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="action-btn" onclick="deletePlan(2)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add/Edit Service Modal -->
+            <div id="service-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('service-modal')">×</span>
+                    <h3 id="modal-title">Adicionar Serviço</h3>
+                    <form id="service-form">
+                        <div class="form-group">
+                            <label for="service-name">Nome</label>
+                            <input type="text" id="service-name" placeholder="Digite o nome do serviço" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="service-category">Categoria</label>
+                            <select id="service-category" required>
+                                <option value="massage">Massagem</option>
+                                <option value="facial">Tratamento Facial</option>
+                                <option value="laser">Depilação a Laser</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="service-duration">Duração (minutos)</label>
+                            <input type="number" id="service-duration" min="1" placeholder="Digite a duração" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="service-price">Preço (R$)</label>
+                            <input type="number" id="service-price" step="0.01" min="0" placeholder="Digite o preço" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="service-status">Status</label>
+                            <select id="service-status" required>
+                                <option value="active">Ativo</option>
+                                <option value="inactive">Inativo</option>
+                            </select>
+                        </div>
+                        <div class="modal-buttons">
+                            <button type="button" onclick="closeModal('service-modal')">Cancel</button>
+                            <button type="submit" class="confirm">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Add/Edit Plan Modal -->
+            <div id="plan-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('plan-modal')">×</span>
+                    <h3 id="plan-modal-title">Adicionar Plano</h3>
+                    <form id="plan-form">
+                        <div class="form-group">
+                            <label for="plan-name">Nome</label>
+                            <input type="text" id="plan-name" placeholder="Digite o nome do plano" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="plan-description">Descrição</label>
+                            <textarea id="plan-description" placeholder="Descreva o plano" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="plan-price">Preço Mensal (R$)</label>
+                            <input type="number" id="plan-price" step="0.01" min="0" placeholder="Digite o preço mensal" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="plan-status">Status</label>
+                            <select id="plan-status" required>
+                                <option value="active">Ativo</option>
+                                <option value="inactive">Inativo</option>
+                            </select>
+                        </div>
+                        <div class="modal-buttons">
+                            <button type="button" onclick="closeModal('plan-modal')">Cancel</button>
+                            <button type="submit" class="confirm">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Confirmation Modal -->
+            <div id="confirm-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('confirm-modal')">×</span>
+                    <h3>Confirmar Ação</h3>
+                    <p id="confirm-message"></p>
+                    <div class="modal-buttons">
+                        <button class="cancel" onclick="closeModal('confirm-modal')">Cancel</button>
+                        <button class="confirm" onclick="confirmAction()">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Dropdown -->
+            <div class="notifications-dropdown">
+                <div class="notification-item">
+                    <i class="fas fa-concierge-bell"></i>
+                    <div>
+                        <p>Novo serviço adicionado</p>
+                        <small>15 minutos atrás</small>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <i class="fas fa-edit"></i>
+                    <div>
+                        <p>Serviço atualizado</p>
+                        <small>Hoje, 10:00</small>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://src/js/global.js"></script>
+    <script src="js/admin/admin-services.js"></script>
+    <script>
+        function openTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all tab links
+            const tabLinks = document.querySelectorAll('.tab-link');
+            tabLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Show the selected tab content and set the active tab link
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function openAddPlanModal() {
+            document.getElementById('plan-modal').style.display = 'block';
+            document.getElementById('plan-modal-title').textContent = 'Adicionar Plano';
+            document.getElementById('plan-form').reset();
+        }
+
+        function editPlan(id) {
+            // Placeholder for edit plan logic
+            document.getElementById('plan-modal').style.display = 'block';
+            document.getElementById('plan-modal-title').textContent = 'Editar Plano';
+            // Populate form with plan data (requires backend integration)
+        }
+
+        function deletePlan(id) {
+            document.getElementById('confirm-modal').style.display = 'block';
+            document.getElementById('confirm-message').textContent = 'Tem certeza que deseja excluir este plano?';
+            // Store the id for confirmation action
+            document.getElementById('confirm-modal').dataset.planId = id;
+        }
+    </script>
+</body>
+</html>

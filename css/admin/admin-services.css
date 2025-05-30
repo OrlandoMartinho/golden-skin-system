@@ -1,0 +1,528 @@
+@import url('../global.css');
+
+/* ============ BASE STYLES ============ */
+.services-container,
+.plans-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    margin-top: 20px;
+}
+
+/* ============ HEADER (SERVICES & PLANS) ============ */
+.services-header,
+.plans-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.services-header h2,
+.plans-header h2 {
+    font-size: 20px;
+    color: #333;
+}
+
+.add-service-btn,
+.add-plan-btn {
+    background: #5a8f7b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.add-service-btn:hover,
+.add-plan-btn:hover {
+    background: var(--secondary);
+}
+
+.add-service-btn i,
+.add-plan-btn i {
+    font-size: 14px;
+}
+
+/* ============ SEARCH AND FILTER ============ */
+.search-filter-container {
+    padding: 10px 15px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.search-box {
+    flex: 1;
+    position: relative;
+}
+
+.search-box i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px 10px 10px 35px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 14px;
+    outline: none;
+}
+
+.filter-box {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-box select {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+}
+
+/* ============ TABLES (SERVICES & PLANS) ============ */
+.services-table,
+.plans-table {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.services-table table,
+.plans-table table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px; /* Ensures table content doesn't collapse too much */
+}
+
+.services-table th,
+.services-table td,
+.plans-table th,
+.plans-table td {
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    white-space: nowrap; /* Prevents text wrapping in table cells */
+}
+
+.services-table th,
+.plans-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+}
+
+.services-table tr:hover,
+.plans-table tr:hover {
+    background: #f9f9f9;
+}
+
+.status-active {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    background: #e6f7ee;
+    color: #00a859;
+}
+
+.status-inactive {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    background: #fee;
+    color: #e74c3c;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: #5a8f7b;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: color 0.3s ease;
+}
+
+.action-btn:hover {
+    color: var(--secondary);
+}
+
+/* ============ TAB NAVIGATION ============ */
+.tab-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-link {
+    background: #f5f5f5;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.tab-link:hover {
+    background: #e0e0e0;
+}
+
+.tab-link.active {
+    background: #5a8f7b;
+    color: white;
+    font-weight: bold;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ============ MODAL ============ */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: opacity 0.3s ease;
+}
+
+.modal.active {
+    opacity: 1;
+    pointer-events: auto;
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    position: relative;
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-content h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-buttons .cancel,
+.modal-buttons .confirm {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.modal-buttons .cancel {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.modal-buttons .confirm {
+    background: #5a8f7b;
+    color: white;
+}
+
+.modal-buttons .confirm:hover {
+    background: var(--secondary);
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    color: #aaa;
+    cursor: pointer;
+}
+
+/* ============ NOTIFICATIONS DROPDOWN ============ */
+.notifications-dropdown {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    display: none;
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.notification-item i {
+    font-size: 18px;
+    margin-right: 10px;
+    color: #6c63ff;
+}
+
+.notification-item p {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.notification-item small {
+    font-size: 12px;
+    color: #999;
+}
+
+/* ============ RESPONSIVENESS ============ */
+@media (max-width: 992px) {
+    .services-container,
+    .plans-container {
+        padding: 20px;
+    }
+
+    .modal-content {
+        max-width: 450px;
+    }
+
+    .notifications-dropdown {
+        width: 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .search-filter-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .filter-box {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .services-header,
+    .plans-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .services-table,
+    .plans-table {
+        font-size: 12px;
+    }
+
+    .services-table th,
+    .services-table td,
+    .plans-table th,
+    .plans-table td {
+        padding: 8px;
+    }
+
+    .tab-nav {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .tab-link {
+        width: 100%;
+        text-align: center;
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .notifications-dropdown {
+        width: 90%;
+        max-width: 280px;
+        right: 5%;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 250px;
+        height: 100%;
+        background: white;
+        transition: left 0.3s ease;
+        z-index: 1001;
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
+    .overlay.active {
+        display: block;
+    }
+}
+
+@media (max-width: 576px) {
+    .services-header h2,
+    .plans-header h2 {
+        font-size: 18px;
+    }
+
+    .services-table th,
+    .services-table td,
+    .plans-table th,
+    .plans-table td {
+        font-size: 11px;
+        padding: 6px;
+    }
+
+    .search-box input,
+    .filter-box select {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .search-box input {
+        padding-left: 30px;
+    }
+
+    .search-box i {
+        font-size: 12px;
+        left: 10px;
+    }
+
+    .add-service-btn,
+    .add-plan-btn {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .modal-content {
+        max-width: 90%;
+        padding: 15px;
+    }
+
+    .modal-content h3 {
+        font-size: 16px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .modal-buttons .cancel,
+    .modal-buttons .confirm {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    .close {
+        font-size: 20px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .services-container,
+    .plans-container {
+        padding: 35px;
+    }
+
+    .services-header h2,
+    .plans-header h2 {
+        font-size: 24px;
+    }
+
+    .tab-link {
+        font-size: 18px;
+        padding: 12px 24px;
+    }
+
+    .modal-content {
+        max-width: 650px;
+    }
+
+    .notifications-dropdown {
+        width: 350px;
+    }
+}

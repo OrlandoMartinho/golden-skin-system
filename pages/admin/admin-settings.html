@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pele Douro - Definições</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/global.css">
+    <link rel="stylesheet" href="../../css/admin/admin-settings.css">
+</head>
+<body>
+    <div class="container">
+        <div class="overlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="../../assets/img/logo.png" alt="Logo Pele Douro">
+            </div>
+
+            <button class="close-sidebar">
+                <i class="fa-solid fa-x"></i>
+            </button>
+
+            <nav class="sidebar-nav">
+                <a href="admin-home.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Painel</span>
+                </a>
+                <a href="admin-users.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Usuários</span>
+                </a>
+                <a href="admin-services.html" class="nav-item">
+                    <i class="fas fa-concierge-bell"></i>
+                    <span>Serviços</span>
+                </a>
+                <a href="admin-products.html" class="nav-item">
+                    <i class="fas fa-store"></i>
+                    <span>Produtos</span>
+                </a>
+                <a href="admin-reports.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Relatórios</span>
+                </a>
+                <a href="admin-chat.html" class="nav-item">
+                    <i class="far fa-comments"></i>
+                    <span>Chat</span>
+                </a>
+                <a href="admin-settings.html" class="nav-item active">
+                    <i class="fas fa-cog"></i>
+                    <span>Definições</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="page-title">
+                    <h1>Definições</h1>
+                    <p>Gerencie suas informações e configurações do sistema</p>
+                </div>
+                <div class="header-icons">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Admin <i class="fas fa-chevron-down"></i></span>
+                        <div class="dropdown-content">
+                            <a href="admin-settings.html" class="active">
+                                <i class="fas fa-cog"></i> Definições
+                            </a>
+                            <a href="#">
+                                <i class="fas fa-sign-out-alt"></i> Terminar sessão
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Settings Container -->
+            <div class="settings-container">
+                <!-- Tabs Navigation -->
+                <div class="settings-tabs">
+                    <div class="settings-tab active" data-tab="general">
+                        <i class="fas fa-user-cog"></i> Geral
+                    </div>
+                    <div class="settings-tab" data-tab="security">
+                        <i class="fas fa-shield-alt"></i> Segurança
+                    </div>
+                    <div class="settings-tab" data-tab="system">
+                        <i class="fas fa-cogs"></i> Sistema
+                    </div>
+                </div>
+
+                <!-- General Tab Content -->
+                <div id="general-tab" class="settings-content active">
+                    <div class="settings-header">
+                        <h2>Configurações Gerais</h2>
+                    </div>
+                    <div class="settings-form">
+                        <!-- Alterar Nome -->
+                        <div class="form-group">
+                            <label for="admin-name">Nome do Administrador</label>
+                            <input type="text" id="admin-name" placeholder="Digite seu nome" value="Admin">
+                            <button class="save-btn" onclick="saveName()">Salvar</button>
+                        </div>
+                        <!-- Alterar Número -->
+                        <div class="form-group">
+                            <label for="admin-phone">Número de Telefone</label>
+                            <input type="tel" id="admin-phone" placeholder="Digite seu número" value="+55 11 98765-4321">
+                            <button class="save-btn" onclick="savePhone()">Salvar</button>
+                        </div>
+                        <!-- Atualizar Foto de Perfil -->
+                        <div class="form-group">
+                            <label for="admin-photo">Foto de Perfil</label>
+                            <div class="profile-photo-upload">
+                                <img src="https://via.placeholder.com/100" alt="Foto de Perfil" id="profile-photo-preview">
+                                <input type="file" id="admin-photo" accept="image/*" onchange="previewPhoto(event)">
+                                <button class="upload-btn" onclick="uploadPhoto()">Atualizar Foto</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Tab Content -->
+                <div id="security-tab" class="settings-content">
+                    <div class="settings-header">
+                        <h2>Configurações de Segurança</h2>
+                    </div>
+                    <div class="settings-form">
+                        <!-- Alterar E-mail -->
+                        <div class="form-group">
+                            <label for="admin-email">E-mail</label>
+                            <input type="email" id="admin-email" placeholder="Digite seu e-mail" value="admin@peledouro.com">
+                            <button class="save-btn" onclick="saveEmail()">Salvar</button>
+                        </div>
+                        <!-- Alterar Senha -->
+                        <div class="form-group">
+                            <label for="current-password">Senha Atual</label>
+                            <input type="password" id="current-password" placeholder="Digite sua senha atual">
+                            <label for="new-password">Nova Senha</label>
+                            <input type="password" id="new-password" placeholder="Digite sua nova senha">
+                            <label for="confirm-password">Confirmar</label>
+                            <input type="password" id="confirm-password" placeholder="Confirme sua nova senha">
+                            <button class="submit-btn" onclick="savePassword()">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Tab Content -->
+                <div id="system-tab" class="settings-content">
+                    <div class="settings-header">
+                        <h2>Configurações do Sistema</h2>
+                    </div>
+                    <div class="settings-form">
+                        <!-- Nome da Clínica -->
+                        <div class="form-group">
+                            <label for="clinic-name">Nome da Clínica</label>
+                            <input type="text" id="clinic-name" placeholder="Digite o nome da clínica" value="Pele Douro">
+                            <button class="save-btn" onclick="saveClinicName()">Salvar</button>
+                        </div>
+                        <!-- Endereço da Clínica -->
+                        <div class="form-group">
+                            <label for="clinic-address">Endereço da Clínica</label>
+                            <input type="text" id="clinic-address" placeholder="Digite o endereço" value="Av. Paulista, 1234, São Paulo, SP">
+                            <button class="save-btn" onclick="saveClinicAddress()">Salvar</button>
+                        </div>
+                        <!-- Configurações de Notificações -->
+                        <div class="form-group">
+                            <label>Notificações</label>
+                            <div class="notification-settings">
+                                <label>
+                                    <input type="checkbox" id="notify-email" checked>
+                                    Receber notificações por e-mail
+                                </label>
+                                <label>
+                                    <input type="checkbox" id="notify-sms">
+                                    Receber notificações por SMS
+                                </label>
+                                <button class="save-btn" onclick="saveNotificationSettings()">Salvar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Confirmation Modal -->
+        <div id="confirm-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('confirm-modal')">×</span>
+                <h3>Confirmar Alteração</h3>
+                <p id="confirm-message">Tem certeza que deseja salvar as alterações?</p>
+                <div class="modal-buttons">
+                    <button class="cancel" onclick="closeModal('confirm-modal')">Cancelar</button>
+                    <button class="confirm" onclick="confirmAction()">Confirmar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Dropdown -->
+        <div class="notifications-dropdown">
+            <div class="notification-item">
+                <i class="fas fa-cog"></i>
+                <div>
+                    <p>Perfil atualizado</p>
+                    <small>5 minutos atrás</small>
+                </div>
+            </div>
+            <div class="notification-item">
+                <i class="fas fa-shield-alt"></i>
+                <div>
+                    <p>Senha alterada com sucesso</p>
+                    <small>Hoje, 14:00</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/global.js"></script>
+    <script src="../../js/admin/admin-settings.js"></script>
+</body>
+</html>
