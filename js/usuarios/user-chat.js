@@ -7,7 +7,7 @@
             if(chatId === 1) {
                 document.getElementById('chat-name').textContent = 'Ana Silva - Massagista';
                 document.getElementById('chat-status').textContent = 'Online';
-                document.getElementById('chat-avatar').src = 'https://via.placeholder.com/50';
+                document.getElementById('chat-avatar').src = '../../assets/img/Elipse 51.png';
                 
                 // Limpar mensagens existentes
                 const messagesContainer = document.getElementById('chat-messages');

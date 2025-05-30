@@ -45,7 +45,7 @@
     --cancel-gray-hover: #999;
   
     --status-active-bg: #e6f7ee;
-    --status-active-text: #00a859;
+    --status-active-text: var(--primary);
     --status-inactive-bg: #fee;
     --status-inactive-text: #e74c3c;
   
