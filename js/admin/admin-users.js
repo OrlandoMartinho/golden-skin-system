@@ -1,118 +1,99 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Modal control functions
-  window.closeModal = function(modalId) {
-      const modal = document.getElementById(modalId);
-      modal.classList.remove('active');
-  };
+    
+    // User modal handling
+    const userModal = document.getElementById('user-modal');
+    const confirmModal = document.getElementById('confirm-modal');
+    const userForm = document.getElementById('user-form');
+    const modalTitle = document.getElementById('modal-title');
+    let editUserId = null;
 
-  window.confirmAction = function() {
-      const modal = document.getElementById('confirm-modal');
-      const messageElement = document.getElementById('confirm-message');
-      
-      console.log('Action confirmed:', messageElement.dataset.action);
-      modal.classList.remove('active');
-      alert('Ação realizada com sucesso!');
-  };
+    window.openAddUserModal = () => {
+        modalTitle.textContent = 'Adicionar Usuário';
+        userForm.reset();
+        userModal.classList.add('active');
+    };
 
-  // Open add user modal
-  window.openAddUserModal = function() {
-      const modal = document.getElementById('user-modal');
-      const form = document.getElementById('user-form');
-      const title = document.getElementById('modal-title');
-      
-      title.textContent = 'Adicionar Usuário';
-      form.reset();
-      modal.classList.add('active');
-  };
+    window.editUser = (id) => {
+        // Mock data for demonstration; replace with actual data fetching
+        const users = {
+            1: { name: 'João Silva', email: 'joao.silva@example.com', role: 'admin', status: 'active' },
+            2: { name: 'Maria Oliveira', email: 'maria.oliveira@example.com', role: 'customer', status: 'active' },
+            3: { name: 'Pedro Santos', email: 'pedro.santos@example.com', role: 'customer', status: 'inactive' }
+        };
 
-  // Edit user
-  window.editUser = function(userId) {
-      const modal = document.getElementById('user-modal');
-      const form = document.getElementById('user-form');
-      const title = document.getElementById('modal-title');
-      
-      // Simulate fetching user data (replace with API call)
-      const userData = {
-          1: { name: 'Ana Silva', email: 'ana.silva@peledouro.com', role: 'client', status: 'active' },
-          2: { name: 'Carlos Mendes', email: 'carlos.mendes@peledouro.com', role: 'staff', status: 'active' },
-          3: { name: 'Maria Costa', email: 'maria.costa@peledouro.com', role: 'admin', status: 'inactive' }
-      };
+        const user = users[id];
+        if (user) {
+            document.getElementById('user-name').value = user.name;
+            document.getElementById('user-email').value = user.email;
+            document.getElementById('user-role').value = user.role;
+            document.getElementById('user-status').value = user.status;
+            modalTitle.textContent = 'Editar Usuário';
+            editUserId = id;
+            userModal.classList.add('active');
+        }
+    };
 
-      const user = userData[userId];
-      if (user) {
-          title.textContent = 'Editar Usuário';
-          document.getElementById('user-name').value = user.name;
-          document.getElementById('user-email').value = user.email;
-          document.getElementById('user-role').value = user.role;
-          document.getElementById('user-status').value = user.status;
-          modal.classList.add('active');
-      }
-  };
+    window.deleteUser = (id) => {
+        editUserId = id;
+        document.getElementById('confirm-message').textContent = 'Tem certeza que deseja excluir este usuário?';
+        confirmModal.classList.add('active');
+    };
 
-  // Delete user
-  window.deleteUser = function(userId) {
-      showConfirmModal(`Tem certeza que deseja excluir o usuário ${userId}?`, `deleteUser-${userId}`);
-  };
+    window.closeModal = (modalId) => {
+        document.getElementById(modalId).classList.remove('active');
+        editUserId = null;
+    };
 
-  // Form submission
-  document.getElementById('user-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      
-      const name = document.getElementById('user-name').value.trim();
-      const email = document.getElementById('user-email').value.trim();
-      const role = document.getElementById('user-role').value;
-      const status = document.getElementById('user-status').value;
+    window.confirmAction = () => {
+        // Implement delete logic here
+        console.log(`Deleting user with ID: ${editUserId}`);
+        closeModal('confirm-modal');
+    };
 
-      if (!name || !email) {
-          alert('Por favor, preencha todos os campos obrigatórios.');
-          return;
-      }
+    userForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const userData = {
+            name: document.getElementById('user-name').value,
+            email: document.getElementById('user-email').value,
+            role: document.getElementById('user-role').value,
+            status: document.getElementById('user-status').value
+        };
 
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-          alert('Por favor, insira um e-mail válido.');
-          return;
-      }
+        if (editUserId) {
+            console.log(`Editing user ${editUserId}:`, userData);
+        } else {
+            console.log('Adding new user:', userData);
+        }
 
-      // Simulate saving user (replace with API call)
-      console.log('Saving user:', { name, email, role, status });
-      closeModal('user-modal');
-      alert('Usuário salvo com sucesso!');
-  });
+        closeModal('user-modal');
+    });
 
-  // Helper function to show confirmation modal
-  function showConfirmModal(message, action) {
-      const modal = document.getElementById('confirm-modal');
-      const messageElement = document.getElementById('confirm-message');
-      
-      messageElement.textContent = message;
-      messageElement.dataset.action = action;
-      modal.classList.add('active');
-  }
+    // Search and filter functionality
+    const searchInput = document.getElementById('user-search');
+    const roleFilter = document.getElementById('user-role-filter');
+    const statusFilter = document.getElementById('user-status-filter');
 
-  // Search and filter functionality
-  document.getElementById('user-search').addEventListener('input', filterUsers);
-  document.getElementById('user-role-filter').addEventListener('change', filterUsers);
-  document.getElementById('user-status-filter').addEventListener('change', filterUsers);
+    const filterUsers = () => {
+        const searchTerm = searchInput.value.toLowerCase();
+        const roleFilterValue = roleFilter.value;
+        const statusFilterValue = statusFilter.value;
 
-  function filterUsers() {
-      const search = document.getElementById('user-search').value.toLowerCase();
-      const roleFilter = document.getElementById('user-role-filter').value;
-      const statusFilter = document.getElementById('user-status-filter').value;
+        const rows = document.querySelectorAll('.users-table tbody tr');
+        rows.forEach(row => {
+            const name = row.cells[0].textContent.toLowerCase();
+            const email = row.cells[1].textContent.toLowerCase();
+            const role = row.cells[2].textContent.toLowerCase();
+            const status = row.cells[3].querySelector('span').textContent.toLowerCase();
 
-      const rows = document.querySelectorAll('.users-table tbody tr');
+            const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm);
+            const matchesRole = roleFilterValue === 'all' || role === roleFilterValue;
+            const matchesStatus = statusFilterValue === 'all' || status === statusFilterValue;
 
-      rows.forEach(row => {
-          const name = row.cells[0].textContent.toLowerCase();
-          const email = row.cells[1].textContent.toLowerCase();
-          const role = row.cells[2].textContent.toLowerCase();
-          const status = row.cells[3].textContent.toLowerCase();
+            row.style.display = matchesSearch && matchesRole && matchesStatus ? '' : 'none';
+        });
+    };
 
-          const matchesSearch = name.includes(search) || email.includes(search);
-          const matchesRole = roleFilter === 'all' || role === roleFilter;
-          const matchesStatus = statusFilter === 'all' || status === statusFilter;
-
-          row.style.display = matchesSearch && matchesRole && matchesStatus ? '' : 'none';
-      });
-  }
+    searchInput.addEventListener('input', filterUsers);
+    roleFilter.addEventListener('change', filterUsers);
+    statusFilter.addEventListener('change', filterUsers);
 });

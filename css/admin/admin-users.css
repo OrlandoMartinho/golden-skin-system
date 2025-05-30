@@ -2,24 +2,33 @@
 
 /* ============ BASE STYLES ============ */
 .users-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 20px;
     background: white;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    padding: 25px;
+    padding: 20px;
     margin-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* ============ USERS HEADER ============ */
 .users-header {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    gap: 15px;
 }
 
 .users-header h2 {
     font-size: 20px;
     color: #333;
+    margin: 0;
 }
 
 .add-user-btn {
@@ -35,6 +44,7 @@
     align-items: center;
     gap: 8px;
     transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
 .add-user-btn:hover {
@@ -43,14 +53,17 @@
 
 /* ============ SEARCH AND FILTER ============ */
 .search-filter-container {
-    padding: 10px 15px;
+    padding: 10px 0;
     display: flex;
+    flex-wrap: wrap;
     gap: 15px;
     align-items: center;
+    width: 100%;
 }
 
 .search-box {
     flex: 1;
+    min-width: 200px;
     position: relative;
 }
 
@@ -69,11 +82,13 @@
     border-radius: 20px;
     font-size: 14px;
     outline: none;
+    box-sizing: border-box;
 }
 
 .filter-box {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .filter-box select {
@@ -82,16 +97,20 @@
     border-radius: 5px;
     font-size: 14px;
     outline: none;
+    min-width: 150px;
 }
 
 /* ============ USERS TABLE ============ */
 .users-table {
     overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    min-width: 600px;
 }
 
 thead {
@@ -103,6 +122,7 @@ th, td {
     text-align: left;
     font-size: 14px;
     color: #333;
+    box-sizing: border-box;
 }
 
 th {
@@ -143,6 +163,7 @@ tr:hover {
     cursor: pointer;
     margin: 0 5px;
     transition: all 0.3s ease;
+    padding: 5px;
 }
 
 .action-btn:hover {
@@ -182,6 +203,8 @@ tr:hover {
     padding: 20px;
     position: relative;
     animation: modalFadeIn 0.3s ease-out;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 @keyframes modalFadeIn {
@@ -214,6 +237,7 @@ tr:hover {
     border-radius: 5px;
     font-size: 14px;
     outline: none;
+    box-sizing: border-box;
 }
 
 .modal-buttons {
@@ -221,6 +245,7 @@ tr:hover {
     justify-content: flex-end;
     gap: 10px;
     margin-top: 20px;
+    flex-wrap: wrap;
 }
 
 .modal-buttons .cancel,
@@ -230,6 +255,8 @@ tr:hover {
     border-radius: 4px;
     font-size: 14px;
     cursor: pointer;
+    flex: 1;
+    min-width: 100px;
 }
 
 .modal-buttons .cancel {
@@ -254,6 +281,9 @@ tr:hover {
     font-weight: bold;
     color: #aaa;
     cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
 }
 
 /* ============ NOTIFICATIONS DROPDOWN ============ */
@@ -266,11 +296,12 @@ tr:hover {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     width: 300px;
     display: none;
+    z-index: 100;
 }
 
 .notification-item {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     padding: 10px;
     border-bottom: 1px solid #eee;
 }
@@ -279,58 +310,104 @@ tr:hover {
     font-size: 18px;
     margin-right: 10px;
     color: #6c63ff;
+    flex-shrink: 0;
+}
+
+.notification-content {
+    flex: 1;
+    min-width: 0;
 }
 
 .notification-item p {
-    margin: 0;
+    margin: 0 0 5px 0;
     font-size: 14px;
     color: #333;
+    word-break: break-word;
 }
 
 .notification-item small {
     font-size: 12px;
     color: #999;
+    display: block;
 }
 
 /* ============ RESPONSIVENESS ============ */
 @media (max-width: 768px) {
+    .users-container {
+        padding: 15px;
+    }
+    
+    .users-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
     .search-filter-container {
         flex-direction: column;
         gap: 10px;
     }
-
-    .filter-box {
+    
+    .search-box, .filter-box {
         width: 100%;
-        flex-direction: column;
     }
-
-    .users-header {
-        flex-direction: column;
-        gap: 10px;
-        align-items: flex-start;
+    
+    .filter-box select {
+        width: 100%;
     }
-
-    .users-table {
-        font-size: 12px;
-    }
-
+    
     th, td {
-        padding: 8px;
+        padding: 8px 10px;
+        font-size: 13px;
     }
-
+    
+    .modal-content {
+        padding: 15px;
+    }
+    
+    .modal-buttons .cancel,
+    .modal-buttons .confirm {
+        padding: 8px 12px;
+    }
+    
     .notifications-dropdown {
-        width: 100%;
-        max-width: 280px;
+        width: calc(100% - 40px);
+        right: 10px;
+        top: 50px;
     }
 }
 
-@media (min-width: 576px) {
+@media (max-width: 576px) {
     .users-header h2 {
-        font-size: 22px;
+        font-size: 18px;
     }
-
-    th, td {
-        font-size: 15px;
+    
+    .add-user-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    
+    .search-box input, .filter-box select {
+        padding: 8px 8px 8px 30px;
+        font-size: 13px;
+    }
+    
+    .status-active, .status-inactive {
+        padding: 2px 8px;
+        font-size: 11px;
+    }
+    
+    .action-btn {
+        font-size: 14px;
+        margin: 0 3px;
+    }
+    
+    .modal-content h3 {
+        font-size: 16px;
+    }
+    
+    .form-group input, 
+    .form-group select {
+        padding: 8px 12px;
     }
 }
 
@@ -338,14 +415,20 @@ tr:hover {
     .users-container {
         padding: 30px;
     }
-
+    
     .modal-content {
         max-width: 600px;
     }
-
+    
     .notifications-dropdown {
         width: 350px;
     }
 }
 
-
+@media (min-width: 1200px) {
+    .users-container {
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

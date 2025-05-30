@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pele Douro - Gerenciar Usuários</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../../css/global.css">
+
     <link rel="stylesheet" href="../../css/admin/admin-users.css">
 </head>
 <body>
@@ -58,12 +58,12 @@
                 </button>
                 <div class="page-title">
                     <h1>Gerenciar Usuários</h1>
-                    <p>Administre clientes, funcionários e administradores</p>
+                    <p>Administre os usuários cadastrados no sistema</p>
                 </div>
                 <div class="header-icons">
                     <div class="notification-icon">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-badge">4</span>
+                        <span class="notification-badge">3</span>
                     </div>
                     <div class="user-profile">
                         <i class="fa-solid fa-user"></i>
@@ -90,15 +90,14 @@
                 </div>
                 <div class="filter-box">
                     <select id="user-role-filter">
-                        <option value="all">Todos os papéis</option>
-                        <option value="client">Clientes</option>
-                        <option value="staff">Funcionários</option>
-                        <option value="admin">Administradores</option>
+                        <option value="all">Todas as funções</option>
+                        <option value="admin">Administrador</option>
+                        <option value="customer">Cliente</option>
                     </select>
                     <select id="user-status-filter">
                         <option value="all">Todos os status</option>
-                        <option value="active">Ativos</option>
-                        <option value="inactive">Inativos</option>
+                        <option value="active">Ativo</option>
+                        <option value="inactive">Inativo</option>
                     </select>
                 </div>
             </div>
@@ -108,7 +107,7 @@
                 <div class="users-header">
                     <h2>Lista de Usuários</h2>
                     <button class="add-user-btn" onclick="openAddUserModal()">
-                        <i class="fas fa-user-plus"></i> Adicionar Usuário
+                        <i class="fas fa-plus"></i> Adicionar Usuário
                     </button>
                 </div>
 
@@ -117,8 +116,8 @@
                         <thead>
                             <tr>
                                 <th>Nome</th>
-                                <th>E-mail</th>
-                                <th>Papel</th>
+                                <th>Email</th>
+                                <th>Função</th>
                                 <th>Status</th>
                                 <th>Ações</th>
                             </tr>
@@ -126,9 +125,9 @@
                         <tbody>
                             <!-- User 1 -->
                             <tr>
-                                <td>Ana Silva</td>
-                                <td>ana.silva@peledouro.com</td>
-                                <td>Cliente</td>
+                                <td>João Silva</td>
+                                <td>joao.silva@example.com</td>
+                                <td>Administrador</td>
                                 <td><span class="status-active">Ativo</span></td>
                                 <td>
                                     <button class="action-btn" onclick="editUser(1)">
@@ -141,9 +140,9 @@
                             </tr>
                             <!-- User 2 -->
                             <tr>
-                                <td>Carlos Mendes</td>
-                                <td>carlos.mendes@peledouro.com</td>
-                                <td>Funcionário</td>
+                                <td>Maria Oliveira</td>
+                                <td>maria.oliveira@example.com</td>
+                                <td>Cliente</td>
                                 <td><span class="status-active">Ativo</span></td>
                                 <td>
                                     <button class="action-btn" onclick="editUser(2)">
@@ -156,9 +155,9 @@
                             </tr>
                             <!-- User 3 -->
                             <tr>
-                                <td>Maria Costa</td>
-                                <td>maria.costa@peledouro.com</td>
-                                <td>Administrador</td>
+                                <td>Pedro Santos</td>
+                                <td>pedro.santos@example.com</td>
+                                <td>Cliente</td>
                                 <td><span class="status-inactive">Inativo</span></td>
                                 <td>
                                     <button class="action-btn" onclick="editUser(3)">
@@ -183,18 +182,17 @@
                 <form id="user-form">
                     <div class="form-group">
                         <label for="user-name">Nome</label>
-                        <input type="text" id="user-name" placeholder="Digite o nome" required>
+                        <input type="text" id="user-name" placeholder="Digite o nome do usuário" required>
                     </div>
                     <div class="form-group">
-                        <label for="user-email">E-mail</label>
-                        <input type="email" id="user-email" placeholder="Digite o e-mail" required>
+                        <label for="user-email">Email</label>
+                        <input type="email" id="user-email" placeholder="Digite o email do usuário" required>
                     </div>
                     <div class="form-group">
-                        <label for="user-role">Papel</label>
+                        <label for="user-role">Função</label>
                         <select id="user-role" required>
-                            <option value="client">Cliente</option>
-                            <option value="staff">Funcionário</option>
                             <option value="admin">Administrador</option>
+                            <option value="customer">Cliente</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -228,17 +226,17 @@
         <!-- Notifications Dropdown -->
         <div class="notifications-dropdown">
             <div class="notification-item">
-                <i class="fas fa-user-plus"></i>
+                <i class="fas fa-users"></i>
                 <div>
                     <p>Novo usuário registrado</p>
-                    <small>10 minutos atrás</small>
+                    <small>15 minutos atrás</small>
                 </div>
             </div>
             <div class="notification-item">
-                <i class="fas fa-user-edit"></i>
+                <i class="fas fa-edit"></i>
                 <div>
                     <p>Usuário atualizado</p>
-                    <small>Hoje, 12:15</small>
+                    <small>Hoje, 09:30</small>
                 </div>
             </div>
         </div>
