@@ -156,4 +156,4 @@ document.addEventListener('DOMContentLoaded', () => {
       messageElement.dataset.action = action;
       modal.classList.add('active');
   }
-});
+}); 
