@@ -1,27 +1,6 @@
 @import url('../global.css');
 
-/* global.css */
-:root {
-  --background-white: #fff;
-  --shadow-light: rgba(0, 0, 0, 0.1);
-  --shadow-dark: rgba(0, 0, 0, 0.2);
-  --text-dark: #333;
-  --text-medium: #666;
-  --text-light: #999;
-  --text-white: #fff;
-  --chat-background: #f9f9f9;
-  --chat-hover: #e6f0fa;
-  --chat-active: #d1e7ff;
-  --chat-closed: #f1f1f1;
-  --primary-color: var(--primary);
-  --primary-color-hover: var(--secondary);
-  --danger-red: #e74c3c;
-  --danger-red-hover: #c0392b;
-  --border-light: #ddd;
-  --cancel-gray: #ccc;
-  --cancel-gray-hover: #999;
-  --modal-overlay: rgba(0, 0, 0, 0.5);
-}
+
 
 .search-filter-container{
   margin-top: 2vh;

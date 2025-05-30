@@ -1,24 +1,5 @@
 @import url('../global.css');
-/* global.css */
-:root {
-  --background-white: #fff;
-  --shadow-light: rgba(0, 0, 0, 0.1);
-  --shadow-medium: rgba(0, 0, 0, 0.3);
-  --text-dark: #333;
-  --text-medium: #555;
-  --text-light: #999;
-  --text-gray: #aaa;
-  --border-light: #ddd;
-  --border-lighter: #eee;
-  --modal-background: #f0f0f0;
-  --modal-overlay: rgba(0, 0, 0, 0.7);
-  --primary-color: var(--primary); /* Assumed for var(--primary) */
-  --secondary-color:var(--secondary); /* Assumed for var(--secondary) */
-  --accent-purple:var(--secondary);
-  --accent-purple-hover: var(--secondary);
-  --table-header-bg: #f8f9fa;
-  --table-hover-bg: #f9f9f9;
-}
+
 /* ============ BASE STYLES ============ */
 .reports-container {
     display: grid;

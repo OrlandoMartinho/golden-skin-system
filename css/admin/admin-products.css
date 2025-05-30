@@ -1,27 +1,7 @@
 @import url('../global.css');
 
 /* global.css */
-:root {
-  --background-white: #fff;
-  --shadow-light: rgba(0, 0, 0, 0.1);
-  --shadow-medium: rgba(0, 0, 0, 0.3);
-  --text-dark: #333;
-  --text-light: #999;
-  --text-gray: #aaa;
-  --border-light: #ddd;
-  --border-lighter: #eee;
-  --modal-background: #f0f0f0;
-  --modal-overlay: rgba(0, 0, 0, 0.7);
-  --primary-color: var(--primary); /* Assumed for var(--primary) */
-  --secondary-color: var(--secondary); /* Assumed for var(--secondary) */
-  --accent-purple: #6c63ff;
-  --status-active-bg: #e6f7ee;
-  --status-active-text: #00a859;
-  --status-inactive-bg: #fee;
-  --status-inactive-text: #e74c3c;
-  --table-header-bg: #f8f9fa;
-  --table-hover-bg: #f9f9f9;
-}
+
 /* ============ BASE STYLES ============ */
 .products-container {
     display: grid;
