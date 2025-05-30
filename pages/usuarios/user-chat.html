@@ -4,623 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pele Douro - Chat</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../../css/usuarios/user-home.css">
-    <style>
-       
-    /* Estilos específicos para a página de chat (MANTIDOS) */
-    .chat-container {
-        display: flex;
-        height: calc(100vh - 200px);
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        overflow: hidden;
-    }
-    
-    .chat-sidebar {
-        width: 300px;
-        border-right: 1px solid #eee;
-        background: #f9f9f9;
-        overflow-y: auto;
-        transition: transform 0.3s ease;
-    }
-    
-    .chat-main {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .chat-header {
-        padding: 15px;
-        border-bottom: 1px solid #eee;
-        background: #f5f5f5;
-        display: flex;
-        align-items: center;
-    }
-    
-    .chat-header img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 10px;
-    }
-    
-    .chat-header-info h4 {
-        margin: 0;
-        font-size: 16px;
-    }
-    
-    .chat-header-info p {
-        margin: 0;
-        font-size: 12px;
-        color: #888;
-    }
-    
-    .chat-header-actions {
-        margin-left: auto;
-    }
-    
-    .chat-messages {
-        flex: 1;
-        padding: 20px;
-        overflow-y: auto;
-        background: #fff;
-    }
-    
-    .message {
-        margin-bottom: 15px;
-        max-width: 70%;
-        animation: fadeIn 0.3s ease;
-    }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .message-in {
-        align-self: flex-start;
-    }
-    
-    .message-out {
-        align-self: flex-end;
-        margin-left: auto;
-    }
-    
-    .message-content {
-        padding: 10px 15px;
-        border-radius: 18px;
-        position: relative;
-    }
-    
-    .message-in .message-content {
-        background: #f1f1f1;
-        border-top-left-radius: 5px;
-    }
-    
-    .message-out .message-content {
-        background: #8B4513;
-        color: white;
-        border-top-right-radius: 5px;
-    }
-    
-    .message-time {
-        font-size: 11px;
-        color: #999;
-        margin-top: 5px;
-        text-align: right;
-    }
-    
-    .message-out .message-time {
-        color: rgba(255,255,255,0.7);
-    }
-    
-    .chat-input {
-        padding: 15px;
-        border-top: 1px solid #eee;
-        background: #f5f5f5;
-        display: flex;
-        align-items: center;
-    }
-    
-    .chat-input textarea {
-        flex: 1;
-        border: 1px solid #ddd;
-        border-radius: 20px;
-        padding: 10px 15px;
-        resize: none;
-        height: 40px;
-        max-height: 120px;
-        outline: none;
-        transition: height 0.2s ease;
-    }
-    
-    .chat-input-actions {
-        margin-left: 10px;
-        display: flex;
-    }
-    
-    .chat-input-actions button {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        border: none;
-        background: #8B4513;
-        color: white;
-        cursor: pointer;
-        margin-left: 5px;
-        transition: background 0.2s, transform 0.2s;
-    }
-    
-    .chat-input-actions button:hover {
-        background: #A0522D;
-        transform: scale(1.05);
-    }
-    
-    .chat-contact {
-        display: flex;
-        align-items: center;
-        padding: 12px 15px;
-        border-bottom: 1px solid #eee;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-    
-    .chat-contact:hover {
-        background: #f1f1f1;
-    }
-    
-    .chat-contact.active {
-        background: #e9e9e9;
-    }
-    
-    .chat-contact img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-right: 10px;
-    }
-    
-    .chat-contact-info {
-        flex: 1;
-    }
-    
-    .chat-contact-info h4 {
-        margin: 0;
-        font-size: 15px;
-        color: #333;
-    }
-    
-    .chat-contact-info p {
-        margin: 3px 0 0;
-        font-size: 13px;
-        color: #888;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    
-    .chat-contact-meta {
-        text-align: right;
-    }
-    
-    .chat-contact-time {
-        font-size: 11px;
-        color: #999;
-    }
-    
-    .chat-contact-badge {
-        background: #8B4513;
-        color: white;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 10px;
-        margin-top: 5px;
-    }
-    
-    .chat-search {
-        padding: 15px;
-        border-bottom: 1px solid #eee;
-    }
-    
-    .chat-search input {
-        width: 100%;
-        padding: 8px 15px;
-        border: 1px solid #ddd;
-        border-radius: 20px;
-        outline: none;
-    }
-    
-    .no-chat-selected {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        color: #888;
-    }
-    
-    .no-chat-selected i {
-        font-size: 50px;
-        margin-bottom: 20px;
-        color: #ddd;
-    }
-    
-    .chat-date-divider {
-        text-align: center;
-        margin: 20px 0;
-        position: relative;
-    }
-    
-    .chat-date-divider span {
-        background: #f5f5f5;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-size: 12px;
-        color: #888;
-        position: relative;
-        z-index: 1;
-    }
-    
-    .chat-date-divider:before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: #eee;
-        z-index: 0;
-    }
-    
-    .typing-indicator {
-        font-size: 12px;
-        color: #888;
-        font-style: italic;
-        margin-top: 5px;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-    
-    .typing-indicator.active {
-        opacity: 1;
-    }
-    
-    .back-to-contacts {
-        display: none;
-        background: none;
-        border: none;
-        font-size: 18px;
-        cursor: pointer;
-        color: #555;
-        margin-right: 10px;
-    }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">«
+    <link rel="stylesheet" href="../../css/usuarios/user-chat.css">
 
-    /* RESPONSIVIDADE */
-    @media (max-width: 1200px) {
-        .chat-container {
-            height: calc(100vh - 180px);
-        }
-        
-        .chat-sidebar {
-            width: 280px;
-        }
-        
-        .chat-messages {
-            padding: 15px;
-        }
-    }
-    
-    @media (max-width: 992px) {
-        .chat-container {
-            height: calc(100vh - 160px);
-        }
-        
-        .chat-contact {
-            padding: 10px 12px;
-        }
-        
-        .chat-contact img {
-            width: 45px;
-            height: 45px;
-        }
-        
-        .chat-header-actions button {
-            width: 35px;
-            height: 35px;
-            font-size: 14px;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .chat-container {
-            height: calc(100vh - 140px);
-            flex-direction: column;
-        }
-        
-        .chat-sidebar {
-            width: 100%;
-            height: auto;
-            max-height: 50vh;
-            border-right: none;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .chat-main {
-            display: none;
-            height: calc(50vh - 60px);
-        }
-        
-        .chat-main.active {
-            display: flex;
-        }
-        
-        .back-to-contacts {
-            display: block;
-        }
-        
-        .no-chat-selected {
-            display: none;
-        }
-        
-        .message {
-            max-width: 85%;
-        }
-    }
-    
-    @media (max-width: 576px) {
-        .chat-container {
-            height: calc(100vh - 120px);
-        }
-        
-        .chat-header {
-            padding: 10px;
-        }
-        
-        .chat-header img {
-            width: 35px;
-            height: 35px;
-        }
-        
-        .chat-header-info h4 {
-            font-size: 15px;
-        }
-        
-        .chat-input {
-            padding: 10px;
-        }
-        
-        .chat-input textarea {
-            padding: 8px 12px;
-        }
-        
-        .chat-input-actions button {
-            width: 35px;
-            height: 35px;
-            font-size: 14px;
-        }
-        
-        .message-content {
-            padding: 8px 12px;
-            font-size: 14px;
-        }
-        
-        .chat-contact-info h4 {
-            font-size: 14px;
-        }
-        
-        .chat-contact-info p {
-            font-size: 12px;
-        }
-    }
-    
-    @media (max-width: 400px) {
-        .chat-header-actions button {
-            width: 30px;
-            height: 30px;
-            font-size: 12px;
-            margin-left: 3px;
-        }
-        
-        .chat-input-actions button {
-            width: 30px;
-            height: 30px;
-            font-size: 12px;
-        }
-        
-        .chat-contact img {
-            width: 40px;
-            height: 40px;
-        }
-    }
-
-
-    
-    /* Estilos dos botões de ação do chat (MANTIDOS E MELHORADOS) */
-    .chat-header-actions {
-        margin-left: auto;
-        display: flex;
-        gap: 8px;
-    }
-    
-    .chat-header-actions button {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        border: none;
-        background: #8B4513;
-        color: white;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-    }
-    
-    .chat-header-actions button:hover {
-        background: #A0522D;
-        transform: scale(1.1);
-    }
-    
-    .chat-header-actions button i {
-        font-size: 16px;
-    }
-    
-    /* Botões de upload e ações no input */
-    .chat-input-actions {
-        display: flex;
-        gap: 8px;
-        margin-left: 10px;
-    }
-    
-    .chat-input-actions button {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        border: none;
-        background: #8B4513;
-        color: white;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-    }
-    
-    .chat-input-actions button:hover {
-        background: #A0522D;
-        transform: scale(1.05);
-    }
-    
-    .chat-input-actions button i {
-        font-size: 18px;
-    }
-    
-    /* Lista de clientes sem scroll (ajustada) */
-    .chat-sidebar {
-        width: 300px;
-        border-right: 1px solid #eee;
-        background: #f9f9f9;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
-    
-    .chat-contacts-container {
-        flex: 1;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .chat-contacts-list {
-        flex: 1;
-        overflow-y: auto;
-    }
-    
-    /* Ajustes para evitar scroll desnecessário */
-    .chat-container {
-        display: flex;
-        height: calc(100vh - 200px);
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        overflow: hidden;
-    }
-    
-    /* RESPONSIVIDADE PARA OS NOVOS ELEMENTOS */
-    @media (max-width: 992px) {
-        .chat-header-actions button {
-            width: 32px;
-            height: 32px;
-        }
-        
-        .chat-header-actions button i {
-            font-size: 14px;
-        }
-        
-        .chat-input-actions button {
-            width: 36px;
-            height: 36px;
-        }
-        
-        .chat-input-actions button i {
-            font-size: 16px;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .chat-sidebar {
-            width: 100%;
-            height: auto;
-            max-height: 60vh;
-        }
-        
-        .chat-contacts-list {
-            max-height: calc(60vh - 120px);
-        }
-        
-        .chat-header-actions {
-            gap: 6px;
-        }
-        
-        .chat-header-actions button {
-            width: 30px;
-            height: 30px;
-        }
-    }
-    
-    @media (max-width: 576px) {
-        .chat-header-actions button {
-            width: 28px;
-            height: 28px;
-            font-size: 12px;
-        }
-        
-        .chat-input-actions {
-            gap: 5px;
-        }
-        
-        .chat-input-actions button {
-            width: 34px;
-            height: 34px;
-        }
-    }
-    
-    /* Efeitos de hover e foco para melhor UX */
-    button:focus {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.3);
-    }
-    
-    /* Transições suaves para os botões */
-    button {
-        transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
-    }
-    
-    /* Estilo para o botão ativo (quando pressionado) */
-    button:active {
-        transform: scale(0.95);
-    }
-    
-    /* Ajuste para o textarea do chat */
-    .chat-input textarea {
-        transition: height 0.2s ease, border-color 0.2s ease;
-    }
-    
-    .chat-input textarea:focus {
-        border-color: #8B4513;
-    }
-
-
-    </style>
 </head>
 <body>
     <div class="container">
@@ -646,7 +32,7 @@
                 <span>Loja de Produtos</span>
             </a>
 
-            <a href="user-chat.html" class="nav-item active">
+            <a href="#" class="nav-item active">
                 <i class="far fa-comments"></i>
                 <span>Chat</span>
             </a>
@@ -665,7 +51,7 @@
                 </button>
                 <div class="page-title">
                     <h1>Chat</h1>
-                    <p>Converse com nossa equipe de suporte</p>
+                    <p>Converse com nossos profissionais</p>
                 </div>
                 <div class="header-icons">
                     <div class="notification-icon">
@@ -676,164 +62,129 @@
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count">3</span>
                     </div>
-                    <div class="user-profile dropdown">
+                    <div class="user-profile">
                         <i class="fa-solid fa-user"></i>
                         <span>Admin <i class="fas fa-chevron-down"></i></span>
                         <div class="dropdown-content">
+                            <a href="user-history.html"><i class="fa-solid fa-clock-rotate-left"></i> Histórico</a>
                             <a href="#"><i class="fas fa-cog"></i> Definições</a>
-                            <a href="user-history.html"><i class="fas fa-cog"></i> Histórico</a>
                             <a href="#"><i class="fas fa-sign-out-alt"></i> Terminar sessão</a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Container do Chat -->
-            <div class="chat-container">
-                <!-- Sidebar de contatos -->
-                <div class="chat-sidebar">
-                    <div class="chat-search">
-                        <input type="text" placeholder="Pesquisar conversas...">
+            <!-- Barra de pesquisa -->
+            <div class="search-filter-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Pesquisar conversas...">
+                </div>
+            </div>
+            
+            <hr>
+            
+            <section class="section-agendaments">
+                <!-- Lista de conversas -->
+                <div class="chat-list">
+                    <!-- Conversa 1 -->
+                    <div class="chat-item" onclick="openChat(1)">
+                        <img src="https://via.placeholder.com/50" alt="Terapeuta">
+                        <div class="chat-item-info">
+                            <h4>Ana Silva - Massagista</h4>
+                            <p>Olá, gostaria de confirmar seu horário amanhã...</p>
+                        </div>
+                        <div class="chat-item-time">10:30</div>
+                        <div class="unread-count">3</div>
                     </div>
                     
-                    <!-- Contato 1 -->
-                    <div class="chat-contact active" onclick="openChat(1)">
-                        <img src="https://via.placeholder.com/150" alt="Suporte Pele Douro">
-                        <div class="chat-contact-info">
-                            <h4>Suporte Pele Douro</h4>
-                            <p>Olá! Como podemos ajudar você hoje?</p>
+                    <!-- Conversa 2 -->
+                    <div class="chat-item" onclick="openChat(2)">
+                        <img src="https://via.placeholder.com/50" alt="Esteticista">
+                        <div class="chat-item-info">
+                            <h4>Carlos Mendes - Esteticista</h4>
+                            <p>Seu produto já está disponível para retirada...</p>
                         </div>
-                        <div class="chat-contact-meta">
-                            <div class="chat-contact-time">10:30</div>
-                            <div class="chat-contact-badge">3</div>
-                        </div>
+                        <div class="chat-item-time">Ontem</div>
                     </div>
                     
-                    <!-- Contato 2 -->
-                    <div class="chat-contact" onclick="openChat(2)">
-                        <img src="https://via.placeholder.com/150" alt="Dra. Ana Silva">
-                        <div class="chat-contact-info">
-                            <h4>Dra. Ana Silva</h4>
-                            <p>Sua consulta está marcada para amanhã às 14h</p>
+                    <!-- Conversa 3 -->
+                    <div class="chat-item" onclick="openChat(3)">
+                        <img src="https://via.placeholder.com/50" alt="Atendimento">
+                        <div class="chat-item-info">
+                            <h4>Atendimento Pele Douro</h4>
+                            <p>Obrigado por entrar em contato, como podemos ajudar?</p>
                         </div>
-                        <div class="chat-contact-meta">
-                            <div class="chat-contact-time">Ontem</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Contato 3 -->
-                    <div class="chat-contact" onclick="openChat(3)">
-                        <img src="https://via.placeholder.com/150" alt="Terapeuta Carlos">
-                        <div class="chat-contact-info">
-                            <h4>Terapeuta Carlos</h4>
-                            <p>Obrigado pelo feedback positivo!</p>
-                        </div>
-                        <div class="chat-contact-meta">
-                            <div class="chat-contact-time">Seg</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Contato 4 -->
-                    <div class="chat-contact" onclick="openChat(4)">
-                        <img src="https://via.placeholder.com/150" alt="Equipe de Vendas">
-                        <div class="chat-contact-info">
-                            <h4>Equipe de Vendas</h4>
-                            <p>Seu pedido #12345 foi enviado</p>
-                        </div>
-                        <div class="chat-contact-meta">
-                            <div class="chat-contact-time">12/05</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Contato 5 -->
-                    <div class="chat-contact" onclick="openChat(5)">
-                        <img src="https://via.placeholder.com/150" alt="Marina - Spa">
-                        <div class="chat-contact-info">
-                            <h4>Marina - Spa</h4>
-                            <p>Lembre-se da sua sessão de spa na próxima semana</p>
-                        </div>
-                        <div class="chat-contact-meta">
-                            <div class="chat-contact-time">10/05</div>
-                        </div>
+                        <div class="chat-item-time">15/01</div>
                     </div>
                 </div>
                 
-                <!-- Área principal do chat -->
-                <div class="chat-main" id="chat-main">
+                <!-- Área de chat (inicialmente oculta) -->
+                <div class="chat-container" id="chat-window" style="display: none;">
                     <div class="chat-header">
-                        <button class="back-to-contacts" onclick="backToContacts()">
-                            <i class="fas fa-arrow-left"></i>
-                        </button>
-                        <img src="https://via.placeholder.com/150" alt="Suporte Pele Douro">
+                        <img src="https://via.placeholder.com/50" alt="Terapeuta" id="chat-avatar">
                         <div class="chat-header-info">
-                            <h4>Suporte Pele Douro</h4>
-                            <p>Online</p>
+                            <h4 id="chat-name">Ana Silva - Massagista</h4>
+                            <p id="chat-status">Online</p>
                         </div>
-                        <div class="chat-header-actions">
-                            <button><i class="fas fa-phone"></i></button>
-                            <button><i class="fas fa-video"></i></button>
-                            <button><i class="fas fa-ellipsis-v"></i></button>
-                        </div>
+                        <button class="close-chat" onclick="closeChat()" style="margin-left: auto;">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                     
-                    <div class="chat-messages">
-                        <!-- Divider de data -->
-                        <div class="chat-date-divider">
-                            <span>HOJE</span>
-                        </div>
-                        
-                        <!-- Mensagem recebida -->
-                        <div class="message message-in">
+                    <div class="chat-messages" id="chat-messages">
+                        <!-- Mensagens serão carregadas aqui -->
+                        <div class="message received">
                             <div class="message-content">
-                                Olá! Como podemos ajudar você hoje?
+                                Olá, como posso ajudar você hoje?
                             </div>
                             <div class="message-time">10:30</div>
                         </div>
                         
-                        <!-- Mensagem enviada -->
-                        <div class="message message-out">
+                        <div class="message sent">
                             <div class="message-content">
-                                Olá! Gostaria de saber sobre o status do meu pedido #12345
+                                Olá Ana, gostaria de confirmar meu horário de amanhã
                             </div>
                             <div class="message-time">10:32</div>
                         </div>
                         
-                        <!-- Mensagem recebida -->
-                        <div class="message message-in">
+                        <div class="message received">
                             <div class="message-content">
-                                Claro! Vou verificar isso para você. Um momento por favor...
+                                Seu horário está confirmado para amanhã às 14h. Poderia chegar 10 minutos antes?
                             </div>
                             <div class="message-time">10:33</div>
                         </div>
                         
-                        <!-- Indicador de digitando -->
-                        <div class="typing-indicator">
-                            <i class="fas fa-circle"></i>
-                            <i class="fas fa-circle"></i>
-                            <i class="fas fa-circle"></i>
-                            <span>Suporte Pele Douro está digitando...</span>
+                        <div class="message sent">
+                            <div class="message-content">
+                                Claro, sem problemas! Obrigado pela confirmação.
+                            </div>
+                            <div class="message-time">10:35</div>
                         </div>
                     </div>
                     
                     <div class="chat-input">
-                        <button><i class="far fa-smile"></i></button>
-                        <button><i class="fas fa-paperclip"></i></button>
-                        <textarea placeholder="Digite sua mensagem..." rows="1"></textarea>
-                        <div class="chat-input-actions">
-                            <button><i class="fas fa-microphone"></i></button>
-                            <button><i class="fas fa-paper-plane"></i></button>
-                        </div>
+                        <input type="text" placeholder="Digite sua mensagem..." id="message-input">
+                        <button onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
                     </div>
                 </div>
-                
-                <!-- Tela quando nenhum chat está selecionado (visível apenas em desktop) -->
-                <div class="no-chat-selected" id="no-chat-selected">
-                    <i class="far fa-comment-dots"></i>
-                    <h3>Selecione uma conversa</h3>
-                    <p>Escolha um contato para começar a conversar</p>
+            </section>
+        </main>
+
+        <!-- Modal de confirmação -->
+        <div id="confirm-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('confirm-modal')">&times;</span>
+                <h3>Confirmar ação</h3>
+                <p id="confirm-message">Tem certeza que deseja excluir esta conversa?</p>
+                <div class="modal-buttons">
+                    <button class="cancel" onclick="closeModal('confirm-modal')">Cancelar</button>
+                    <button class="confirm" onclick="confirmAction()">Confirmar</button>
                 </div>
             </div>
-        </main>
+        </div>
 
         <!-- Notificações Dropdown -->
         <div class="notifications-dropdown">
@@ -877,78 +228,8 @@
             </div>
         </div>
     </div>
-
-    <script src="../../js/usuarios/user-home.js"></script>
-    <script>
-        // Funções específicas para a página de chat
-        function openChat(contactId) {
-            console.log('Abrindo chat com contato:', contactId);
-            
-            // Atualiza o contato ativo na sidebar
-            document.querySelectorAll('.chat-contact').forEach(contact => {
-                contact.classList.remove('active');
-            });
-            event.currentTarget.classList.add('active');
-            
-            // Mostra a área de chat e esconde a mensagem "selecione um chat"
-            document.getElementById('chat-main').style.display = 'flex';
-            document.getElementById('no-chat-selected').style.display = 'none';
-            
-            // Em dispositivos móveis, mostra apenas o chat
-            if (window.innerWidth <= 768) {
-                document.querySelector('.chat-sidebar').style.display = 'none';
-                document.getElementById('chat-main').classList.add('active');
-            }
-            
-            // Aqui você carregaria as mensagens do chat selecionado
-            // loadChatMessages(contactId);
-        }
-        
-        function backToContacts() {
-            // Volta para a lista de contatos (apenas em mobile)
-            document.querySelector('.chat-sidebar').style.display = 'block';
-            document.getElementById('chat-main').classList.remove('active');
-        }
-        
-        // Auto-resize do textarea de mensagem
-        const textarea = document.querySelector('.chat-input textarea');
-        textarea.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
-        });
-        
-        // Verifica o tamanho da tela ao carregar
-        window.addEventListener('load', function() {
-            if (window.innerWidth > 768) {
-                document.getElementById('no-chat-selected').style.display = 'flex';
-                document.getElementById('chat-main').style.display = 'none';
-            } else {
-                document.getElementById('no-chat-selected').style.display = 'none';
-            }
-        });
-        
-        // Verifica o tamanho da tela ao redimensionar
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                document.querySelector('.chat-sidebar').style.display = 'block';
-                document.getElementById('chat-main').classList.remove('active');
-                
-                // Se nenhum chat estiver selecionado, mostra a mensagem
-                const activeContact = document.querySelector('.chat-contact.active');
-                if (!activeContact) {
-                    document.getElementById('no-chat-selected').style.display = 'flex';
-                    document.getElementById('chat-main').style.display = 'none';
-                }
-            }
-        });
-        
-        // Simula o indicador "digitando"
-        setInterval(function() {
-            const typingIndicator = document.querySelector('.typing-indicator');
-            if (typingIndicator) {
-                typingIndicator.style.display = Math.random() > 0.5 ? 'block' : 'none';
-            }
-        }, 3000);
-    </script>
+    
+    <script src="../../js/global.js"></script>
+    <script src="../../js/usuarios/user-chat.js"></script>
 </body>
 </html>
