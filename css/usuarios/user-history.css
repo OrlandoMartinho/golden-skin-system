@@ -1,0 +1,180 @@
+@import url('../global.css');
+ .history-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .history-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .history-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .history-tab.active {
+            border-bottom: 3px solid #8B4513;
+            color: #8B4513;
+        }
+        
+        .history-tab:hover:not(.active) {
+            background: #f9f9f9;
+        }
+        
+        .history-content {
+            display: none;
+        }
+        
+        .history-content.active {
+            display: block;
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .history-filter {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .history-filter select, 
+        .history-filter input {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .history-item {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .history-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .history-info {
+            flex: 1;
+        }
+        
+        .history-info h3 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+        
+        .history-info p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .history-meta {
+            text-align: right;
+        }
+        
+        .history-date {
+            color: #8B4513;
+            font-weight: 600;
+        }
+        
+        .history-status {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+        
+        .status-completed {
+            background: #e6f7ee;
+            color: #00a859;
+        }
+        
+        .status-cancelled {
+            background: #fee;
+            color: #e74c3c;
+        }
+        
+        .status-pending {
+            background: #fff8e6;
+            color: #f39c12;
+        }
+        
+        .history-amount {
+            font-weight: 600;
+            color: #333;
+            margin-top: 5px;
+        }
+        
+        .no-history {
+            text-align: center;
+            padding: 50px;
+            color: #888;
+        }
+        
+        .no-history i {
+            font-size: 50px;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .history-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .history-filter {
+                width: 100%;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .history-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .history-meta {
+                text-align: left;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
+            
+            .history-tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+                padding-bottom: 5px;
+            }
+        }
