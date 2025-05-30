@@ -1,5 +1,7 @@
  /* Estilos específicos para a página de serviços */
-        .services-container {
+ @import url('../global.css');       
+ 
+ .services-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 25px;
