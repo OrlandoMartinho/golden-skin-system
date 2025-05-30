@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pele Douro - Loja de Produtos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/usuarios/user-home.css">
+    <style>
+        /* Estilos específicos para a página de produtos */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-image {
+            height: 200px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .product-info {
+            padding: 15px;
+        }
+        
+        .product-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .product-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+            height: 40px;
+            overflow: hidden;
+        }
+        
+        .product-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 15px;
+        }
+        
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .add-to-cart, .view-details {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .add-to-cart {
+            background-color: #8B4513;
+            color: white;
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        
+        .add-to-cart:hover {
+            background-color: #A0522D;
+        }
+        
+        .view-details {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        
+        .view-details:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .product-categories {
+            display: flex;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        
+        .category-btn {
+            padding: 8px 15px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
+        .category-btn.active {
+            background: #8B4513;
+            color: white;
+            border-color: #8B4513;
+        }
+        
+        .rating {
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        
+        /* Modal de detalhes do produto */
+        #product-detail-modal .modal-content {
+            max-width: 800px;
+        }
+        
+        .product-detail-container {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @media (min-width: 768px) {
+            .product-detail-container {
+                flex-direction: row;
+            }
+        }
+        
+        .product-detail-image {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f9f9f9;
+        }
+        
+        .product-detail-image img {
+            max-width: 100%;
+            max-height: 300px;
+        }
+        
+        .product-detail-info {
+            flex: 1;
+            padding: 20px;
+        }
+        
+        .product-detail-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .product-detail-price {
+            font-size: 22px;
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 15px;
+        }
+        
+        .product-detail-description {
+            margin-bottom: 20px;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .product-detail-meta {
+            margin-bottom: 20px;
+        }
+        
+        .product-detail-meta div {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .quantity-selector button {
+            width: 30px;
+            height: 30px;
+            background: #f0f0f0;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .quantity-selector input {
+            width: 50px;
+            height: 30px;
+            text-align: center;
+            margin: 0 10px;
+            border: 1px solid #ddd;
+        }
+        
+        .add-to-cart-large {
+            width: 100%;
+            padding: 12px;
+            background: #8B4513;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .add-to-cart-large:hover {
+            background: #A0522D;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="overlay"></div>
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="../../assets/img/logo.png" alt="">
+            </div>
+
+            <button class="close-sidebar">
+                <i class="fa-solid fa-x .close-sidebar"></i>
+            </button>
+            
+            <a href="user-home.html"" class="nav-item">
+                <i class="far fa-calendar-alt"></i>
+                <span>Agendamentos</span>
+            </a>
+            
+            <a href="user-product.html" class="nav-item active">
+                <i class="fas fa-store"></i>
+                <span>Loja de Produtos</span>
+            </a>
+
+            <a href="user-chat.html" class="nav-item">
+                <i class="far fa-comments"></i>
+                <span>Chat</span>
+            </a>
+
+            <a href="user-service.html" class="nav-item">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Serviços</span>
+            </a>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="page-title">
+                    <h1>Loja de Produtos</h1>
+                    <p>Encontre os melhores produtos para cuidar da sua pele</p>
+                </div>
+                <div class="header-icons">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">2</span>
+                    </div>
+                    <div class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">3</span>
+                    </div>
+                    <div class="user-profile dropdown">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Admin <i class="fas fa-chevron-down"></i></span>
+                        <div class="dropdown-content">
+                            <a href="#"><i class="fas fa-cog"></i> Definições</a>
+                            <a href="user-history.html"><i class="fas fa-cog"></i> Histórico</a>
+                            <a href="#"><i class="fas fa-sign-out-alt"></i> Terminar sessão</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barra de pesquisa e filtro -->
+            <div class="search-filter-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Pesquisar produtos...">
+                </div>
+                <div class="filter-dropdown">
+                    <select>
+                        <option value="">Todas as categorias</option>
+                        <option value="hidratantes">Hidratantes</option>
+                        <option value="limpeza">Limpeza Facial</option>
+                        <option value="anti-idade">Anti-idade</option>
+                        <option value="protetores">Protetores Solares</option>
+                    </select>
+                </div>
+                <div class="filter-dropdown">
+                    <select>
+                        <option value="">Ordenar por</option>
+                        <option value="preco-asc">Preço: menor para maior</option>
+                        <option value="preco-desc">Preço: maior para menor</option>
+                        <option value="avaliacao">Melhor avaliados</option>
+                        <option value="novidades">Novidades</option>
+                    </select>
+                </div>
+            </div>
+            
+            <hr>
+            
+            <!-- Categorias -->
+            <div class="product-categories">
+                <button class="category-btn active">Todos</button>
+                <button class="category-btn">Hidratantes</button>
+                <button class="category-btn">Limpeza Facial</button>
+                <button class="category-btn">Anti-idade</button>
+                <button class="category-btn">Protetores Solares</button>
+                <button class="category-btn">Máscaras</button>
+                <button class="category-btn">Óleos Corporais</button>
+                <button class="category-btn">Kits Especiais</button>
+            </div>
+            
+            <!-- Grid de Produtos -->
+            <section class="products-grid">
+                <!-- Produto 1 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://via.placeholder.com/250x250" alt="Creme Hidratante">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Creme Hidratante 24h</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>(128)</span>
+                        </div>
+                        <p class="product-description">Hidratação profunda e duradoura para todos os tipos de pele.</p>
+                        <div class="product-price">R$ 89,90</div>
+                        <div class="product-actions">
+                            <button class="add-to-cart" onclick="addToCart(1)">
+                                <i class="fas fa-shopping-cart"></i> Add
+                            </button>
+                            <button class="view-details" onclick="openModal('product-detail-modal')">
+                                Detalhes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Produto 2 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://via.placeholder.com/250x250" alt="Óleo Corporal">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Óleo Corporal Relaxante</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>(96)</span>
+                        </div>
+                        <p class="product-description">Óleo com essência de lavanda para relaxamento muscular.</p>
+                        <div class="product-price">R$ 59,90</div>
+                        <div class="product-actions">
+                            <button class="add-to-cart" onclick="addToCart(2)">
+                                <i class="fas fa-shopping-cart"></i> Add
+                            </button>
+                            <button class="view-details" onclick="openModal('product-detail-modal')">
+                                Detalhes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Produto 3 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://via.placeholder.com/250x250" alt="Máscara Facial">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Máscara Facial de Argila</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(215)</span>
+                        </div>
+                        <p class="product-description">Purifica e revitaliza a pele, controlando a oleosidade.</p>
+                        <div class="product-price">R$ 45,90</div>
+                        <div class="product-actions">
+                            <button class="add-to-cart" onclick="addToCart(3)">
+                                <i class="fas fa-shopping-cart"></i> Add
+                            </button>
+                            <button class="view-details" onclick="openModal('product-detail-modal')">
+                                Detalhes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Produto 4 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://via.placeholder.com/250x250" alt="Protetor Solar">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Protetor Solar FPS 60</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>(178)</span>
+                        </div>
+                        <p class="product-description">Proteção avançada contra raios UVA/UVB com toque seco.</p>
+                        <div class="product-price">R$ 79,90</div>
+                        <div class="product-actions">
+                            <button class="add-to-cart" onclick="addToCart(4)">
+                                <i class="fas fa-shopping-cart"></i> Add
+                            </button>
+                            <button class="view-details" onclick="openModal('product-detail-modal')">
+                                Detalhes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Produto 5 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://via.placeholder.com/250x250" alt="Sérum Anti-idade">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Sérum Anti-idade</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(342)</span>
+                        </div>
+                        <p class="product-description">Reduz sinais de envelhecimento com ácido hialurônico e vitamina C.</p>
+                        <div class="product-price">R$ 129,90</div>
+                        <div class="product-actions">
+                            <button class="add-to-cart" onclick="addToCart(5)">
+                                <i class="fas fa-shopping-cart"></i> Add
+                            </button>
+                            <button class="view-details" onclick="openModal('product-detail-modal')">
+                                Detalhes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Produto 6 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://via.placeholder.com/250x250" alt="Kit Beleza Completa">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Kit Beleza Completa</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>(87)</span>
+                        </div>
+                        <p class="product-description">Kit com 5 produtos essenciais para uma rotina de beleza completa.</p>
+                        <div class="product-price">R$ 199,90</div>
+                        <div class="product-actions">
+                            <button class="add-to-cart" onclick="addToCart(6)">
+                                <i class="fas fa-shopping-cart"></i> Add
+                            </button>
+                            <button class="view-details" onclick="openModal('product-detail-modal')">
+                                Detalhes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Produto 7 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://via.placeholder.com/250x250" alt="Gel de Limpeza">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Gel de Limpeza Facial</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>(156)</span>
+                        </div>
+                        <p class="product-description">Remove impurezas sem ressecar, ideal para pele sensível.</p>
+                        <div class="product-price">R$ 49,90</div>
+                        <div class="product-actions">
+                            <button class="add-to-cart" onclick="addToCart(7)">
+                                <i class="fas fa-shopping-cart"></i> Add
+                            </button>
+                            <button class="view-details" onclick="openModal('product-detail-modal')">
+                                Detalhes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Produto 8 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://via.placeholder.com/250x250" alt="Água Micelar">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Água Micelar 3 em 1</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(264)</span>
+                        </div>
+                        <p class="product-description">Limpa, tonifica e remove maquiagem em um único passo.</p>
+                        <div class="product-price">R$ 39,90</div>
+                        <div class="product-actions">
+                            <button class="add-to-cart" onclick="addToCart(8)">
+                                <i class="fas fa-shopping-cart"></i> Add
+                            </button>
+                            <button class="view-details" onclick="openModal('product-detail-modal')">
+                                Detalhes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Paginação -->
+            <div class="pagination">
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">4</button>
+                <button class="page-btn">5</button>
+                <button class="page-btn next">Próximo <i class="fas fa-chevron-right"></i></button>
+            </div>
+        </main>
+
+        <!-- Modal de Detalhes do Produto -->
+        <div id="product-detail-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('product-detail-modal')">&times;</span>
+                <div class="product-detail-container">
+                    <div class="product-detail-image">
+                        <img src="https://via.placeholder.com/400x400" alt="Creme Hidratante 24h">
+                    </div>
+                    <div class="product-detail-info">
+                        <h3 class="product-detail-title">Creme Hidratante 24h</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>128 avaliações</span>
+                        </div>
+                        <div class="product-detail-price">R$ 89,90</div>
+                        <p class="product-detail-description">
+                            O Creme Hidratante 24h oferece hidratação intensa e duradoura para todos os tipos de pele. 
+                            Formulado com ácido hialurônico e ceramidas, ajuda a restaurar a barreira natural da pele, 
+                            mantendo-a macia e suave por até 24 horas. Livre de óleo e não comedogênico, é perfeito 
+                            para uso diário, proporcionando conforto imediato e hidratação prolongada.
+                        </p>
+                        <div class="product-detail-meta">
+                            <div><strong>Marca:</strong> Pele Douro</div>
+                            <div><strong>Volume:</strong> 50ml</div>
+                            <div><strong>Tipo de pele:</strong> Todos os tipos</div>
+                            <div><strong>Ingredientes principais:</strong> Ácido Hialurônico, Ceramidas, Vitamina E</div>
+                        </div>
+                        <div class="quantity-selector">
+                            <button onclick="decreaseQuantity()">-</button>
+                            <input type="number" value="1" min="1" id="product-quantity">
+                            <button onclick="increaseQuantity()">+</button>
+                        </div>
+                        <button class="add-to-cart-large" onclick="addToCartFromModal()">
+                            <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Confirmação de Adição ao Carrinho -->
+        <div id="add-to-cart-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('add-to-cart-modal')">&times;</span>
+                <h3>Produto adicionado ao carrinho!</h3>
+                <div class="modal-buttons">
+                    <button class="cancel" onclick="closeModal('add-to-cart-modal')">Continuar comprando</button>
+                    <button class="confirm" onclick="goToCart()">Ir para o carrinho</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notificações Dropdown -->
+        <div class="notifications-dropdown">
+            <div class="notification-item">
+                <i class="fas fa-calendar-check"></i>
+                <div>
+                    <p>Novo agendamento confirmado</p>
+                    <small>10 minutos atrás</small>
+                </div>
+            </div>
+            <div class="notification-item">
+                <i class="fas fa-shopping-cart"></i>
+                <div>
+                    <p>Seu pedido foi enviado</p>
+                    <small>Ontem, 15:30</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carrinho Dropdown -->
+        <div class="cart-dropdown">
+            <div class="cart-item">
+                <img src="https://via.placeholder.com/50" alt="Produto">
+                <div>
+                    <p>Creme Hidratante</p>
+                    <small>1x R$ 59,90</small>
+                </div>
+                <i class="fas fa-times" onclick="removeCartItem(this)"></i>
+            </div>
+            <div class="cart-item">
+                <img src="https://via.placeholder.com/50" alt="Produto">
+                <div>
+                    <p>Óleo Corporal</p>
+                    <small>2x R$ 39,90</small>
+                </div>
+                <i class="fas fa-times" onclick="removeCartItem(this)"></i>
+            </div>
+            <div class="cart-total">
+                <p>Total: R$ 139,70</p>
+                <button onclick="goToCart()">Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/usuarios/user-home.js"></script>
+    <script>
+        // Funções específicas para a página de produtos
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.querySelector('.overlay').style.display = 'block';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.querySelector('.overlay').style.display = 'none';
+        }
+        
+        function addToCart(productId) {
+            // Lógica para adicionar ao carrinho
+            console.log('Produto adicionado ao carrinho:', productId);
+            updateCartCount(1);
+            openModal('add-to-cart-modal');
+        }
+        
+        function addToCartFromModal() {
+            const quantity = parseInt(document.getElementById('product-quantity').value);
+            console.log('Adicionado ao carrinho com quantidade:', quantity);
+            updateCartCount(quantity);
+            closeModal('product-detail-modal');
+            openModal('add-to-cart-modal');
+        }
+        
+        function updateCartCount(quantityToAdd) {
+            const cartCountElement = document.querySelector('.cart-count');
+            let currentCount = parseInt(cartCountElement.textContent) || 0;
+            cartCountElement.textContent = currentCount + quantityToAdd;
+        }
+        
+        function increaseQuantity() {
+            const quantityInput = document.getElementById('product-quantity');
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+        }
+        
+        function decreaseQuantity() {
+            const quantityInput = document.getElementById('product-quantity');
+            if (parseInt(quantityInput.value) > 1) {
+                quantityInput.value = parseInt(quantityInput.value) - 1;
+            }
+        }
+        
+        function removeCartItem(element) {
+            element.parentElement.remove();
+            updateCartCount(-1); // Diminui a contagem do carrinho
+            // Atualizar total do carrinho aqui
+        }
+        
+        function goToCart() {
+            // Redirecionar para página do carrinho
+            console.log('Ir para o carrinho');
+            closeModal('add-to-cart-modal');
+        }
+        
+        // Filtro por categoria
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                // Aqui você filtraria os produtos por categoria
+            });
+        });
+    </script>
+</body>
+</html>

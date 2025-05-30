@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pele Douro - Serviços</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/usuarios/user-home.css">
+    <style>
+        /* Estilos específicos para a página de serviços */
+        .services-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 20px 0;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .service-image {
+            height: 180px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .service-card:hover .service-image img {
+            transform: scale(1.05);
+        }
+        
+        .service-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #8B4513;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .service-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .service-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .service-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            flex: 1;
+        }
+        
+        .service-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .service-duration {
+            color: #8B4513;
+        }
+        
+        .service-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 15px;
+        }
+        
+        .service-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-details {
+            flex: 1;
+            padding: 10px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 5px;
+            color: #333;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn-details:hover {
+            background: #e0e0e0;
+        }
+        
+        .btn-schedule {
+            flex: 1;
+            padding: 10px;
+            background: #8B4513;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn-schedule:hover {
+            background: #A0522D;
+        }
+        
+        .service-categories {
+            display: flex;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        
+        .category-btn {
+            padding: 8px 15px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
+        .category-btn.active {
+            background: #8B4513;
+            color: white;
+            border-color: #8B4513;
+        }
+        
+        /* Modal de Agendamento */
+        #schedule-modal .modal-content {
+            max-width: 500px;
+        }
+        
+        .schedule-form {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .modal-buttons .cancel {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .modal-buttons .confirm {
+            background: #8B4513;
+            color: white;
+        }
+        
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .time-slot {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .time-slot:hover {
+            border-color: #8B4513;
+        }
+        
+        .time-slot.selected {
+            background: #8B4513;
+            color: white;
+            border-color: #8B4513;
+        }
+        
+        .time-slot.unavailable {
+            background: #f5f5f5;
+            color: #999;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+        
+        @media (max-width: 768px) {
+            .services-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .time-slots {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="overlay"></div>
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="../../assets/img/logo.png" alt="">
+            </div>
+
+            <button class="close-sidebar">
+                <i class="fa-solid fa-x .close-sidebar"></i>
+            </button>
+            
+            <a href="user-home.html" class="nav-item">
+                <i class="far fa-calendar-alt"></i>
+                <span>Agendamentos</span>
+            </a>
+            
+            <a href="user-product.html" class="nav-item">
+                <i class="fas fa-store"></i>
+                <span>Loja de Produtos</span>
+            </a>
+
+            <a href="user-chat.html" class="nav-item">
+                <i class="far fa-comments"></i>
+                <span>Chat</span>
+            </a>
+
+            <a href="user-service.html" class="nav-item active">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Serviços</span>
+            </a>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="page-title">
+                    <h1>Nossos Serviços</h1>
+                    <p>Agende os melhores tratamentos para sua pele</p>
+                </div>
+                <div class="header-icons">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">2</span>
+                    </div>
+                    <div class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">3</span>
+                    </div>
+                    <div class="user-profile dropdown">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Admin <i class="fas fa-chevron-down"></i></span>
+                        <div class="dropdown-content">
+                            <a href="#"><i class="fas fa-cog"></i> Definições</a>
+                            <a href="user-history.html"><i class="fas fa-cog"></i> Histórico</a>
+                            <a href="#"><i class="fas fa-sign-out-alt"></i> Terminar sessão</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barra de pesquisa e filtro -->
+            <div class="search-filter-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Pesquisar serviços...">
+                </div>
+                <div class="filter-dropdown">
+                    <select>
+                        <option value="">Todas as categorias</option>
+                        <option value="facial">Tratamentos Faciais</option>
+                        <option value="corporal">Tratamentos Corporais</option>
+                        <option value="spa">Spa & Relaxamento</option>
+                        <option value="esteticos">Procedimentos Estéticos</option>
+                    </select>
+                </div>
+                <div class="filter-dropdown">
+                    <select>
+                        <option value="">Ordenar por</option>
+                        <option value="popular">Mais populares</option>
+                        <option value="preco-asc">Preço: menor para maior</option>
+                        <option value="preco-desc">Preço: maior para menor</option>
+                        <option value="duracao">Duração</option>
+                    </select>
+                </div>
+            </div>
+            
+            <hr>
+            
+            <!-- Categorias -->
+            <div class="service-categories">
+                <button class="category-btn active">Todos</button>
+                <button class="category-btn">Tratamentos Faciais</button>
+                <button class="category-btn">Tratamentos Corporais</button>
+                <button class="category-btn">Spa & Relaxamento</button>
+                <button class="category-btn">Massagens</button>
+                <button class="category-btn">Depilação</button>
+                <button class="category-btn">Manicure & Pedicure</button>
+            </div>
+            
+            <!-- Grid de Serviços -->
+            <section class="services-container">
+                <!-- Serviço 1 -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e" alt="Limpeza de Pele">
+                        <span class="service-badge">Mais Popular</span>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Limpeza de Pele Profissional</h3>
+                        <p class="service-description">
+                            Remoção de cravos e impurezas com hidratação e finalização. Ideal para todos os tipos de pele.
+                        </p>
+                        <div class="service-meta">
+                            <span class="service-duration"><i class="far fa-clock"></i> 60 min</span>
+                            <span class="service-rating"><i class="fas fa-star"></i> 4.9 (128)</span>
+                        </div>
+                        <div class="service-price">R$ 120,00</div>
+                        <div class="service-actions">
+                            <button class="btn-details" onclick="openModal('details-modal')">Detalhes</button>
+                            <button class="btn-schedule" onclick="openModal('schedule-modal')">Agendar</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Serviço 2 -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874" alt="Massagem Relaxante">
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Massagem Relaxante</h3>
+                        <p class="service-description">
+                            Técnicas suaves para alívio do estresse e tensão muscular. Inclui aromaterapia.
+                        </p>
+                        <div class="service-meta">
+                            <span class="service-duration"><i class="far fa-clock"></i> 50 min</span>
+                            <span class="service-rating"><i class="fas fa-star"></i> 4.8 (96)</span>
+                        </div>
+                        <div class="service-price">R$ 150,00</div>
+                        <div class="service-actions">
+                            <button class="btn-details" onclick="openModal('details-modal')">Detalhes</button>
+                            <button class="btn-schedule" onclick="openModal('schedule-modal')">Agendar</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Serviço 3 -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881" alt="Tratamento Anti-idade">
+                        <span class="service-badge">Novidade</span>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Tratamento Anti-idade</h3>
+                        <p class="service-description">
+                            Combina técnicas avançadas para redução de linhas de expressão e firmeza da pele.
+                        </p>
+                        <div class="service-meta">
+                            <span class="service-duration"><i class="far fa-clock"></i> 90 min</span>
+                            <span class="service-rating"><i class="fas fa-star"></i> 4.7 (87)</span>
+                        </div>
+                        <div class="service-price">R$ 220,00</div>
+                        <div class="service-actions">
+                            <button class="btn-details" onclick="openModal('details-modal')">Detalhes</button>
+                            <button class="btn-schedule" onclick="openModal('schedule-modal')">Agendar</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Serviço 4 -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883" alt="Depilação a Laser">
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Depilação a Laser</h3>
+                        <p class="service-description">
+                            Sessão de depilação a laser para áreas específicas. Tecnologia avançada e segura.
+                        </p>
+                        <div class="service-meta">
+                            <span class="service-duration"><i class="far fa-clock"></i> 30 min</span>
+                            <span class="service-rating"><i class="fas fa-star"></i> 4.6 (142)</span>
+                        </div>
+                        <div class="service-price">R$ 180,00</div>
+                        <div class="service-actions">
+                            <button class="btn-details" onclick="openModal('details-modal')">Detalhes</button>
+                            <button class="btn-schedule" onclick="openModal('schedule-modal')">Agendar</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Serviço 5 -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1596704017254-975dad9a5d3c" alt="Spa dos Pés">
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Spa dos Pés</h3>
+                        <p class="service-description">
+                            Relaxamento completo para os pés com hidratação, massagem e cuidado com as unhas.
+                        </p>
+                        <div class="service-meta">
+                            <span class="service-duration"><i class="far fa-clock"></i> 45 min</span>
+                            <span class="service-rating"><i class="fas fa-star"></i> 4.9 (113)</span>
+                        </div>
+                        <div class="service-price">R$ 90,00</div>
+                        <div class="service-actions">
+                            <button class="btn-details" onclick="openModal('details-modal')">Detalhes</button>
+                            <button class="btn-schedule" onclick="openModal('schedule-modal')">Agendar</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Serviço 6 -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557" alt="Day Spa Completo">
+                        <span class="service-badge">Pacote</span>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Day Spa Completo</h3>
+                        <p class="service-description">
+                            Pacote completo com massagem, tratamento facial e corporal. Inclui almoço saudável.
+                        </p>
+                        <div class="service-meta">
+                            <span class="service-duration"><i class="far fa-clock"></i> 4 horas</span>
+                            <span class="service-rating"><i class="fas fa-star"></i> 5.0 (76)</span>
+                        </div>
+                        <div class="service-price">R$ 350,00</div>
+                        <div class="service-actions">
+                            <button class="btn-details" onclick="openModal('details-modal')">Detalhes</button>
+                            <button class="btn-schedule" onclick="openModal('schedule-modal')">Agendar</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Serviço 7 -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1519735777090-ec97162dc266" alt="Design de Sobrancelhas">
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Design de Sobrancelhas</h3>
+                        <p class="service-description">
+                            Modelagem perfeita para realçar seu olhar. Inclui henna ou tintura.
+                        </p>
+                        <div class="service-meta">
+                            <span class="service-duration"><i class="far fa-clock"></i> 30 min</span>
+                            <span class="service-rating"><i class="fas fa-star"></i> 4.8 (204)</span>
+                        </div>
+                        <div class="service-price">R$ 60,00</div>
+                        <div class="service-actions">
+                            <button class="btn-details" onclick="openModal('details-modal')">Detalhes</button>
+                            <button class="btn-schedule" onclick="openModal('schedule-modal')">Agendar</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Serviço 8 -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1" alt="Drenagem Linfática">
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Drenagem Linfática</h3>
+                        <p class="service-description">
+                            Técnica especializada para redução de inchaço e melhora da circulação.
+                        </p>
+                        <div class="service-meta">
+                            <span class="service-duration"><i class="far fa-clock"></i> 50 min</span>
+                            <span class="service-rating"><i class="fas fa-star"></i> 4.7 (89)</span>
+                        </div>
+                        <div class="service-price">R$ 130,00</div>
+                        <div class="service-actions">
+                            <button class="btn-details" onclick="openModal('details-modal')">Detalhes</button>
+                            <button class="btn-schedule" onclick="openModal('schedule-modal')">Agendar</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            
+        </main>
+
+        <!-- Modal de Detalhes do Serviço -->
+        <div id="details-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('details-modal')">&times;</span>
+                <div class="service-image">
+                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e" alt="Limpeza de Pele">
+                </div>
+                <div class="service-content" style="padding: 20px;">
+                    <h3 class="service-title">Limpeza de Pele Profissional</h3>
+                    <div class="service-meta">
+                        <span class="service-duration"><i class="far fa-clock"></i> 60 min</span>
+                        <span class="service-rating"><i class="fas fa-star"></i> 4.9 (128 avaliações)</span>
+                    </div>
+                    <div class="service-price">R$ 120,00</div>
+                    <div class="service-description">
+                        <p>Nossa Limpeza de Pele Profissional é um tratamento completo que remove impurezas, cravos e células mortas, devolvendo a vitalidade e luminosidade à sua pele.</p>
+                        <p><strong>Benefícios:</strong></p>
+                        <ul>
+                            <li>Desobstrução dos poros</li>
+                            <li>Remoção de cravos e impurezas</li>
+                            <li>Hidratação profunda</li>
+                            <li>Uniformização do tom da pele</li>
+                            <li>Prevenção de acne</li>
+                        </ul>
+                        <p><strong>Indicações:</strong> Todos os tipos de pele, especialmente peles oleosas e com tendência a acne.</p>
+                        <p><strong>Contraindicações:</strong> Peles com irritações ou alergias ativas.</p>
+                    </div>
+                    <div class="service-actions" style="margin-top: 20px;">
+                        <button class="btn-schedule" style="width: 100%;" onclick="closeModal('details-modal'); openModal('schedule-modal')">Agendar Este Serviço</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Agendamento -->
+        <div id="schedule-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('schedule-modal')">&times;</span>
+                <h3 style="padding: 20px 20px 0; margin-bottom: 0;">Agendar Serviço</h3>
+                <div class="schedule-form">
+                    <div class="form-group">
+                        <label>Serviço selecionado</label>
+                        <input type="text" value="Limpeza de Pele Profissional" readonly>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Data</label>
+                            <input type="date" id="schedule-date">
+                        </div>
+                        <div class="form-group">
+                            <label>Horário</label>
+                            <select id="schedule-time">
+                                <option value="">Selecione um horário</option>
+                                <option value="09:00">09:00</option>
+                                <option value="10:00">10:00</option>
+                                <option value="11:00">11:00</option>
+                                <option value="13:00">13:00</option>
+                                <option value="14:00">14:00</option>
+                                <option value="15:00">15:00</option>
+                                <option value="16:00">16:00</option>
+                                <option value="17:00">17:00</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Profissional</label>
+                        <select>
+                            <option value="">Qualquer profissional</option>
+                            <option value="ana">Ana Silva</option>
+                            <option value="carlos">Carlos Mendes</option>
+                            <option value="marina">Marina Oliveira</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Observações (opcional)</label>
+                        <textarea placeholder="Alguma observação importante?"></textarea>
+                    </div>
+                    
+                    <div class="modal-buttons">
+                        <button class="cancel" onclick="closeModal('schedule-modal')">Cancelar</button>
+                        <button class="confirm" onclick="confirmSchedule()">Confirmar Agendamento</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Confirmação de Agendamento -->
+        <div id="confirmation-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('confirmation-modal')">&times;</span>
+                <div style="text-align: center; padding: 30px;">
+                    <i class="far fa-calendar-check" style="font-size: 50px; color: #8B4513; margin-bottom: 20px;"></i>
+                    <h3>Agendamento Confirmado!</h3>
+                    <p>Seu serviço foi agendado com sucesso.</p>
+                    <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                        <p><strong>Limpeza de Pele Profissional</strong></p>
+                        <p>12 de Janeiro de 2025 - 14:00</p>
+                        <p>Com: Ana Silva</p>
+                    </div>
+                    <p>Você receberá um e-mail de confirmação com todos os detalhes.</p>
+                    <button class="confirm" style="width: 100%; margin-top: 20px;" onclick="closeModal('confirmation-modal')">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notificações Dropdown -->
+        <div class="notifications-dropdown">
+            <div class="notification-item">
+                <i class="fas fa-calendar-check"></i>
+                <div>
+                    <p>Novo agendamento confirmado</p>
+                    <small>10 minutos atrás</small>
+                </div>
+            </div>
+            <div class="notification-item">
+                <i class="fas fa-shopping-cart"></i>
+                <div>
+                    <p>Seu pedido foi enviado</p>
+                    <small>Ontem, 15:30</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carrinho Dropdown -->
+        <div class="cart-dropdown">
+            <div class="cart-item">
+                <img src="https://via.placeholder.com/50" alt="Produto">
+                <div>
+                    <p>Creme Hidratante</p>
+                    <small>1x R$ 59,90</small>
+                </div>
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="cart-item">
+                <img src="https://via.placeholder.com/50" alt="Produto">
+                <div>
+                    <p>Óleo Corporal</p>
+                    <small>2x R$ 39,90</small>
+                </div>
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="cart-total">
+                <p>Total: R$ 139,70</p>
+                <button>Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/usuarios/user-home.js"></script>
+    <script>
+        // Funções específicas para a página de serviços
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.querySelector('.overlay').style.display = 'block';
+            
+            // Se for o modal de agendamento, seta a data mínima para hoje
+            if (modalId === 'schedule-modal') {
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('schedule-date').min = today;
+            }
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.querySelector('.overlay').style.display = 'none';
+        }
+        
+        function confirmSchedule() {
+            closeModal('schedule-modal');
+            openModal('confirmation-modal');
+            
+            // Aqui você enviaria os dados do agendamento para o servidor
+            // const service = ...
+            // const date = ...
+            // const time = ...
+            // const professional = ...
+            // const notes = ...
+        }
+        
+        // Filtro por categoria
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                // Aqui você filtraria os serviços por categoria
+                const category = this.textContent.trim();
+                console.log('Filtrando por categoria:', category);
+            });
+        });
+        
+        // Paginação
+        document.querySelectorAll('.page-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (this.classList.contains('active') || this.classList.contains('next')) return;
+                
+                document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                // Aqui você carregaria a página correspondente
+                const page = this.textContent.trim();
+                console.log('Carregando página:', page);
+            });
+        });
+        
+        // Fecha modais ao clicar no overlay
+        document.querySelector('.overlay').addEventListener('click', function() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+            this.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pele Douro - Histórico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/usuarios/user-home.css">
+    <style>
+        /* Estilos específicos para a página de histórico */
+        .history-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .history-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .history-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .history-tab.active {
+            border-bottom: 3px solid #8B4513;
+            color: #8B4513;
+        }
+        
+        .history-tab:hover:not(.active) {
+            background: #f9f9f9;
+        }
+        
+        .history-content {
+            display: none;
+        }
+        
+        .history-content.active {
+            display: block;
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .history-filter {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .history-filter select, 
+        .history-filter input {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .history-item {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .history-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .history-info {
+            flex: 1;
+        }
+        
+        .history-info h3 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+        
+        .history-info p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .history-meta {
+            text-align: right;
+        }
+        
+        .history-date {
+            color: #8B4513;
+            font-weight: 600;
+        }
+        
+        .history-status {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+        
+        .status-completed {
+            background: #e6f7ee;
+            color: #00a859;
+        }
+        
+        .status-cancelled {
+            background: #fee;
+            color: #e74c3c;
+        }
+        
+        .status-pending {
+            background: #fff8e6;
+            color: #f39c12;
+        }
+        
+        .history-amount {
+            font-weight: 600;
+            color: #333;
+            margin-top: 5px;
+        }
+        
+        .no-history {
+            text-align: center;
+            padding: 50px;
+            color: #888;
+        }
+        
+        .no-history i {
+            font-size: 50px;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .history-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .history-filter {
+                width: 100%;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .history-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .history-meta {
+                text-align: left;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
+            
+            .history-tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+                padding-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="overlay"></div>
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="../../assets/img/logo.png" alt="">
+            </div>
+
+            <button class="close-sidebar">
+                <i class="fa-solid fa-x .close-sidebar"></i>
+            </button>
+            
+            <a href="user-home.html" class="nav-item">
+                <i class="far fa-calendar-alt"></i>
+                <span>Agendamentos</span>
+            </a>
+            
+            <a href="user-product.html" class="nav-item">
+                <i class="fas fa-store"></i>
+                <span>Loja de Produtos</span>
+            </a>
+
+            <a href="user-chat.html" class="nav-item">
+                <i class="far fa-comments"></i>
+                <span>Chat</span>
+            </a>
+
+            <a href="user-service.html" class="nav-item">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Serviços</span>
+            </a>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="page-title">
+                    <h1>Histórico</h1>
+                    <p>Seu histórico completo de serviços e compras</p>
+                </div>
+                <div class="header-icons">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">2</span>
+                    </div>
+                    <div class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">3</span>
+                    </div>
+                    <div class="user-profile dropdown">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Admin <i class="fas fa-chevron-down"></i></span>
+                        <div class="dropdown-content">
+                            <a href="user-settings.html"><i class="fas fa-cog"></i> Definições</a>
+                            <a href="user-history.html"><i class="fas fa-history"></i> Histórico</a>
+                            <a href="#"><i class="fas fa-sign-out-alt"></i> Terminar sessão</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Container do Histórico -->
+            <div class="history-container">
+                <!-- Abas de navegação -->
+                <div class="history-tabs">
+                    <div class="history-tab active" data-tab="services">
+                        <i class="fas fa-spa"></i> Serviços Agendados
+                    </div>
+                    <div class="history-tab" data-tab="purchases">
+                        <i class="fas fa-shopping-bag"></i> Compras Realizadas
+                    </div>
+                </div>
+                
+                <!-- Conteúdo da aba de Serviços -->
+                <div id="services-tab" class="history-content active">
+                    <div class="history-header">
+                        <h2>Serviços Agendados</h2>
+                        <div class="history-filter">
+                            <select id="service-status-filter">
+                                <option value="all">Todos os status</option>
+                                <option value="completed">Concluídos</option>
+                                <option value="cancelled">Cancelados</option>
+                                <option value="pending">Pendentes</option>
+                            </select>
+                            <input type="month" id="service-month-filter">
+                        </div>
+                    </div>
+                    
+                    <div class="history-list">
+                        <!-- Item 1 - Serviço Concluído -->
+                        <div class="history-item" data-status="completed">
+                            <div class="history-info">
+                                <h3>Massagem Relaxante</h3>
+                                <p>Profissional: Dra. Ana Silva</p>
+                                <p>Duração: 60 minutos | 15/01/2025 - 14:30</p>
+                            </div>
+                            <div class="history-meta">
+                                <div class="history-status status-completed">Concluído</div>
+                                <div class="history-amount">R$ 120,00</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Item 2 - Serviço Cancelado -->
+                        <div class="history-item" data-status="cancelled">
+                            <div class="history-info">
+                                <h3>Tratamento Facial</h3>
+                                <p>Profissional: Terapeuta Carlos</p>
+                                <p>Motivo: Remarcação | 05/01/2025 - 10:00</p>
+                            </div>
+                            <div class="history-meta">
+                                <div class="history-status status-cancelled">Cancelado</div>
+                                <div class="history-amount">R$ 85,00</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Item 3 - Serviço Pendente -->
+                        <div class="history-item" data-status="pending">
+                            <div class="history-info">
+                                <h3>Depilação a Laser</h3>
+                                <p>Profissional: Marina Costa</p>
+                                <p>Sessão 2 de 6 | 22/01/2025 - 16:00</p>
+                            </div>
+                            <div class="history-meta">
+                                <div class="history-status status-pending">Agendado</div>
+                                <div class="history-amount">R$ 150,00</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Paginação -->
+                    <div style="display: flex; justify-content: center; margin-top: 30px;">
+                        <button style="padding: 8px 15px; margin: 0 5px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 5px;">1</button>
+                        <button style="padding: 8px 15px; margin: 0 5px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 5px;">2</button>
+                        <button style="padding: 8px 15px; margin: 0 5px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 5px;">3</button>
+                        <button style="padding: 8px 15px; margin: 0 5px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 5px;">&raquo;</button>
+                    </div>
+                </div>
+                
+                <!-- Conteúdo da aba de Compras -->
+                <div id="purchases-tab" class="history-content">
+                    <div class="history-header">
+                        <h2>Compras Realizadas</h2>
+                        <div class="history-filter">
+                            <select id="purchase-status-filter">
+                                <option value="all">Todos os status</option>
+                                <option value="delivered">Entregues</option>
+                                <option value="processing">Processando</option>
+                                <option value="cancelled">Canceladas</option>
+                            </select>
+                            <input type="month" id="purchase-month-filter">
+                        </div>
+                    </div>
+                    
+                    <div class="history-list">
+                        <!-- Item 1 - Compra Entregue -->
+                        <div class="history-item" data-status="delivered">
+                            <div class="history-info">
+                                <h3>Pedido #PD-2025-0012</h3>
+                                <p>Kit Spa Completo (3 itens)</p>
+                                <p>Data: 10/01/2025 | Método: Cartão de Crédito</p>
+                            </div>
+                            <div class="history-meta">
+                                <div class="history-status status-completed">Entregue</div>
+                                <div class="history-amount">R$ 189,90</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Item 2 - Compra Entregue -->
+                        <div class="history-item" data-status="delivered">
+                            <div class="history-info">
+                                <h3>Pedido #PD-2024-9876</h3>
+                                <p>Óleo Corporal Natural (2 unidades)</p>
+                                <p>Data: 28/12/2024 | Método: Pix</p>
+                            </div>
+                            <div class="history-meta">
+                                <div class="history-status status-completed">Entregue</div>
+                                <div class="history-amount">R$ 79,80</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Item 3 - Compra Processando -->
+                        <div class="history-item" data-status="processing">
+                            <div class="history-info">
+                                <h3>Pedido #PD-2025-0034</h3>
+                                <p>Creme Hidratante + Escova Corporal</p>
+                                <p>Data: 18/01/2025 | Método: Cartão de Crédito</p>
+                            </div>
+                            <div class="history-meta">
+                                <div class="history-status status-pending">Processando</div>
+                                <div class="history-amount">R$ 149,90</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Paginação -->
+                    <div style="display: flex; justify-content: center; margin-top: 30px;">
+                        <button style="padding: 8px 15px; margin: 0 5px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 5px;">1</button>
+                        <button style="padding: 8px 15px; margin: 0 5px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 5px;">2</button>
+                        <button style="padding: 8px 15px; margin: 0 5px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 5px;">&raquo;</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Notificações Dropdown -->
+        <div class="notifications-dropdown">
+            <div class="notification-item">
+                <i class="fas fa-calendar-check"></i>
+                <div>
+                    <p>Novo agendamento confirmado</p>
+                    <small>10 minutos atrás</small>
+                </div>
+            </div>
+            <div class="notification-item">
+                <i class="fas fa-shopping-cart"></i>
+                <div>
+                    <p>Seu pedido foi enviado</p>
+                    <small>Ontem, 15:30</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carrinho Dropdown -->
+        <div class="cart-dropdown">
+            <div class="cart-item">
+                <img src="https://via.placeholder.com/50" alt="Produto">
+                <div>
+                    <p>Creme Hidratante</p>
+                    <small>1x R$ 59,90</small>
+                </div>
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="cart-item">
+                <img src="https://via.placeholder.com/50" alt="Produto">
+                <div>
+                    <p>Óleo Corporal</p>
+                    <small>2x R$ 39,90</small>
+                </div>
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="cart-total">
+                <p>Total: R$ 139,70</p>
+                <button>Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/usuarios/user-home.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Alternar entre abas
+            const tabs = document.querySelectorAll('.history-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove a classe active de todas as abas e conteúdos
+                    document.querySelectorAll('.history-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.history-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Adiciona a classe active à aba clicada
+                    this.classList.add('active');
+                    
+                    // Mostra o conteúdo correspondente
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // Filtros para serviços
+            const serviceStatusFilter = document.getElementById('service-status-filter');
+            const serviceMonthFilter = document.getElementById('service-month-filter');
+            
+            // Filtros para compras
+            const purchaseStatusFilter = document.getElementById('purchase-status-filter');
+            const purchaseMonthFilter = document.getElementById('purchase-month-filter');
+            
+            // Adiciona listeners para os filtros
+            [serviceStatusFilter, serviceMonthFilter, purchaseStatusFilter, purchaseMonthFilter].forEach(filter => {
+                filter.addEventListener('change', function() {
+                    const tab = this.closest('.history-content').id;
+                    console.log(`Filtrando ${tab}:`, {
+                        status: tab.includes('services') ? serviceStatusFilter.value : purchaseStatusFilter.value,
+                        month: tab.includes('services') ? serviceMonthFilter.value : purchaseMonthFilter.value
+                    });
+                    
+                    // Aqui você implementaria a lógica de filtragem real
+                    // Por enquanto, apenas demonstração no console
+                });
+            });
+            
+            // Adiciona classe ativa ao item do menu de histórico
+            const currentPage = window.location.pathname.split('/').pop();
+            if (currentPage === 'user-history.html') {
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
