@@ -14,9 +14,12 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo">
-                <i class="fas fa-spa"></i>
-                <span>Pele Douro</span>
+                <img src="../../assets/img/logo.png" alt="">
             </div>
+
+            <button class="close-sidebar">
+                <i class="fa-solid fa-x .close-sidebar"></i>
+            </button>
             
             <a href="#" class="nav-item active">
                 <i class="far fa-calendar-alt"></i>
@@ -59,7 +62,7 @@
                         <span class="cart-count">3</span>
                     </div>
                     <div class="user-profile dropdown">
-                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User">
+                        <i class="fa-solid fa-user"></i>
                         <span>Admin <i class="fas fa-chevron-down"></i></span>
                         <div class="dropdown-content">
                             <a href="#"><i class="fas fa-cog"></i> Definições</a>
@@ -87,108 +90,10 @@
                     <input type="date" id="filter-date">
                 </div>
             </div>
-                    <hr>
+            
+            <hr>
+            
             <section class="section-agendaments">
-                <!-- Card 1 -->
-                <div class="card">
-                    <h3>Detalhes do agendamento</h3>
-                    <label>Data e Hora</label>
-                    <div class="field">12/01/2025 - 14:30</div>
-                    <label>Tipo de Serviço</label>
-                    <div class="field">Spa & Relaxamento em Casa</div>
-                    <label>Informações do serviço</label>
-                    <p class="info">
-                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
-                    </p>
-                    <label>Status</label>
-                    <div class="status ativo">Ativo</div>
-                    <div class="buttons">
-                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
-                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
-                    </div>
-                </div>
-
-
-                <!-- Card 1 -->
-                <div class="card">
-                    <h3>Detalhes do agendamento</h3>
-                    <label>Data e Hora</label>
-                    <div class="field">12/01/2025 - 14:30</div>
-                    <label>Tipo de Serviço</label>
-                    <div class="field">Spa & Relaxamento em Casa</div>
-                    <label>Informações do serviço</label>
-                    <p class="info">
-                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
-                    </p>
-                    <label>Status</label>
-                    <div class="status ativo">Ativo</div>
-                    <div class="buttons">
-                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
-                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
-                    </div>
-                </div>
-
-
-                <!-- Card 1 -->
-                <div class="card">
-                    <h3>Detalhes do agendamento</h3>
-                    <label>Data e Hora</label>
-                    <div class="field">12/01/2025 - 14:30</div>
-                    <label>Tipo de Serviço</label>
-                    <div class="field">Spa & Relaxamento em Casa</div>
-                    <label>Informações do serviço</label>
-                    <p class="info">
-                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
-                    </p>
-                    <label>Status</label>
-                    <div class="status ativo">Ativo</div>
-                    <div class="buttons">
-                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
-                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
-                    </div>
-                </div>
-
-
-
-                <!-- Card 1 -->
-                <div class="card">
-                    <h3>Detalhes do agendamento</h3>
-                    <label>Data e Hora</label>
-                    <div class="field">12/01/2025 - 14:30</div>
-                    <label>Tipo de Serviço</label>
-                    <div class="field">Spa & Relaxamento em Casa</div>
-                    <label>Informações do serviço</label>
-                    <p class="info">
-                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
-                    </p>
-                    <label>Status</label>
-                    <div class="status ativo">Ativo</div>
-                    <div class="buttons">
-                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
-                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
-                    </div>
-                </div>
-
-
-
-                <!-- Card 1 -->
-                <div class="card">
-                    <h3>Detalhes do agendamento</h3>
-                    <label>Data e Hora</label>
-                    <div class="field">12/01/2025 - 14:30</div>
-                    <label>Tipo de Serviço</label>
-                    <div class="field">Spa & Relaxamento em Casa</div>
-                    <label>Informações do serviço</label>
-                    <p class="info">
-                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
-                    </p>
-                    <label>Status</label>
-                    <div class="status ativo">Ativo</div>
-                    <div class="buttons">
-                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
-                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
-                    </div>
-                </div>
                 <!-- Card 1 -->
                 <div class="card">
                     <h3>Detalhes do agendamento</h3>
@@ -212,6 +117,101 @@
                 <div class="card">
                     <h3>Detalhes do agendamento</h3>
                     <label>Data e Hora</label>
+                    <div class="field">12/01/2025 - 14:30</div>
+                    <label>Tipo de Serviço</label>
+                    <div class="field">Spa & Relaxamento em Casa</div>
+                    <label>Informações do serviço</label>
+                    <p class="info">
+                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
+                    </p>
+                    <label>Status</label>
+                    <div class="status ativo">Ativo</div>
+                    <div class="buttons">
+                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
+                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="card">
+                    <h3>Detalhes do agendamento</h3>
+                    <label>Data e Hora</label>
+                    <div class="field">12/01/2025 - 14:30</div>
+                    <label>Tipo de Serviço</label>
+                    <div class="field">Spa & Relaxamento em Casa</div>
+                    <label>Informações do serviço</label>
+                    <p class="info">
+                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
+                    </p>
+                    <label>Status</label>
+                    <div class="status ativo">Ativo</div>
+                    <div class="buttons">
+                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
+                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="card">
+                    <h3>Detalhes do agendamento</h3>
+                    <label>Data e Hora</label>
+                    <div class="field">12/01/2025 - 14:30</div>
+                    <label>Tipo de Serviço</label>
+                    <div class="field">Spa & Relaxamento em Casa</div>
+                    <label>Informações do serviço</label>
+                    <p class="info">
+                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
+                    </p>
+                    <label>Status</label>
+                    <div class="status ativo">Ativo</div>
+                    <div class="buttons">
+                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
+                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="card">
+                    <h3>Detalhes do agendamento</h3>
+                    <label>Data e Hora</label>
+                    <div class="field">12/01/2025 - 14:30</div>
+                    <label>Tipo de Serviço</label>
+                    <div class="field">Spa & Relaxamento em Casa</div>
+                    <label>Informações do serviço</label>
+                    <p class="info">
+                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
+                    </p>
+                    <label>Status</label>
+                    <div class="status ativo">Ativo</div>
+                    <div class="buttons">
+                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
+                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
+                    </div>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="card">
+                    <h3>Detalhes do agendamento</h3>
+                    <label>Data e Hora</label>
+                    <div class="field">12/01/2025 - 14:30</div>
+                    <label>Tipo de Serviço</label>
+                    <div class="field">Spa & Relaxamento em Casa</div>
+                    <label>Informações do serviço</label>
+                    <p class="info">
+                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
+                    </p>
+                    <label>Status</label>
+                    <div class="status ativo">Ativo</div>
+                    <div class="buttons">
+                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
+                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button> 
+                    </div>
+                </div>
+
+                <!-- Card 7 -->
+                <div class="card">
+                    <h3>Detalhes do agendamento</h3>
+                    <label>Data e Hora</label>
                     <div class="field">15/01/2025 - 10:00</div>
                     <label>Tipo de Serviço</label>
                     <div class="field">Massagem Terapêutica</div>
@@ -227,7 +227,7 @@
                     </div>
                 </div>
 
-                <!-- Card 3 -->
+                <!-- Card 8 -->
                 <div class="card">
                     <h3>Detalhes do agendamento</h3>
                     <label>Data e Hora</label>
@@ -324,47 +324,6 @@
         </div>
     </div>
 
-    <script>
-        // Funções para os modais
-        function openModal(id) {
-            document.getElementById(id).style.display = 'block';
-            document.querySelector('.overlay').style.display = 'block';
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
-            document.querySelector('.overlay').style.display = 'none';
-        }
-
-        // Dropdown do usuário
-        document.querySelector('.user-profile').addEventListener('click', function() {
-            this.querySelector('.dropdown-content').classList.toggle('show');
-        });
-
-        // Fechar dropdowns ao clicar fora
-        window.onclick = function(event) {
-            if (!event.target.matches('.user-profile') && !event.target.matches('.user-profile *')) {
-                var dropdowns = document.querySelectorAll('.dropdown-content');
-                dropdowns.forEach(function(dropdown) {
-                    if (dropdown.classList.contains('show')) {
-                        dropdown.classList.remove('show');
-                    }
-                });
-            }
-        }
-
-        // Menu toggle para mobile
-        document.querySelector('.menu-toggle').addEventListener('click', function() {
-            document.querySelector('.sidebar').classList.toggle('active');
-            document.querySelector('.overlay').style.display = 
-                document.querySelector('.overlay').style.display === 'block' ? 'none' : 'block';
-        });
-
-        // Fechar sidebar ao clicar no overlay
-        document.querySelector('.overlay').addEventListener('click', function() {
-            document.querySelector('.sidebar').classList.remove('active');
-            this.style.display = 'none';
-        });
-    </script>
+    <script src="../../js/usuarios/user-home.js"></script>
 </body>
 </html>
