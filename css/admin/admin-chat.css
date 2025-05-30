@@ -13,8 +13,8 @@
   --chat-hover: #e6f0fa;
   --chat-active: #d1e7ff;
   --chat-closed: #f1f1f1;
-  --primary-blue: var(--primary);
-  --primary-blue-hover: var(--secondary);
+  --primary-color: var(--primary);
+  --primary-color-hover: var(--secondary);
   --danger-red: #e74c3c;
   --danger-red-hover: #c0392b;
   --border-light: #ddd;
@@ -81,7 +81,7 @@
 .chat-item i {
   font-size: 1.5rem;
   margin-right: 15px;
-  color: var(--primary-blue);
+  color: var(--primary-color);
 }
 
 .chat-item div {
@@ -159,7 +159,7 @@
 }
 
 .message.sent {
-  background: var(--primary-blue);
+  background: var(--primary-color);
   color: var(--text-white);
   margin-left: auto;
 }
@@ -197,7 +197,7 @@
 
 .chat-input button {
   padding: 10px 20px;
-  background: var(--primary-blue);
+  background: var(--primary-color);
   color: var(--text-white);
   border: none;
   border-radius: 8px;
@@ -206,7 +206,7 @@
 }
 
 .chat-input button:hover {
-  background: var(--primary-blue-hover);
+  background: var(--primary-color-hover);
 }
 
 .chat-input button i {
@@ -234,7 +234,7 @@
 
 .action-btn {
   padding: 10px 20px;
-  background: var(--primary-blue);
+  background: var(--primary-color);
   color: var(--text-white);
   border: none;
   border-radius: 8px;
@@ -246,7 +246,7 @@
 }
 
 .action-btn:hover {
-  background: var(--primary-blue-hover);
+  background: var(--primary-color-hover);
 }
 
 /* Search and Filter */

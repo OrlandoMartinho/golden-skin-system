@@ -1,14 +1,33 @@
 @import url('../global.css');
-
+/* global.css */
+:root {
+  --background-white: #fff;
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.3);
+  --modal-overlay: rgba(0, 0, 0, 0.7);
+  --text-dark: #333;
+  --text-medium: #555;
+  --text-light: #999;
+  --text-gray: #aaa;
+  --border-light: #ddd;
+  --border-lighter: #eee;
+  --modal-background: #f0f0f0;
+  --primary-color: var(--primary);
+  --secondary-color: var(--secondary); /* Assumed for var(--secondary) */
+  --accent-purple: #6c63ff;
+  --accent-purple-hover: #5a54cc;
+  --tab-background: #f8f9fa;
+  --tab-hover: #e6f7ee;
+}
 /* ============ BASE STYLES ============ */
 .settings-container {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     gap: 20px;
-    background: white;
+    background: var(--background-white);
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px var(--shadow-light);
     padding: 25px;
     margin-top: 20px;
 }
@@ -23,8 +42,8 @@
 .settings-tab {
     padding: 10px 15px;
     font-size: 14px;
-    color: #333;
-    background: #f8f9fa;
+    color: var(--text-dark);
+    background: var(--tab-background);
     border-radius: 5px;
     cursor: pointer;
     display: flex;
@@ -34,12 +53,12 @@
 }
 
 .settings-tab:hover {
-    background: #e6f7ee;
+    background: var(--tab-hover);
 }
 
 .settings-tab.active {
-    background: #5a8f7b;
-    color: white;
+    background: var(--primary-color);
+    color: var(--background-white);
 }
 
 /* ============ SETTINGS CONTENT ============ */
@@ -53,7 +72,7 @@
 
 .settings-header h2 {
     font-size: 20px;
-    color: #333;
+    color: var(--text-dark);
     margin-bottom: 15px;
 }
 
@@ -70,21 +89,21 @@
 
 .form-group label {
     font-size: 14px;
-    color: #333;
+    color: var(--text-dark);
     margin-bottom: 5px;
 }
 
 .form-group input {
     padding: 10px 15px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-light);
     border-radius: 5px;
     font-size: 14px;
     outline: none;
 }
 
 .save-btn, .submit-btn {
-    background: #5a8f7b;
-    color: white;
+    background: var(--primary-color);
+    color: var(--background-white);
     border: none;
     border-radius: 4px;
     padding: 8px 15px;
@@ -96,7 +115,7 @@
 }
 
 .save-btn:hover, .submit-btn:hover {
-    background: var(--secondary);
+    background: var(--secondary-color);
 }
 
 .profile-photo-upload {
@@ -113,8 +132,8 @@
 }
 
 .upload-btn {
-    background: #6c63ff;
-    color: white;
+    background: var(--accent-purple);
+    color: var(--background-white);
     border: none;
     border-radius: 4px;
     padding: 8px 15px;
@@ -124,7 +143,7 @@
 }
 
 .upload-btn:hover {
-    background: #5a54cc;
+    background: var(--accent-purple-hover);
 }
 
 .notification-settings {
@@ -135,7 +154,7 @@
 
 .notification-settings label {
     font-size: 14px;
-    color: #333;
+    color: var(--text-dark);
 }
 
 /* ============ MODAL ============ */
@@ -145,7 +164,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: var(--modal-overlay);
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -163,9 +182,9 @@
 }
 
 .modal-content {
-    background-color: #fff;
+    background-color: var(--background-white);
     border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 15px var(--shadow-medium);
     width: 100%;
     max-width: 500px;
     padding: 20px;
@@ -181,12 +200,12 @@
 .modal-content h3 {
     font-size: 18px;
     margin-bottom: 15px;
-    color: #333;
+    color: var(--text-dark);
 }
 
 .modal-content p {
     font-size: 14px;
-    color: #555;
+    color: var(--text-medium);
     margin-bottom: 20px;
 }
 
@@ -196,7 +215,7 @@
     right: 15px;
     font-size: 24px;
     font-weight: bold;
-    color: #aaa;
+    color: var(--text-gray);
     cursor: pointer;
 }
 
@@ -216,17 +235,17 @@
 }
 
 .modal-buttons .cancel {
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: var(--modal-background);
+    color: var(--text-dark);
 }
 
 .modal-buttons .confirm {
-    background-color: #5a8f7b;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--background-white);
 }
 
 .modal-buttons .confirm:hover {
-    background-color: var(--secondary);
+    background-color: var(--secondary-color);
 }
 
 /* ============ NOTIFICATIONS DROPDOWN ============ */
@@ -234,9 +253,9 @@
     position: absolute;
     top: 60px;
     right: 20px;
-    background-color: #fff;
+    background-color: var(--background-white);
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px var(--shadow-light);
     width: 300px;
     display: none;
 }
@@ -245,24 +264,24 @@
     display: flex;
     align-items: center;
     padding: 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border-lighter);
 }
 
 .notification-item i {
     font-size: 18px;
     margin-right: 10px;
-    color: #6c63ff;
+    color: var(--accent-purple);
 }
 
 .notification-item p {
     margin: 0;
     font-size: 14px;
-    color: #333;
+    color: var(--text-dark);
 }
 
 .notification-item small {
     font-size: 12px;
-    color: #999;
+    color: var(--text-light);
 }
 
 /* ============ RESPONSIVENESS ============ */
