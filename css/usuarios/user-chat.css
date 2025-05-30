@@ -54,7 +54,7 @@
 }
 
 .unread-count {
-    background-color: #6c63ff;
+    background-color:var(--secondary);
     color: white;
     border-radius: 50%;
     width: 20px;
@@ -147,7 +147,7 @@
 }
 
 .sent .message-content {
-    background-color: #6c63ff;
+    background-color:var(--secondary);
     color: #fff;
 }
 
@@ -174,7 +174,7 @@
 }
 
 .chat-input button {
-    background-color: #6c63ff;
+    background-color:var(--secondary);
     color: white;
     border: none;
     border-radius: 50%;
