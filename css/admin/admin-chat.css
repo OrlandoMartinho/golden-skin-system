@@ -1,5 +1,28 @@
 @import url('../global.css');
 
+/* global.css */
+:root {
+  --background-white: #fff;
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-dark: rgba(0, 0, 0, 0.2);
+  --text-dark: #333;
+  --text-medium: #666;
+  --text-light: #999;
+  --text-white: #fff;
+  --chat-background: #f9f9f9;
+  --chat-hover: #e6f0fa;
+  --chat-active: #d1e7ff;
+  --chat-closed: #f1f1f1;
+  --primary-blue: var(--primary);
+  --primary-blue-hover: var(--secondary);
+  --danger-red: #e74c3c;
+  --danger-red-hover: #c0392b;
+  --border-light: #ddd;
+  --cancel-gray: #ccc;
+  --cancel-gray-hover: #999;
+  --modal-overlay: rgba(0, 0, 0, 0.5);
+}
+
 /* Chat Container */
 .dashboard-container {
   display: flex;
@@ -11,9 +34,9 @@
 
 /* Chat List Section */
 .overview-section {
-  background: #fff;
+  background: var(--background-white);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px var(--shadow-light);
   padding: 20px;
   width: 300px; /* Fixed width for vertical sidebar */
   height: 100%;
@@ -23,7 +46,7 @@
 .overview-section h2 {
   margin: 0 0 15px;
   font-size: 1.5rem;
-  color: #333;
+  color: var(--text-dark);
 }
 
 .overview-cards {
@@ -37,28 +60,28 @@
   align-items: center;
   padding: 15px;
   border-radius: 8px;
-  background: #f9f9f9;
+  background: var(--chat-background);
   cursor: pointer;
   transition: background 0.3s;
 }
 
 .chat-item:hover {
-  background: #e6f0fa;
+  background: var(--chat-hover);
 }
 
 .chat-item.active {
-  background: #d1e7ff;
+  background: var(--chat-active);
 }
 
 .chat-item.closed {
   opacity: 0.7;
-  background: #f1f1f1;
+  background: var(--chat-closed);
 }
 
 .chat-item i {
   font-size: 1.5rem;
   margin-right: 15px;
-  color: #4a90e2;
+  color: var(--primary-blue);
 }
 
 .chat-item div {
@@ -68,23 +91,23 @@
 .chat-item h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: #333;
+  color: var(--text-dark);
 }
 
 .chat-item p {
   margin: 5px 0;
-  color: #666;
+  color: var(--text-medium);
   font-size: 0.9rem;
 }
 
 .chat-item small {
-  color: #999;
+  color: var(--text-light);
   font-size: 0.8rem;
 }
 
 .unread-count {
-  background: #e74c3c;
-  color: #fff;
+  background: var(--danger-red);
+  color: var(--text-white);
   border-radius: 50%;
   padding: 2px 8px;
   font-size: 0.8rem;
@@ -100,9 +123,9 @@
 
 /* Chat Window Section */
 .recent-activity-section {
-  background: #fff;
+  background: var(--background-white);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px var(--shadow-light);
   padding: 20px;
   flex: 1;
   display: flex;
@@ -112,7 +135,7 @@
 .recent-activity-section h2 {
   margin: 0 0 15px;
   font-size: 1.5rem;
-  color: #333;
+  color: var(--text-dark);
 }
 
 .activity-list {
@@ -131,13 +154,13 @@
 }
 
 .message.received {
-  background: #f1f1f1;
+  background: var(--chat-closed);
   margin-right: auto;
 }
 
 .message.sent {
-  background: #4a90e2;
-  color: #fff;
+  background: var(--primary-blue);
+  color: var(--text-white);
   margin-left: auto;
 }
 
@@ -150,11 +173,11 @@
   display: block;
   margin-top: 5px;
   font-size: 0.7rem;
-  color: #999;
+  color: var(--text-light);
 }
 
 .message.sent small {
-  color: #d1e7ff;
+  color: var(--chat-active);
 }
 
 .chat-input {
@@ -166,7 +189,7 @@
 .chat-input textarea {
   flex: 1;
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-light);
   border-radius: 8px;
   resize: none;
   font-size: 0.9rem;
@@ -174,8 +197,8 @@
 
 .chat-input button {
   padding: 10px 20px;
-  background: #4a90e2;
-  color: #fff;
+  background: var(--primary-blue);
+  color: var(--text-white);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -183,7 +206,7 @@
 }
 
 .chat-input button:hover {
-  background: #357abd;
+  background: var(--primary-blue-hover);
 }
 
 .chat-input button i {
@@ -192,16 +215,16 @@
 
 /* Quick Actions Section */
 .quick-actions-section {
-  background: #fff;
+  background: var(--background-white);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px var(--shadow-light);
   padding: 20px;
 }
 
 .quick-actions-section h2 {
   margin: 0 0 15px;
   font-size: 1.5rem;
-  color: #333;
+  color: var(--text-dark);
 }
 
 .quick-actions {
@@ -211,8 +234,8 @@
 
 .action-btn {
   padding: 10px 20px;
-  background: #4a90e2;
-  color: #fff;
+  background: var(--primary-blue);
+  color: var(--text-white);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -223,7 +246,7 @@
 }
 
 .action-btn:hover {
-  background: #357abd;
+  background: var(--primary-blue-hover);
 }
 
 /* Search and Filter */
@@ -243,20 +266,20 @@
   top: 50%;
   left: 10px;
   transform: translateY(-50%);
-  color: #999;
+  color: var(--text-light);
 }
 
 .search-box input {
   width: 100%;
   padding: 10px 10px 10px 35px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-light);
   border-radius: 8px;
   font-size: 0.9rem;
 }
 
 #chat-status-filter {
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-light);
   border-radius: 8px;
   font-size: 0.9rem;
 }
@@ -269,31 +292,31 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--modal-overlay);
   z-index: 1000;
   align-items: center;
   justify-content: center;
 }
 
 .modal-content {
-  background: #fff;
+  background: var(--background-white);
   border-radius: 8px;
   padding: 20px;
   max-width: 400px;
   width: 90%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px var(--shadow-dark);
 }
 
 .modal-content h3 {
   margin: 0 0 15px;
   font-size: 1.2rem;
-  color: #333;
+  color: var(--text-dark);
 }
 
 .modal-content p {
   margin: 0 0 20px;
   font-size: 0.9rem;
-  color: #666;
+  color: var(--text-medium);
 }
 
 .modal-content .close {
@@ -302,11 +325,11 @@
   right: 15px;
   font-size: 1.2rem;
   cursor: pointer;
-  color: #999;
+  color: var(--text-light);
 }
 
 .modal-content .close:hover {
-  color: #333;
+  color: var(--text-dark);
 }
 
 .modal-buttons {
@@ -317,8 +340,8 @@
 
 .modal-buttons .cancel {
   padding: 8px 16px;
-  background: #ccc;
-  color: #fff;
+  background: var(--cancel-gray);
+  color: var(--text-white);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -326,19 +349,19 @@
 
 .modal-buttons .confirm {
   padding: 8px 16px;
-  background: #e74c3c;
-  color: #fff;
+  background: var(--danger-red);
+  color: var(--text-white);
   border: none;
   border-radius: 8px;
   cursor: pointer;
 }
 
 .modal-buttons .confirm:hover {
-  background: #c0392b;
+  background: var(--danger-red-hover);
 }
 
 .modal-buttons .cancel:hover {
-  background: #999;
+  background: var(--cancel-gray-hover);
 }
 
 /* Responsive Design */

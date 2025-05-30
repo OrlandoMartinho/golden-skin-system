@@ -1,14 +1,36 @@
 @import url('../global.css');
 
+/* global.css */
+:root {
+  --background-white: #fff;
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.3);
+  --text-dark: #333;
+  --text-light: #999;
+  --text-gray: #aaa;
+  --border-light: #ddd;
+  --border-lighter: #eee;
+  --modal-background: #f0f0f0;
+  --modal-overlay: rgba(0, 0, 0, 0.7);
+  --primary-green: var(--primary); /* Assumed for var(--primary) */
+  --secondary-green: var(--secondary); /* Assumed for var(--secondary) */
+  --accent-purple: #6c63ff;
+  --status-active-bg: #e6f7ee;
+  --status-active-text: #00a859;
+  --status-inactive-bg: #fee;
+  --status-inactive-text: #e74c3c;
+  --table-header-bg: #f8f9fa;
+  --table-hover-bg: #f9f9f9;
+}
 /* ============ BASE STYLES ============ */
 .products-container {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     gap: 20px;
-    background: white;
+    background: var(--background-white);
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px var(--shadow-light);
     padding: 25px;
     margin-top: 20px;
 }
@@ -23,12 +45,12 @@
 
 .products-header h2 {
     font-size: 20px;
-    color: #333;
+    color: var(--text-dark);
 }
 
 .add-product-btn {
-    background: #5a8f7b;
-    color: white;
+    background: var(--primary-green);
+    color: var(--background-white);
     border: none;
     border-radius: 4px;
     padding: 10px 15px;
@@ -42,7 +64,7 @@
 }
 
 .add-product-btn:hover {
-    background: var(--secondary);
+    background: var(--secondary-green);
 }
 
 /* ============ SEARCH AND FILTER ============ */
@@ -63,13 +85,13 @@
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: #999;
+    color: var(--text-light);
 }
 
 .search-box input {
     width: 100%;
     padding: 10px 10px 10px 35px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-light);
     border-radius: 20px;
     font-size: 14px;
     outline: none;
@@ -82,7 +104,7 @@
 
 .filter-box select {
     padding: 10px 15px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-light);
     border-radius: 5px;
     font-size: 14px;
     outline: none;
@@ -99,14 +121,14 @@ table {
 }
 
 thead {
-    background: #f8f9fa;
+    background: var(--table-header-bg);
 }
 
 th, td {
     padding: 12px 15px;
     text-align: left;
     font-size: 14px;
-    color: #333;
+    color: var(--text-dark);
 }
 
 th {
@@ -114,11 +136,11 @@ th {
 }
 
 tr {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border-lighter);
 }
 
 tr:hover {
-    background: #f9f9f9;
+    background: var(--table-hover-bg);
 }
 
 .status-active {
@@ -126,8 +148,8 @@ tr:hover {
     padding: 3px 10px;
     border-radius: 20px;
     font-size: 12px;
-    background: #e6f7ee;
-    color: #00a859;
+    background: var(--status-active-bg);
+    color: var(--status-active-text);
 }
 
 .status-inactive {
@@ -135,14 +157,14 @@ tr:hover {
     padding: 3px 10px;
     border-radius: 20px;
     font-size: 12px;
-    background: #fee;
-    color: #e74c3c;
+    background: var(--status-inactive-bg);
+    color: var(--status-inactive-text);
 }
 
 .action-btn {
     background: none;
     border: none;
-    color: #5a8f7b;
+    color: var(--primary-green);
     font-size: 16px;
     cursor: pointer;
     margin: 0 5px;
@@ -150,7 +172,7 @@ tr:hover {
 }
 
 .action-btn:hover {
-    color: var(--secondary);
+    color: var(--secondary-green);
 }
 
 /* ============ MODAL ============ */
@@ -160,7 +182,7 @@ tr:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: var(--modal-overlay);
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -178,9 +200,9 @@ tr:hover {
 }
 
 .modal-content {
-    background-color: #fff;
+    background-color: var(--background-white);
     border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 15px var(--shadow-medium);
     width: 100%;
     max-width: 500px;
     padding: 20px;
@@ -196,7 +218,7 @@ tr:hover {
 .modal-content h3 {
     font-size: 18px;
     margin-bottom: 15px;
-    color: #333;
+    color: var(--text-dark);
 }
 
 .form-group {
@@ -206,7 +228,7 @@ tr:hover {
 .form-group label {
     display: block;
     font-size: 14px;
-    color: #333;
+    color: var(--text-dark);
     margin-bottom: 5px;
 }
 
@@ -214,7 +236,7 @@ tr:hover {
 .form-group select {
     width: 100%;
     padding: 10px 15px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-light);
     border-radius: 5px;
     font-size: 14px;
     outline: none;
@@ -237,17 +259,17 @@ tr:hover {
 }
 
 .modal-buttons .cancel {
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: var(--modal-background);
+    color: var(--text-dark);
 }
 
 .modal-buttons .confirm {
-    background-color: #5a8f7b;
-    color: white;
+    background-color: var(--primary-green);
+    color: var(--background-white);
 }
 
 .modal-buttons .confirm:hover {
-    background-color: var(--secondary);
+    background-color: var(--secondary-green);
 }
 
 .close {
@@ -256,7 +278,7 @@ tr:hover {
     right: 15px;
     font-size: 24px;
     font-weight: bold;
-    color: #aaa;
+    color: var(--text-gray);
     cursor: pointer;
 }
 
@@ -265,9 +287,9 @@ tr:hover {
     position: absolute;
     top: 60px;
     right: 20px;
-    background-color: #fff;
+    background-color: var(--background-white);
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px var(--shadow-light);
     width: 300px;
     display: none;
 }
@@ -276,24 +298,24 @@ tr:hover {
     display: flex;
     align-items: center;
     padding: 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border-lighter);
 }
 
 .notification-item i {
     font-size: 18px;
     margin-right: 10px;
-    color: #6c63ff;
+    color: var(--accent-purple);
 }
 
 .notification-item p {
     margin: 0;
     font-size: 14px;
-    color: #333;
+    color: var(--text-dark);
 }
 
 .notification-item small {
     font-size: 12px;
-    color: #999;
+    color: var(--text-light);
 }
 
 /* ============ RESPONSIVENESS ============ */
