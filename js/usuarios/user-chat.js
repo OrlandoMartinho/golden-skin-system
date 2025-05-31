@@ -43,7 +43,7 @@
         } else if(chatId === 2) {
             document.getElementById('chat-name').textContent = 'Carlos Mendes - Esteticista';
             document.getElementById('chat-status').textContent = 'Online há 2h';
-            document.getElementById('chat-avatar').src = 'https://via.placeholder.com/50/0000FF/FFFFFF';
+            document.getElementById('chat-avatar').src = '../../assets/img/Elipse 51.png';
             
             const messagesContainer = document.getElementById('chat-messages');
             messagesContainer.innerHTML = `
@@ -71,7 +71,7 @@
         }
         
         // Rolagem para baixo
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        // messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
     
     // Função para fechar o chat
