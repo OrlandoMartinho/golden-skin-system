@@ -13,7 +13,7 @@
   --color-secondary:#0065D4;
 }
 html{
-  font-size:62.5%;
+  font-size: 80%;
 }
 p{
   color:var(--text-color);
