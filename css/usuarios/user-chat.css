@@ -2,17 +2,23 @@
 
 /* ============ BASE STYLES ============ */
 .section-chat {
-    padding: 15px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+ 
 }
 /* ============ CHAT LIST ============ */
 .chat-list {
     margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
 }
 
 .chat-item {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     display: flex;
     padding: 10px;
     border-bottom: 1px solid #eee;
@@ -25,6 +31,7 @@
 }
 
 .chat-item img {
+
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -32,6 +39,9 @@
 }
 
 .chat-item-info {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     flex: 1;
 }
 
