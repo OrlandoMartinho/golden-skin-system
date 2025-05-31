@@ -6,7 +6,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-
+}
 /* ============ CHAT LIST ============ */
 .chat-list {
     margin-top: 20px;
