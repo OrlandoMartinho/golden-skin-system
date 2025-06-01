@@ -12,6 +12,7 @@ import { cartsRoutes } from "./cartsRoutes";
 import { purchaseProductsRoutes } from "./purchaseProductsRoutes";
 import { appointmentsRoutes } from "./appointmentsRoutes";
 import { productsRoutes } from "./productsRoutes";
+import { servicesRoutes } from "./servicesRoutes";
 export async function routes(app:FastifyTypedInstance) {
   userRoutes(app)
   notificationsRoutes(app);
@@ -23,4 +24,5 @@ export async function routes(app:FastifyTypedInstance) {
   purchaseProductsRoutes(app);
   appointmentsRoutes(app);
   productsRoutes(app);
+  servicesRoutes(app);
 }

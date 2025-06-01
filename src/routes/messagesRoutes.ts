@@ -107,7 +107,7 @@ export async function messagesRoutes(app: FastifyTypedInstance) {
       schema: {
         description: "View a single message",
         tags: ["Messages"],
-        body: MessagesSchemas.ViewMessage,
+        params: MessagesSchemas.ViewMessage,
         headers: tokenSchema,
         response: {
           200: MessagesSchemas.messageSchema,
@@ -119,7 +119,7 @@ export async function messagesRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.viewA(request.body, request.headers));
+      return reply.status(200).send(await controller.viewA(request.params, request.headers));
     }
   );
 }

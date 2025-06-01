@@ -84,7 +84,7 @@ export async function productsRoutes(app: FastifyTypedInstance) {
       schema: {
         description: "View a single product",
         tags: ["Products"],
-        body: ProductsSchemas.ViewProduct,
+        params: ProductsSchemas.ViewProduct,
         headers: tokenSchema,
         response: {
           200: ProductsSchemas.productSchema,

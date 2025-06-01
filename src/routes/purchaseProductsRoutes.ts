@@ -84,7 +84,7 @@ export async function purchaseProductsRoutes(app: FastifyTypedInstance) {
       schema: {
         description: "View a single purchase product",
         tags: ["PurchaseProducts"],
-        body: PurchaseProductsSchemas.ViewPurchaseProduct,
+        params: PurchaseProductsSchemas.ViewPurchaseProduct,
         headers: tokenSchema,
         response: {
           200: PurchaseProductsSchemas.purchaseProductSchema,
@@ -96,7 +96,7 @@ export async function purchaseProductsRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.viewA(request.body, request.headers));
+      return reply.status(200).send(await controller.viewA(request.params, request.headers));
     }
   );
 
@@ -107,7 +107,7 @@ export async function purchaseProductsRoutes(app: FastifyTypedInstance) {
       schema: {
         description: "View all purchase products in a shopping",
         tags: ["PurchaseProducts"],
-        body: PurchaseProductsSchemas.ViewPurchaseProducts,
+        params: PurchaseProductsSchemas.ViewPurchaseProducts,
         headers: tokenSchema,
         response: {
           200: PurchaseProductsSchemas.purchaseProductsResponseSchema,
@@ -119,7 +119,7 @@ export async function purchaseProductsRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.viewAll(request.body, request.headers));
+      return reply.status(200).send(await controller.viewAll(request.params, request.headers));
     }
   );
 }

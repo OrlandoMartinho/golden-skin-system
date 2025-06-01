@@ -1,24 +1,24 @@
 import { FastifyTypedInstance } from "../types/fastify_types";
-import AppointmentsController from "../controllers/AppointmentsController";
-import AppointmentsSchemas from "../schemas/AppointmentsSchemas";
+import ServicesController from "../controllers/ServicesController";
+import ServicesSchemas from "../schemas/ServicesSchemas";
 import tokenSchema from "../schemas/TokensServicesSchemas";
 import ResponsesSchemas from "../schemas/ResponsesSchemas";
 import type { FastifyReply } from "fastify";
 
-export async function appointmentsRoutes(app: FastifyTypedInstance) {
-  const controller = new AppointmentsController();
+export async function servicesRoutes(app: FastifyTypedInstance) {
+  const controller = new ServicesController();
 
-  // Register a new appointment
+  // Add a new service
   app.post(
-    "/appointments/register",
+    "/services/add",
     {
       schema: {
-        description: "Register a new appointment",
-        tags: ["Appointments"],
-        body: AppointmentsSchemas.RegisterAppointment,
+        description: "Add a new service",
+        tags: ["Services"],
+        body: ServicesSchemas.AddService,
         headers: tokenSchema,
         response: {
-          200: AppointmentsSchemas.success_response,
+          200: ServicesSchemas.success_response,
           400: ResponsesSchemas.error_400_response,
           401: ResponsesSchemas.general_error_response,
           404: ResponsesSchemas.general_error_response,
@@ -27,44 +27,21 @@ export async function appointmentsRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.register(request.body, request.headers));
+      return reply.status(200).send(await controller.add(request.body, request.headers));
     }
   );
 
-  // Update an appointment
-  app.put(
-    "/appointments/update",
-    {
-      schema: {
-        description: "Update an appointment",
-        tags: ["Appointments"],
-        body: AppointmentsSchemas.UpdateAppointment,
-        headers: tokenSchema,
-        response: {
-          200: AppointmentsSchemas.success_response,
-          400: ResponsesSchemas.error_400_response,
-          401: ResponsesSchemas.general_error_response,
-          404: ResponsesSchemas.general_error_response,
-          500: ResponsesSchemas.general_error_response,
-        },
-      },
-    },
-    async (request, reply) => {
-      return reply.status(200).send(await controller.update(request.body, request.headers));
-    }
-  );
-
-  // Delete an appointment
+  // Delete a service
   app.delete(
-    "/appointments",
+    "/services",
     {
       schema: {
-        description: "Delete an appointment",
-        tags: ["Appointments"],
-        body: AppointmentsSchemas.DeleteAppointment,
+        description: "Delete a service",
+        tags: ["Services"],
+        body: ServicesSchemas.DeleteService,
         headers: tokenSchema,
         response: {
-          200: AppointmentsSchemas.success_response,
+          200: ServicesSchemas.success_response,
           400: ResponsesSchemas.error_400_response,
           401: ResponsesSchemas.general_error_response,
           404: ResponsesSchemas.general_error_response,
@@ -77,19 +54,64 @@ export async function appointmentsRoutes(app: FastifyTypedInstance) {
     }
   );
 
-  // View all appointments
-  app.get(
-    "/appointments",
+  // Edit a service
+  app.put(
+    "/services/edit",
     {
       schema: {
-        description: "View all appointments for a user",
-        tags: ["Appointments"],
+        description: "Edit a service",
+        tags: ["Services"],
+        body: ServicesSchemas.EditService,
         headers: tokenSchema,
         response: {
-          200: AppointmentsSchemas.appointmentsResponseSchema,
+          200: ServicesSchemas.success_response,
           400: ResponsesSchemas.error_400_response,
           401: ResponsesSchemas.general_error_response,
           404: ResponsesSchemas.general_error_response,
+          500: ResponsesSchemas.general_error_response,
+        },
+      },
+    },
+    async (request, reply) => {
+      return reply.status(200).send(await controller.edit(request.body, request.headers));
+    }
+  );
+
+  // View a single service
+  app.get(
+    "/services/view-a",
+    {
+      schema: {
+        description: "View a single service",
+        tags: ["Services"],
+        body: ServicesSchemas.ViewService,
+        headers: tokenSchema,
+        response: {
+          200: ServicesSchemas.serviceSchema,
+          400: ResponsesSchemas.error_400_response,
+          401: ResponsesSchemas.general_error_response,
+          404: ResponsesSchemas.general_error_response,
+          500: ResponsesSchemas.general_error_response,
+        },
+      },
+    },
+    async (request, reply) => {
+      return reply.status(200).send(await controller.viewA(request.body, request.headers));
+    }
+  );
+
+  // View all services
+  app.get(
+    "/services",
+    {
+      schema: {
+        description: "View all services",
+        tags: ["Services"],
+        headers: tokenSchema,
+        response: {
+          200: ServicesSchemas.servicesResponseSchema,
+          400: ResponsesSchemas.error_400_response,
+          401: ResponsesSchemas.general_error_response,
           500: ResponsesSchemas.general_error_response,
         },
       },
@@ -99,40 +121,17 @@ export async function appointmentsRoutes(app: FastifyTypedInstance) {
     }
   );
 
-  // View an appointment for an employee
-  app.get(
-    "/appointments/employee",
-    {
-      schema: {
-        description: "View an appointment for an employee",
-        tags: ["Appointments"],
-        params: AppointmentsSchemas.ViewEmployeeAppointment,
-        headers: tokenSchema,
-        response: {
-          200: AppointmentsSchemas.appointmentSchema,
-          400: ResponsesSchemas.error_400_response,
-          401: ResponsesSchemas.general_error_response,
-          404: ResponsesSchemas.general_error_response,
-          500: ResponsesSchemas.general_error_response,
-        },
-      },
-    },
-    async (request, reply) => {
-      return reply.status(200).send(await controller.viewEmployee(request.params, request.headers));
-    }
-  );
-
-  // Add an employee to an appointment
+  // Upload a service photo
   app.post(
-    "/appointments/add-employee",
+    "/services/upload-photo",
     {
       schema: {
-        description: "Add an employee to an appointment",
-        tags: ["Appointments"],
-        body: AppointmentsSchemas.AddEmployeeAppointment,
+        description: "Upload a photo for a service",
+        tags: ["Services"],
+        body: ServicesSchemas.UploadPhotoService,
         headers: tokenSchema,
         response: {
-          200: AppointmentsSchemas.success_response,
+          200: ServicesSchemas.success_response,
           400: ResponsesSchemas.error_400_response,
           401: ResponsesSchemas.general_error_response,
           404: ResponsesSchemas.general_error_response,
@@ -141,7 +140,7 @@ export async function appointmentsRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.addEmployee(request.body, request.headers));
+      return reply.status(200).send(await controller.uploadPhoto(request.body, request.headers));
     }
   );
 }
