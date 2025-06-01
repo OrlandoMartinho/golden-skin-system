@@ -10,7 +10,7 @@ export async function notificationsRoutes(app: FastifyTypedInstance) {
 
 
   // Mark a notification as read
-  app.put(
+  app.patch(
     "/notifications/read",
     {
       schema: {
