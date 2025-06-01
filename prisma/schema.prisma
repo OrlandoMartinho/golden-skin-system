@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql" // ou "postgresql" ou outro, conforme seu banco
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  idUser        Int      @id @default(autoincrement())
+  name          String  @db.VarChar(255)
+  password      String
+  token         String?
+  email         String  @unique @db.VarChar(255)
+  photo         String?
+  phoneNumber   String?  @db.VarChar(45)
+  role          Int
+  path          String?  @db.VarChar(255)
+  status        Boolean
+  createdIn     DateTime @default(now())
+  updatedIn     DateTime?
+
+  Notifications Notifications[]
+  Carts         Carts[]
+  Shoppings     Shoppings[]
+  Appointments  Appointments[] @relation("UserAppointments")
+  EmployeeAppointments Appointments[] @relation("EmployeeAppointments")
+  Messages      Messages[]
+  Chats1        Chats[] @relation("ChatUser1")
+  Chats2        Chats[] @relation("ChatUser2")
+}
+
+model Notifications {
+  idNotification   Int      @id @default(autoincrement())
+  icon             String?
+  description      String?  @db.VarChar(255)
+  notificationTime String?  @db.VarChar(100)
+  read             Boolean?
+  idUser           Int?
+  createdIn        DateTime? @default(now())
+  updatedIn        DateTime?
+
+  Users Users? @relation(fields: [idUser], references: [idUser])
+}
+
+model Services {
+  idService   Int      @id @default(autoincrement())
+  name        String?  @db.VarChar(255)
+  priceInCents Int?
+  duration    Int?
+  benefits    String?
+  reviews     Int?
+  status      Boolean?
+  category    String?  @db.VarChar(255)
+  updatedIn   DateTime?
+  createdIn   DateTime? @default(now())
+  description String?  @db.VarChar(255)
+  photo       String?
+
+  Appointments Appointments[]
+}
+
+model Products {
+  idProduct   Int      @id @default(autoincrement())
+  name        String?  @db.VarChar(255)
+  description String?  @db.VarChar(255)
+  price_in_cents Int?
+  status      Boolean?
+  category    String?  @db.VarChar(255)
+  updatedIn   DateTime?
+  createdIn   DateTime? @default(now())
+  amount      Int?
+  photo       String?
+
+  CartProducts      CartProducts[]
+  PurchaseProducts  PurchaseProducts[]
+}
+
+model Appointments {
+  idAppointment       Int      @id @default(autoincrement())
+  appointmentTime     String?  @db.VarChar(45)
+  appointmentDate     DateTime?
+  status              Boolean?
+  employeeName        String?  @db.VarChar(255)
+  name                String?  @db.VarChar(255)
+  email               String?  @db.VarChar(255)
+  phoneNumber         String?  @db.VarChar(255)
+  employeePhoneNumber String?  @db.VarChar(255)
+  employeeEmail       String?  @db.VarChar(255)
+  idService           Int?
+  idUser              Int?
+  idEmployee          Int?
+  createdIn           DateTime? @default(now())
+  updatedIn           DateTime?
+
+  Services Services? @relation(fields: [idService], references: [idService])
+  Users    Users?    @relation("UserAppointments", fields: [idUser], references: [idUser])
+  Employee Users?    @relation("EmployeeAppointments", fields: [idEmployee], references: [idUser])
+}
+
+model Carts {
+  idCart    Int      @id @default(autoincrement())
+  idUser    Int?
+  status    Boolean?
+
+  Users         Users?         @relation(fields: [idUser], references: [idUser])
+  CartProducts  CartProducts[]
+}
+
+model CartProducts {
+  idCartProduct Int      @id @default(autoincrement())
+  idProduct     Int?
+  idCart        Int?
+  productName   String?  @db.VarChar(255)
+  priceInCents  Int?
+  status        Boolean?
+  createdIn     DateTime? @default(now())
+
+  Products Products? @relation(fields: [idProduct], references: [idProduct])
+  Carts    Carts?    @relation(fields: [idCart], references: [idCart])
+}
+
+model Shoppings {
+  idShopping Int      @id @default(autoincrement())
+  status     Boolean?
+  idUser     Int?
+
+  Users             Users?             @relation(fields: [idUser], references: [idUser])
+  PurchaseProducts  PurchaseProducts[]
+}
+
+model PurchaseProducts {
+  idPurchaseProduct Int      @id @default(autoincrement())
+  idShopping        Int?
+  idProduct         String?  @db.VarChar(255)
+  priceInCents      Int?
+  productName       String?  @db.VarChar(255)
+  paymentMethod     String?  @db.VarChar(45)
+  createdIn         DateTime? @default(now())
+  updatedIn         DateTime?
+
+  Shoppings Shoppings? @relation(fields: [idShopping], references: [idShopping])
+
+  Products Products[]
+}
+
+model Chats {
+  idChat    Int      @id @default(autoincrement())
+  idUser    Int?
+  idUser2   Int?
+  createdIn DateTime? @default(now())
+
+  user1 Users? @relation("ChatUser1", fields: [idUser], references: [idUser])
+  user2 Users? @relation("ChatUser2", fields: [idUser2], references: [idUser])
+
+  Messages Messages[]
+}
+
+model Messages {
+  idMessage   Int      @id @default(autoincrement())
+  description String?  @db.VarChar(255)
+  createdIn   DateTime? @default(now())
+  updatedIn   DateTime?
+  idUser      Int?
+  idChat      Int?
+  username    String?  @db.VarChar(255)
+
+  Users Users? @relation(fields: [idUser], references: [idUser])
+  Chats Chats? @relation(fields: [idChat], references: [idChat])
+}
+
+model VerificationCodes {
+  id_verification_code Int     @id @default(autoincrement())
+  email                String  @db.LongText
+  code                 String  @db.LongText
+  used                 Boolean
+}
