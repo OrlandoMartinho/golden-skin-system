@@ -16,10 +16,11 @@ class EmailConfig {
 
   constructor() {
     this.transporter = nodemailer.createTransport({
-      service:process.env.SERVICE_EMAIL,
+      service:process.env.EMAIL_SERVICE || 'gmail', // Default to Gmail if not specified
+      host: process.env.EMAIL_HOST || 'smtp.gmail.com', // Default SMTP host
       auth: {
         user:process.env.EMAIL ,
-        pass:process.env.PASSWORD_EMAIL 
+        pass:process.env.EMAIL_PASSWORD  
       },
       tls: {
         rejectUnauthorized: false 
