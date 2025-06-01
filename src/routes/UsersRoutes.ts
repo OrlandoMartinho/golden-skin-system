@@ -241,7 +241,7 @@ export async function userRoutes(app: FastifyTypedInstance) {
   );
 
   // Upload user photo
-  app.post(
+  app.patch(
     "/users/upload-photo",
     {
       schema: {

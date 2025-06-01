@@ -122,7 +122,7 @@ export async function productsRoutes(app: FastifyTypedInstance) {
   );
 
   // Upload a product photo
-  app.post(
+  app.patch(
     "/products/upload-photo",
     {
       schema: {
