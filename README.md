@@ -1,79 +1,127 @@
-# Linka - Backend
 
-Este é o backend da plataforma Linka, desenvolvido com Fastify e documentado com Swagger.
+# 🟫 Golden Skin System - Backend
 
-## Requisitos
+This is the backend for the **Golden Skin System**, developed with [**Fastify**](https://www.fastify.io/), [**TypeScript**](https://www.typescriptlang.org/), and documented with Swagger. It supports MySQL database, automatic admin configuration, and email services.
 
-- Node.js (versão recomendada: 18+)
-- pnpm (caso não tenha, instale com `npm install -g pnpm`)
-- Banco de dados configurado
+## ✅ Requirements
 
-## Instalação
+* Node.js (recommended: 18+)
+* pnpm (`npm install -g pnpm`)
+* Active MySQL database
 
-1. Clone o repositório e acesse a branch `backend-feature`:
-   ```sh
-   git clone https://github.com/OrlandoMartinho/Linka.git
-   cd Linka
-   git checkout backend-feature
+## ⚙️ Installation
+
+1. Clone the repository and navigate to the project:
+
+   ```bash
+   git clone https://github.com/OrlandoMartinho/golden-skin-system.git
+   cd golden-skin-system
    ```
 
-2. Instale as dependências com pnpm:
-   ```sh
+2. Install dependencies:
+
+   ```bash
    pnpm install
    ```
 
-3. Configure as variáveis de ambiente criando um arquivo `.env` com os valores necessários (veja um exemplo em `.env.example`).
+3. Create a `.env` file in the project root and fill it with the following example data.
 
-## Executando o Servidor
+## 🔐 `.env` File (example)
 
-Para iniciar o servidor, use o comando:
-   ```sh
-   pnpm dev
-   ```
-O servidor rodará em `http://localhost:3000`.
+```env
+# Database (MySQL)
+DATABASE_HOST=localhost
+DATABASE_USER=root
+DATABASE_PASSWORD=
+DATABASE_NAME=golden_skin_system_bd
+DATABASE_PORT=3306
+DATABASE_URL="mysql://root:@localhost:3306/golden_skin_system_bd"
 
-## Documentação da API
+# Email and Email Service
+EMAIL=
+EMAIL_PASSWORD=
+EMAIL_SERVICE=
 
-A documentação interativa do Swagger está disponível em:
-   ```
-   http://localhost:3000/docs/
-   ```
+# Server
+SERVER_HOST=localhost
+SERVER_PORT=3000
 
-## Estrutura do Projeto
+# Alternative Databases (optional)
+SQLITE_URL=
+MONGO_URL=
+
+# Admin User (auto-created)
+ADMIN_EMAIL=servicospeledouro@gmail.com
+ADMIN_PASSWORD=12345678
+ADMIN_NAME="Pele douro"
+ADMIN_PHONE_NUMBER=123456789
+
+# Security
+SECRET_KEY=DJMFAJHFUJITREO8TJHUVJNIGTOLPAJ64YSHF
+
+# Storage Service
+STORAGE_BASE_URL=
+STORAGE_BASE_PROTOCOL=
+```
+
+## 🚀 Running the Project
+
+After configuring the `.env` file, run:
+
+```bash
+pnpm dev
+```
+
+The server will be available at:
+👉 `http://localhost:3000`
+
+## 📘 API Documentation
+
+Interactive Swagger documentation:
+👉 `http://localhost:3000/docs`
+
+## 🗂️ Project Structure
 
 ```
-LINKA_BACK_END/
-├── config/           # Configurações gerais do sistema
-├── controllers/      # Controladores das requisições
-├── routes/           # Definição das rotas da API
-├── schemas/          # Validações com Zod
-├── services/         # Serviços de backend
-├── types/            # Tipagens do projeto
-├── utils/            # Funções auxiliares
-├── uploads/          # Pasta para armazenar imagens
-├── server.ts         # Arquivo principal do servidor
-└── package.json      # Dependências e scripts do projeto
+golden-skin-system/
+├── assets/           # Static files (optional)
+├── node_modules/
+├── prisma/           # Prisma migrations and schema
+├── src/
+│   ├── config/       # General configurations
+│   ├── controllers/  # Route logic
+│   ├── errors/       # Error handling
+│   ├── routes/       # Fastify routes
+│   ├── schemas/      # Zod validations
+│   ├── services/     # Services (email, auth, etc.)
+│   ├── types/        # TypeScript typings
+│   ├── utils/        # Helper functions
+│   └── server.ts     # Server initialization
+├── storage/          # Local uploads and files
+├── .env              # Environment variables
+├── package.json
+├── pnpm-lock.yaml
+├── tsconfig.json
+└── README.md
 ```
 
-## Principais Tecnologias
+## 🛠️ Technologies Used
 
-- **Fastify** - Framework Node.js para APIs rápidas
-- **Zod** - Validação de dados
-- **Swagger** - Documentação interativa da API
-- **Prisma** - ORM para banco de dados
-- **TypeScript** - Tipagem estática para JavaScript
+* **Fastify** – Fast and lightweight Node.js framework
+* **TypeScript** – Static typing for development
+* **Zod** – Data validation
+* **Prisma** – ORM for relational databases
+* **Swagger** – Automatic API documentation
 
-## Contribuição
+## 🤝 Contribution
 
-1. Crie um fork do repositório.
-2. Crie uma branch para suas mudanças (`git checkout -b minha-feature`).
-3. Commit suas mudanças (`git commit -m 'Minha nova feature'`).
-4. Envie para o repositório (`git push origin minha-feature`).
-5. Abra um Pull Request na branch `backend-feature`.
-
-## Contato
-
-Caso tenha dúvidas ou sugestões, entre em contato!
+1. Fork the project
+2. Create your branch: `git checkout -b my-feature`
+3. Commit your changes: `git commit -m 'feat: my new feature'`
+4. Push to your branch: `git push origin my-feature`
+5. Open a Pull Request
 
 ---
-**Equipe Linka** 🚀
+
+**Golden Skin System** – Developed with 💛 by Orlando Martinho
+
