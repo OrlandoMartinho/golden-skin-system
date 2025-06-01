@@ -65,7 +65,7 @@ model Products {
   idProduct   Int      @id @default(autoincrement())
   name        String?  @db.VarChar(255)
   description String?  @db.VarChar(255)
-  price_in_cents Int?
+  priceInCents Int?
   status      Boolean?
   category    String?  @db.VarChar(255)
   updatedIn   DateTime?

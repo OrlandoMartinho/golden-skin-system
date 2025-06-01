@@ -1,0 +1,69 @@
+import { z } from 'zod';
+
+class ProductsSchemas {
+  // Schema for a single product
+  static productSchema = z.object({
+    idProduct: z.number().optional(),
+    name: z.string(),
+    description: z.string(),
+    priceInCents: z.number(),
+    status: z.boolean(),
+    category: z.string(),
+    photo: z.string().nullable(),
+    createdIn: z.string(),
+    updatedIn: z.string(),
+  });
+
+  // Schema for registering a product
+  static RegisterProduct = z.object({
+    name: z.string().min(1, "Name is required"),
+    description: z.string().min(1, "Description is required"),
+    priceInCents: z.number().int().positive("Price in cents must be a positive integer"),
+    status: z.boolean(),
+    category: z.string().min(1, "Category is required"),
+  });
+
+  // Schema for updating a product
+  static UpdateProduct = z.object({
+    idProduct: z.number().int().positive("ID Product must be a positive integer"),
+    name: z.string().min(1, "Name is required"),
+    description: z.string().min(1, "Description is required"),
+    priceInCents: z.number().int().positive("Price in cents must be a positive integer"),
+    status: z.boolean(),
+    category: z.string().min(1, "Category is required"),
+  });
+
+  // Schema for deleting a product
+  static DeleteProduct = z.object({
+    idProduct: z.number().int().positive("ID Product must be a positive integer"),
+  });
+
+  // Schema for viewing a single product
+  static ViewProduct = z.object({
+    idProduct: z.number().int().positive("ID Product must be a positive integer"),
+  });
+
+  // Schema for viewing all products
+  static ViewAllProducts = z.object({});
+
+  // Schema for uploading a product photo
+  static UploadPhotoProduct = z.object({
+    idProduct: z.number().int().positive("ID Product must be a positive integer"),
+    photo: z.string().min(1, "Photo URL is required"),
+  });
+
+  // Schema for token validation
+  static tokenSchema = z.object({
+    token: z.string().min(1, "Token is required"),
+  });
+
+  // Response schema for success messages
+  static success_response = z.object({
+    message: z.string(),
+  });
+
+  // Response schema for an array of products
+  static productsResponseSchema = z.array(this.productSchema);
+}
+
+export default ProductsSchemas;
