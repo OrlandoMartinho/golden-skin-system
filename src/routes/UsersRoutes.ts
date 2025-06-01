@@ -104,7 +104,7 @@ export async function userRoutes(app: FastifyTypedInstance) {
   );
 
   // Change email
-  app.post(
+  app.patch(
     "/users/change-email",
     {
       schema: {
@@ -129,7 +129,7 @@ export async function userRoutes(app: FastifyTypedInstance) {
   );
 
   // Edit password
-  app.post(
+  app.patch(
     "/users/password-edit",
     {
       schema: {
