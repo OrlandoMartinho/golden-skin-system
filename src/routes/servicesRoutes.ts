@@ -84,7 +84,7 @@ export async function servicesRoutes(app: FastifyTypedInstance) {
       schema: {
         description: "View a single service",
         tags: ["Services"],
-        body: ServicesSchemas.ViewService,
+        params: ServicesSchemas.ViewService,
         headers: tokenSchema,
         response: {
           200: ServicesSchemas.serviceSchema,
@@ -96,7 +96,7 @@ export async function servicesRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.viewA(request.body, request.headers));
+      return reply.status(200).send(await controller.viewA(request.params, request.headers));
     }
   );
 
