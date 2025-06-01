@@ -124,3 +124,117 @@
             sendMessage();
         }
     });
+
+
+        // Adicionando funcionalidade de gravação de áudio
+        document.addEventListener('DOMContentLoaded', function() {
+            const recordButton = document.getElementById('record-button');
+            const stopButton = document.getElementById('stop-button');
+            const playButton = document.getElementById('play-button');
+            const sendAudioButton = document.getElementById('send-audio-button');
+            const cancelAudioButton = document.getElementById('cancel-audio-button');
+            
+            let mediaRecorder;
+            let audioChunks = [];
+            let audioBlob;
+            let audioUrl;
+            
+            recordButton.addEventListener('click', async function() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    
+                    mediaRecorder.ondataavailable = function(e) {
+                        if (e.data.size > 0) {
+                            audioChunks.push(e.data);
+                        }
+                    };
+                    
+                    mediaRecorder.onstop = function() {
+                        audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                        audioUrl = URL.createObjectURL(audioBlob);
+                        
+                        // Mostrar botões de controle
+                        playButton.style.display = 'inline-block';
+                        sendAudioButton.style.display = 'inline-block';
+                        cancelAudioButton.style.display = 'inline-block';
+                    };
+                    
+                    mediaRecorder.start();
+                    audioChunks = [];
+                    
+                    // Mostrar botão de parar e esconder o de gravar
+                    recordButton.style.display = 'none';
+                    stopButton.style.display = 'inline-block';
+                    
+                } catch (error) {
+                    console.error('Erro ao acessar o microfone:', error);
+                    alert('Não foi possível acessar o microfone. Por favor, verifique as permissões.');
+                }
+            });
+            
+            stopButton.addEventListener('click', function() {
+                mediaRecorder.stop();
+                stopButton.style.display = 'none';
+                
+                // Parar todas as tracks do stream
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            });
+            
+            playButton.addEventListener('click', function() {
+                const audioPreview = new Audio(audioUrl);
+                audioPreview.play();
+            });
+            
+            sendAudioButton.addEventListener('click', function() {
+                // Aqui você implementaria o envio do áudio para o servidor
+                // Por enquanto, apenas simularemos adicionando uma mensagem de áudio ao chat
+                const chatMessages = document.getElementById('chat-messages');
+                
+                const audioMessage = document.createElement('div');
+                audioMessage.className = 'message sent audio-message';
+                audioMessage.innerHTML = `
+                    <div class="message-content">
+                        <audio controls>
+                            <source src="${audioUrl}" type="audio/mp3">
+                            Seu navegador não suporta o elemento de áudio.
+                        </audio>
+                        <div class="audio-duration">0:45</div>
+                    </div>
+                    <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                `;
+                
+                chatMessages.appendChild(audioMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Resetar a interface
+                resetAudioInterface();
+            });
+            
+            cancelAudioButton.addEventListener('click', function() {
+                // Parar a gravação se estiver em andamento
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                    mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                }
+                
+                // Resetar a interface
+                resetAudioInterface();
+            });
+            
+            function resetAudioInterface() {
+                recordButton.style.display = 'inline-block';
+                stopButton.style.display = 'none';
+                playButton.style.display = 'none';
+                sendAudioButton.style.display = 'none';
+                cancelAudioButton.style.display = 'none';
+                
+                // Limpar dados da gravação
+                audioChunks = [];
+                audioBlob = null;
+                if (audioUrl) {
+                    URL.revokeObjectURL(audioUrl);
+                    audioUrl = null;
+                }
+            }
+        });

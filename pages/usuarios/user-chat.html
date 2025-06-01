@@ -154,6 +154,26 @@
                             </div>
                             <div class="message-time">10:33</div>
                         </div>
+                        <div class="message received audio-message">
+                            <div class="message-content">
+                                <audio controls>
+                                    <source src="../../assets/audio/mensagem-ana.mp3" type="audio/mpeg">
+                                    Seu navegador não suporta o elemento de áudio.
+                                </audio>
+                                <div class="audio-duration">1:23</div>
+                            </div>
+                            <div class="message-time">10:34</div>
+                        </div>
+                        <div class="message sent audio-message">
+                            <div class="message-content">
+                                <audio controls>
+                                    <source src="../../assets/audio/minha-resposta.mp3" type="audio/mpeg">
+                                    Seu navegador não suporta o elemento de áudio.
+                                </audio>
+                                <div class="audio-duration">0:45</div>
+                            </div>
+                            <div class="message-time">10:35</div>
+                        </div>
                         <div class="message sent">
                             <div class="message-content">
                                 Claro, sem problemas! Obrigado pela confirmação.
@@ -163,6 +183,23 @@
                     </div>
 
                     <div class="chat-input">
+                        <div class="input-options">
+                            <button id="record-button" title="Gravar áudio">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                            <button id="stop-button" title="Parar gravação" style="display: none;">
+                                <i class="fas fa-stop"></i>
+                            </button>
+                            <button id="play-button" title="Ouvir gravação" style="display: none;">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button id="send-audio-button" title="Enviar áudio" style="display: none;">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <button id="cancel-audio-button" title="Cancelar gravação" style="display: none;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
                         <input type="text" placeholder="Digite sua mensagem..." id="message-input">
                         <button onclick="sendMessage()">
                             <i class="fas fa-paper-plane"></i>
@@ -230,5 +267,6 @@
 
     <script src="../../js/global.js"></script>
     <script src="../../js/usuarios/user-chat.js"></script>
+    
 </body>
 </html>
