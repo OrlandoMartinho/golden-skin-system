@@ -133,7 +133,7 @@ class Server {
     this.app.register(fastifySwaggerUi, {
       routePrefix: "/docs",
       theme: {
-        title: "Linka API",
+        title: "Golden Skin API",
         css: [
           {
             filename: 'theme.css',
@@ -141,10 +141,7 @@ class Server {
           }
         ]
       },
-      logo: {
-        type: 'image/svg+xml',
-        content: '' // Add your logo SVG content here if needed
-      }
+     
     });
   }
 
