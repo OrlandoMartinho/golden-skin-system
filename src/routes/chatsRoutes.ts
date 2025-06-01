@@ -1,25 +1,46 @@
 import { FastifyTypedInstance } from "../types/fastify_types";
-import NotificationsController from "../controllers/NotificationsController";
-import NotificationsSchemas from "../schemas/NotificationsSchemas";
+import ChatsController from "../controllers/ChatsController";
+import ChatsSchemas from "../schemas/ChatsSchemas";
 import tokenSchema from "../schemas/TokensServicesSchemas";
 import ResponsesSchemas from "../schemas/ResponsesSchemas";
 import type { FastifyReply } from "fastify";
 
-export async function notificationsRoutes(app: FastifyTypedInstance) {
-  const controller = new NotificationsController();
+export async function chatsRoutes(app: FastifyTypedInstance) {
+  const controller = new ChatsController();
 
-
-  // Mark a notification as read
-  app.put(
-    "/notifications/read",
+  // Add a new chat
+  app.post(
+    "/chats/add",
     {
       schema: {
-        description: "Mark a notification as read",
-        tags: ["Notifications"],
-        body: NotificationsSchemas.ReadNotification,
+        description: "Add a new chat between two users",
+        tags: ["Chats"],
+        body: ChatsSchemas.AddChat,
+        response: {
+          200: ChatsSchemas.success_response,
+          400: ResponsesSchemas.error_400_response,
+          404: ResponsesSchemas.general_error_response,
+          500: ResponsesSchemas.general_error_response,
+        },
+      },
+    },
+    async (request, reply) => {
+      const { idUser, idUser2 } = request.body as any;
+      return reply.status(200).send(await controller.add({ idUser, idUser2 }));
+    }
+  );
+
+  // Update a chat
+  app.put(
+    "/chats/update",
+    {
+      schema: {
+        description: "Update a chat's second user",
+        tags: ["Chats"],
+        body: ChatsSchemas.UpdateChat,
         headers: tokenSchema,
         response: {
-          200: NotificationsSchemas.success_response,
+          200: ChatsSchemas.success_response,
           400: ResponsesSchemas.error_400_response,
           401: ResponsesSchemas.general_error_response,
           404: ResponsesSchemas.general_error_response,
@@ -28,21 +49,21 @@ export async function notificationsRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.read(request.body, request.headers));
+      return reply.status(200).send(await controller.update(request.body, request.headers));
     }
   );
 
-  // Delete a notification
+  // Delete a chat
   app.delete(
-    "/notifications",
+    "/chats",
     {
       schema: {
-        description: "Delete a notification",
-        tags: ["Notifications"],
-        body: NotificationsSchemas.DeleteNotification,
+        description: "Delete a chat",
+        tags: ["Chats"],
+        body: ChatsSchemas.DeleteChat,
         headers: tokenSchema,
         response: {
-          200: NotificationsSchemas.success_response,
+          200: ChatsSchemas.success_response,
           400: ResponsesSchemas.error_400_response,
           401: ResponsesSchemas.general_error_response,
           404: ResponsesSchemas.general_error_response,
@@ -55,17 +76,17 @@ export async function notificationsRoutes(app: FastifyTypedInstance) {
     }
   );
 
-  // View a single notification
+  // View a single chat
   app.get(
-    "/notifications/view-a",
+    "/chats/view-a",
     {
       schema: {
-        description: "View a single notification",
-        tags: ["Notifications"],
-        params: NotificationsSchemas.ViewNotification,
+        description: "View a single chat",
+        tags: ["Chats"],
+        params: ChatsSchemas.ViewChat,
         headers: tokenSchema,
         response: {
-          200: NotificationsSchemas.notificationSchema,
+          200: ChatsSchemas.chatSchema,
           400: ResponsesSchemas.error_400_response,
           401: ResponsesSchemas.general_error_response,
           404: ResponsesSchemas.general_error_response,
@@ -78,16 +99,16 @@ export async function notificationsRoutes(app: FastifyTypedInstance) {
     }
   );
 
-  // View all notifications for a user
+  // View all chats for a user
   app.get(
-    "/notifications",
+    "/chats",
     {
       schema: {
-        description: "View all notifications for a user",
-        tags: ["Notifications"],
+        description: "View all chats for a user",
+        tags: ["Chats"],
         headers: tokenSchema,
         response: {
-          200: NotificationsSchemas.notificationsResponseSchema,
+          200: ChatsSchemas.chatsResponseSchema,
           400: ResponsesSchemas.error_400_response,
           401: ResponsesSchemas.general_error_response,
           500: ResponsesSchemas.general_error_response,

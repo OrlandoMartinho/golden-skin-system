@@ -1,25 +1,46 @@
 import { FastifyTypedInstance } from "../types/fastify_types";
-import NotificationsController from "../controllers/NotificationsController";
-import NotificationsSchemas from "../schemas/NotificationsSchemas";
+import ShoppingsController from "../controllers/ShoppingsController";
+import ShoppingsSchemas from "../schemas/ShoppingsSchemas";
 import tokenSchema from "../schemas/TokensServicesSchemas";
 import ResponsesSchemas from "../schemas/ResponsesSchemas";
 import type { FastifyReply } from "fastify";
 
-export async function notificationsRoutes(app: FastifyTypedInstance) {
-  const controller = new NotificationsController();
+export async function shoppingsRoutes(app: FastifyTypedInstance) {
+  const controller = new ShoppingsController();
 
-
-  // Mark a notification as read
-  app.put(
-    "/notifications/read",
+  // Register a new shopping
+  app.post(
+    "/shoppings/register",
     {
       schema: {
-        description: "Mark a notification as read",
-        tags: ["Notifications"],
-        body: NotificationsSchemas.ReadNotification,
+        description: "Register a new shopping for a user",
+        tags: ["Shoppings"],
+        body: ShoppingsSchemas.RegisterShopping,
+        response: {
+          200: ShoppingsSchemas.success_response,
+          400: ResponsesSchemas.error_400_response,
+          404: ResponsesSchemas.general_error_response,
+          500: ResponsesSchemas.general_error_response,
+        },
+      },
+    },
+    async (request, reply) => {
+      const { idUser } = request.body as any;
+      return reply.status(200).send(await controller.register({ idUser }));
+    }
+  );
+
+  // Update a shopping
+  app.put(
+    "/shoppings/update",
+    {
+      schema: {
+        description: "Update shopping status",
+        tags: ["Shoppings"],
+        body: ShoppingsSchemas.UpdateShopping,
         headers: tokenSchema,
         response: {
-          200: NotificationsSchemas.success_response,
+          200: ShoppingsSchemas.success_response,
           400: ResponsesSchemas.error_400_response,
           401: ResponsesSchemas.general_error_response,
           404: ResponsesSchemas.general_error_response,
@@ -28,21 +49,21 @@ export async function notificationsRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.read(request.body, request.headers));
+      return reply.status(200).send(await controller.update(request.body, request.headers));
     }
   );
 
-  // Delete a notification
+  // Delete a shopping
   app.delete(
-    "/notifications",
+    "/shoppings",
     {
       schema: {
-        description: "Delete a notification",
-        tags: ["Notifications"],
-        body: NotificationsSchemas.DeleteNotification,
+        description: "Delete a shopping",
+        tags: ["Shoppings"],
+        body: ShoppingsSchemas.DeleteShopping,
         headers: tokenSchema,
         response: {
-          200: NotificationsSchemas.success_response,
+          200: ShoppingsSchemas.success_response,
           400: ResponsesSchemas.error_400_response,
           401: ResponsesSchemas.general_error_response,
           404: ResponsesSchemas.general_error_response,
@@ -55,17 +76,17 @@ export async function notificationsRoutes(app: FastifyTypedInstance) {
     }
   );
 
-  // View a single notification
+  // View a single shopping
   app.get(
-    "/notifications/view-a",
+    "/shoppings/view-a",
     {
       schema: {
-        description: "View a single notification",
-        tags: ["Notifications"],
-        params: NotificationsSchemas.ViewNotification,
+        description: "View a single shopping",
+        tags: ["Shoppings"],
+        params: ShoppingsSchemas.ViewShopping,
         headers: tokenSchema,
         response: {
-          200: NotificationsSchemas.notificationSchema,
+          200: ShoppingsSchemas.shoppingSchema,
           400: ResponsesSchemas.error_400_response,
           401: ResponsesSchemas.general_error_response,
           404: ResponsesSchemas.general_error_response,
@@ -78,16 +99,16 @@ export async function notificationsRoutes(app: FastifyTypedInstance) {
     }
   );
 
-  // View all notifications for a user
+  // View all shoppings for a user
   app.get(
-    "/notifications",
+    "/shoppings",
     {
       schema: {
-        description: "View all notifications for a user",
-        tags: ["Notifications"],
+        description: "View all shoppings for a user",
+        tags: ["Shoppings"],
         headers: tokenSchema,
         response: {
-          200: NotificationsSchemas.notificationsResponseSchema,
+          200: ShoppingsSchemas.shoppingsResponseSchema,
           400: ResponsesSchemas.error_400_response,
           401: ResponsesSchemas.general_error_response,
           500: ResponsesSchemas.general_error_response,

@@ -5,7 +5,7 @@ import { prisma } from '../config/PrismaClient';
 import EmailService from '../services/EmailsServices';
 import GenerateVerificationCode from '../utils/code_generations';
 import TokenService from '../services/TokensServices';
-import NotificationsController from './NotificationsControllers';
+import NotificationsController from './NotificationsController';
 import userSchema from '../schemas/UsersSchemas';
 import path, { resolve } from 'path';
 import * as fs from 'fs';

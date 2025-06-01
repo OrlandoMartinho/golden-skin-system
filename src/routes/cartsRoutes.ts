@@ -1,25 +1,24 @@
 import { FastifyTypedInstance } from "../types/fastify_types";
-import NotificationsController from "../controllers/NotificationsController";
-import NotificationsSchemas from "../schemas/NotificationsSchemas";
+import CartsController from "../controllers/CartsController";
+import CartsSchemas from "../schemas/CartsSchemas";
 import tokenSchema from "../schemas/TokensServicesSchemas";
 import ResponsesSchemas from "../schemas/ResponsesSchemas";
 import type { FastifyReply } from "fastify";
 
-export async function notificationsRoutes(app: FastifyTypedInstance) {
-  const controller = new NotificationsController();
+export async function cartsRoutes(app: FastifyTypedInstance) {
+  const controller = new CartsController();
 
-
-  // Mark a notification as read
-  app.put(
-    "/notifications/read",
+  // Add a new cart
+  app.post(
+    "/carts/add",
     {
       schema: {
-        description: "Mark a notification as read",
-        tags: ["Notifications"],
-        body: NotificationsSchemas.ReadNotification,
+        description: "Add a new cart for a user",
+        tags: ["Carts"],
+        body: CartsSchemas.AddCart,
         headers: tokenSchema,
         response: {
-          200: NotificationsSchemas.success_response,
+          200: CartsSchemas.success_response,
           400: ResponsesSchemas.error_400_response,
           401: ResponsesSchemas.general_error_response,
           404: ResponsesSchemas.general_error_response,
@@ -28,21 +27,21 @@ export async function notificationsRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.read(request.body, request.headers));
+      return reply.status(200).send(await controller.add(request.body, request.headers));
     }
   );
 
-  // Delete a notification
+  // Delete a cart
   app.delete(
-    "/notifications",
+    "/carts",
     {
       schema: {
-        description: "Delete a notification",
-        tags: ["Notifications"],
-        body: NotificationsSchemas.DeleteNotification,
+        description: "Delete a cart",
+        tags: ["Carts"],
+        body: CartsSchemas.DeleteCart,
         headers: tokenSchema,
         response: {
-          200: NotificationsSchemas.success_response,
+          200: CartsSchemas.success_response,
           400: ResponsesSchemas.error_400_response,
           401: ResponsesSchemas.general_error_response,
           404: ResponsesSchemas.general_error_response,
@@ -55,17 +54,17 @@ export async function notificationsRoutes(app: FastifyTypedInstance) {
     }
   );
 
-  // View a single notification
+  // View a single cart
   app.get(
-    "/notifications/view-a",
+    "/carts/:idCart",
     {
       schema: {
-        description: "View a single notification",
-        tags: ["Notifications"],
-        params: NotificationsSchemas.ViewNotification,
+        description: "View a single cart",
+        tags: ["Carts"],
+        params: CartsSchemas.ViewCart,
         headers: tokenSchema,
         response: {
-          200: NotificationsSchemas.notificationSchema,
+          200: CartsSchemas.cartSchema,
           400: ResponsesSchemas.error_400_response,
           401: ResponsesSchemas.general_error_response,
           404: ResponsesSchemas.general_error_response,
@@ -78,16 +77,16 @@ export async function notificationsRoutes(app: FastifyTypedInstance) {
     }
   );
 
-  // View all notifications for a user
+  // View all carts for a user
   app.get(
-    "/notifications",
+    "/carts",
     {
       schema: {
-        description: "View all notifications for a user",
-        tags: ["Notifications"],
+        description: "View all carts for a user",
+        tags: ["Carts"],
         headers: tokenSchema,
         response: {
-          200: NotificationsSchemas.notificationsResponseSchema,
+          200: CartsSchemas.cartsResponseSchema,
           400: ResponsesSchemas.error_400_response,
           401: ResponsesSchemas.general_error_response,
           500: ResponsesSchemas.general_error_response,

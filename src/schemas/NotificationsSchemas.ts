@@ -1,60 +1,52 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-class NotificationSchemas {
-  // Schema para adicionar uma notificação
-  static addNotificationSchema = z.object({
-    title: z.string().min(1, "Title is required"),
+class NotificationsSchemas {
+  // Schema for a single notification
+  static notificationSchema = z.object({
+    idNotification: z.number(),
+    icon: z.string(),
+    description: z.string(),
+    notificationTime: z.string(),
+    read: z.boolean(),
+    createdIn: z.string(),
+    updatedIn: z.string(),
+    idUser: z.number(),
+  });
+
+  // Schema for adding a notification
+  static AddNotification = z.object({
+    icon: z.string().min(1, "Icon is required"),
     description: z.string().min(1, "Description is required"),
-    idUser: z.number().int().min(1, "User ID must be a positive integer"),
+    idUser: z.number().int().positive("ID User must be a positive integer"),
   });
 
-    // Schema para leitura de notificações
-    static operateNotification = z.object({
-      idNotification: z.number(),
-      token :z.string()
-    });
-
-
-
-  static readBodyNotificationsSchema = z.object({
-    idNotification: z.number({ required_error: "idNotification is required" })
-  })
-
-  static readNotificationsSchema = z.object({
-    idNotification: z.number({ required_error: "idNotification is required" })
-  });
-  // Schema para operar uma notificação
-  static operateNotificationSchema = z.object({
-    idNotification: z.number({ required_error: "idNotification is required" }).int().positive({ message: "Id must be a positive integer" }),
-    token: z.string({ required_error: "token is required" }).min(1, { message: "Token is required" }),
+  // Schema for marking a notification as read
+  static ReadNotification = z.object({
+    notificationId: z.number().int().positive("Notification ID must be a positive integer"),
   });
 
-  // Schema para deletar uma notificação
-  static deleteNotificationSchema = z.object({
-    idNotification: z.number({ required_error: "idNotification is required" })
-      .int()
-      .positive({ message: "Id must be a positive integer" }),
+  // Schema for deleting a notification
+  static DeleteNotification = z.object({
+    notificationId: z.number().int().positive("Notification ID must be a positive integer"),
   });
 
+  // Schema for viewing a single notification
+  static ViewNotification = z.object({
+    notificationId: z.number().int().positive("Notification ID must be a positive integer"),
+  });
+
+  // Schema for token validation
   static tokenSchema = z.object({
-    token :z.string({ required_error: "The token cannot be empty" }).min(6,"By default a token has more than 8 characters")
-  })
- 
-  
-
-  static viewResponseSchema = z.object({
-    message: z.string(),
-    code: z.number(),
-    result:z.array(z.object({
-      title: z.string(),
-      description: z.string(),
-      idUser: z.number(),
-      idNotification: z.number(),
-      created_in: z.date().nullable(),
-      read: z.boolean(),
-    })).optional()
+    token: z.string().min(1, "Token is required"),
   });
 
+  // Response schema for success messages
+  static success_response = z.object({
+    message: z.string(),
+  });
+
+  // Response schema for an array of notifications (viewAll)
+  static notificationsResponseSchema = z.array(this.notificationSchema);
 }
 
-export default NotificationSchemas;
+export default NotificationsSchemas;

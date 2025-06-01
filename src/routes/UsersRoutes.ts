@@ -1,5 +1,5 @@
 import { FastifyTypedInstance } from "../types/fastify_types";
-import UsersController from "../controllers/UsersControllers";
+import UsersController from "../controllers/UsersController";
 import UsersSchemas from "../schemas/UsersSchemas";
 import tokenSchema from "../schemas/TokensServicesSchemas";
 import ResponsesSchemas from "../schemas/ResponsesSchemas";

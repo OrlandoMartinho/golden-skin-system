@@ -124,7 +124,9 @@ model CartProducts {
 model Shoppings {
   idShopping Int      @id @default(autoincrement())
   status     Boolean?
-  idUser     Int?
+  idUser     Int
+  createdIn  DateTime? @default(now())
+  updatedIn  DateTime?
 
   Users             Users?             @relation(fields: [idUser], references: [idUser])
   PurchaseProducts  PurchaseProducts[]
@@ -163,7 +165,7 @@ model Messages {
   createdIn   DateTime? @default(now())
   updatedIn   DateTime?
   idUser      Int?
-  idChat      Int?
+  idChat      Int
   username    String?  @db.VarChar(255)
 
   Users Users? @relation(fields: [idUser], references: [idUser])
