@@ -327,6 +327,7 @@ class Users {
         message: 'User registered successfully',
         accessToken: token,
         userRole: newUser.role,
+        idUser:newUser.idUser
       };
     } catch (error) {
       if (
@@ -459,6 +460,8 @@ class Users {
       ) {
         throw error;
       }
+
+      console.error("Errror received:",error)
       throw new InternalServerErrorException('An error occurred when trying to retrieve user');
     }
   }
@@ -498,7 +501,7 @@ class Users {
       if (!user) {
         throw new ItemNotFoundException('User not found');
       }
-
+// 
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
         throw new AuthorizationException('Incorrect password');
@@ -523,6 +526,7 @@ class Users {
         message: 'User authenticated successfully',
         accessToken: token,
         userRole: user.role,
+        idUser:user.idUser
       };
     } catch (error) {
       if (

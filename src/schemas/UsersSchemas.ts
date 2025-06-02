@@ -14,7 +14,8 @@ class UserSchemas {
   static AuthenticateResponse = z.object({
     message: z.string(),
     accessToken: z.string(),
-    userRole: z.number()
+    userRole: z.number(),
+    idUser:z.number()
   });
 
   static DeleteUser = z.object({
