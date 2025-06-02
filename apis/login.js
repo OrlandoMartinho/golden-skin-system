@@ -1,6 +1,4 @@
 
-const api_host = "http://localhost:3000";
-
 async function authenticate(email, password) {
   try {
     const url = `${api_host}/api/users/authenticate`;
