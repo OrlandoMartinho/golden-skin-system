@@ -1,0 +1,158 @@
+/* Message Modal Styles */
+.message\:modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.message\:modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.message\:modal-container {
+    background-color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 450px;
+    padding: 30px;
+    position: relative;
+    transform: translateY(30px) scale(0.95);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.message\:modal-overlay.active .message\:modal-container {
+    transform: translateY(0) scale(1);
+}
+
+.message\:modal-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.message\:modal-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+    font-size: 1.5rem;
+}
+
+.message\:modal--success .message\:modal-icon {
+    background-color: rgba(106, 142, 35, 0.1);
+    color: var(--secondary);
+}
+
+.message\:modal--error .message\:modal-icon {
+    background-color: rgba(210, 43, 43, 0.1);
+    color: #d22b2b;
+}
+
+.message\:modal-title {
+    font-size: 1.5rem;
+    color: var(--dark);
+    margin: 0;
+    font-weight: 600;
+}
+
+.message\:modal-body {
+    margin-bottom: 25px;
+    line-height: 1.6;
+    padding-left: 65px; /* Alinhar com o título */
+}
+
+.message\:modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.message\:modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text);
+    cursor: pointer;
+    transition: var(--transition);
+    padding: 5px;
+}
+
+.message\:modal-close:hover {
+    color: var(--dark);
+    transform: rotate(90deg);
+}
+
+/* Animations */
+@keyframes messageModalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes messageModalIconBounce {
+    0% {
+        transform: scale(0);
+    }
+    60% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.message\:modal-container {
+    animation: messageModalFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.message\:modal-icon {
+    animation: messageModalIconBounce 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Ripple effect for button */
+.message\:modal-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.message\:modal-btn .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.7);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
