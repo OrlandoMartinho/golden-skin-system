@@ -30,7 +30,7 @@ class TokenService {
             
             return jwt.verify(accessToken, this.secretKey) as DecodedToken;
         } catch (err) {
-            console.error('Error decoding token:', err);
+         
             return null;
         }
     }
@@ -87,7 +87,7 @@ class TokenService {
             });
             return user !== null; // Retorna verdadeiro se o usuário existir
         } catch (err) {
-            console.error('Error verifying user token:', err);
+          
             return false;
         }
     }
@@ -104,7 +104,7 @@ class TokenService {
 
             return inputDate >= currentDate; // Retorna true se a data não estiver expirada
         } catch (err) {
-            console.error('Error processing date:', err);
+            
             return false;
         }
     }

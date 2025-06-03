@@ -100,14 +100,15 @@ class DatabaseService {
           securityConfig.secretKey
         );
 
+        const path_name = Date.now() + '' + newUser.idUser;
+        const newFolderPath = path.join(uploadsPath, path_name);
+         fs.mkdirSync(newFolderPath, { recursive: true });
+
         await prisma.users.update({
           where: { idUser: newUser.idUser },
-          data: { token: accessToken }
+          data: { token: accessToken,path:path_name }
         });
 
-        // Create storage folder for admin
-        const adminFolder = path.join(uploadsPath, `admin_${newUser.idUser}`);
-        fs.mkdirSync(adminFolder, { recursive: true });
         
         console.log(`Admin user ${adminConfig.name} created successfully.`);
       } else {

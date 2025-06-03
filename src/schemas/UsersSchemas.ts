@@ -34,13 +34,13 @@ static userSchema = z.object({
   password: z.string(),
   token: z.string(),
   email: z.string(),
-  photo: z.string().optional(),
-  phoneNumber: z.string().optional(),
+  photo: z.string().nullable(),
+  phoneNumber: z.string().nullable(),
   role: z.number(),
-  path: z.string().optional(),
+  path: z.string().nullable(),
   status: z.boolean(),
   createdIn: z.date(), 
-  updatedIn: z.date().optional(), 
+  updatedIn: z.date().nullable(), 
 });
 
   // User ID

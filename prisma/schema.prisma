@@ -10,13 +10,13 @@ datasource db {
 model Users {
   idUser        Int      @id @default(autoincrement())
   name          String  @db.VarChar(255)
-  password      String
-  token         String?
+  password      String  @db.Text
+  token         String?  @db.Text
   email         String  @unique @db.VarChar(255)
   photo         String?
   phoneNumber   String?  @db.VarChar(45)
   role          Int
-  path          String?  @db.VarChar(255)
+  path          String?  @db.Text
   status        Boolean
   createdIn     DateTime @default(now())
   updatedIn     DateTime?

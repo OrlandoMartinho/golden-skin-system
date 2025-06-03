@@ -433,6 +433,14 @@ class Users {
     const { token } = validatedKey;
 
     try {
+        
+      if(token === "undefined"){
+       
+          throw new AuthorizationException('Invalid Token');
+
+      }
+
+
       if (!await this.tokenService.checkTokenUser(token)) {
         throw new AuthorizationException('Not authorized');
       }
@@ -450,7 +458,7 @@ class Users {
       if (user.path && user.photo) {
         user.photo = this.fileService.generateLink('/users/' + user.path, req, user.photo);
       }
-
+    
       return userSchema.userSchema.parse(user);
     } catch (error) {
       if (
