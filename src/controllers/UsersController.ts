@@ -469,7 +469,7 @@ class Users {
         throw error;
       }
 
-      console.error("Errror received:",error)
+     
       throw new InternalServerErrorException('An error occurred when trying to retrieve user');
     }
   }
