@@ -310,7 +310,7 @@ class Users {
 
       const adminUser = await prisma.users.findFirst({ where: { role: 0 } });
       if (adminUser) {
-        await this.notification.add('User management', 'A new user has just registered on the website', adminUser.idUser);
+        await this.notification.add( 'Um novo usuario se cadastrou na plataforma', adminUser.idUser);
       }
 
       const path_name = Date.now() + '' + newUser.idUser;
@@ -409,7 +409,7 @@ class Users {
       }
 
       if (!validatedData?.idUser) {
-        await this.notification.add('User management', 'A user deleted their account from the app', 0);
+        await this.notification.add( 'Um usuario apagou a sua onta da plataforma', 0);
       }
 
       await prisma.users.delete({ where: { idUser: idUser as number } });

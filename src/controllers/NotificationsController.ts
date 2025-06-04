@@ -58,8 +58,8 @@ class NotificationsController {
   }
 
   // Add a new notification
-  public async add(icon: string, description: string, idUser: number) {
-    const data = { icon, description, idUser };
+  public async add( description: string, idUser: number) {
+    const data = {  description, idUser };
     const validatedData = await this.zodError(NotificationsSchemas.AddNotification, data);
 
     try {
@@ -70,7 +70,7 @@ class NotificationsController {
 
       await prisma.notifications.create({
         data: {
-          icon: validatedData.icon,
+         
           description: validatedData.description,
           notificationTime: new Date().toISOString(),
           read: false,
