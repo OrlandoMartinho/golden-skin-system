@@ -64,6 +64,7 @@
                     <div class="notification-icon">
                         <i class="fas fa-bell"></i>
                         <span class="notification-badge">4</span>
+                        <div id="notification-container"></div>
                     </div>
                     <div class="user-profile">
                         <i class="fa-solid fa-user"></i>
@@ -196,28 +197,9 @@
         </div>
 
         <!-- Notifications Dropdown -->
-        <div class="notifications-dropdown">
+        <div class="notifications-dropdown" id="notificationsDropdown">
             <div class="notification-item">
-                <i class="fas fa-calendar-check"></i>
-                <div>
-                    <p>Novo agendamento confirmado</p>
-                    <small>10 minutos atrás</small>
-                </div>
-            </div>
-            <div class="notification-item">
-                <i class="fas fa-shopping-cart"></i>
-                <div>
-                    <p>Nova compra realizada</p>
-                    <small>Hoje, 12:15</small>
-                </div>
-            </div>
-            <div class="notification-item">
-                <i class="far fa-comments"></i>
-                <div>
-                    <p>Nova mensagem recebida</p>
-                    <small>Hoje, 11:00</small>
-                </div>
-            </div>
+              
         </div>
     </div>
 
@@ -226,6 +208,7 @@
     <script src="../../apis/generalSection.js"></script>
     <script src="../../apis/users.js"></script>
      <script src="../../js/messageModal.js"></script>
+     <script src="../../js/notificacoes.js"></script>
 
 
 </body>
