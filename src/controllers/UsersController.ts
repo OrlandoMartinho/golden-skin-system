@@ -300,8 +300,7 @@ class Users {
           role: newUser.role,
           access_level: newUser.role,
         },
-        secretKey.secretKey,
-        { expiresIn: '1h' }
+        secretKey.secretKey
       );
 
       await prisma.verificationCodes.update({
@@ -521,8 +520,7 @@ class Users {
 
       const token = jwt.sign(
         { idUser: user.idUser, email: user.email, role: user.role },
-        secretKey.secretKey,
-        { expiresIn: '8h' }
+        secretKey.secretKey
       );
 
       await prisma.users.update({
