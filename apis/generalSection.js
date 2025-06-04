@@ -7,6 +7,7 @@ setInterval(async () => {
 
 
 
+
 async function verifyUserData(){
     const accessToken = localStorage.getItem("accessToken")
     const result = await getUser(accessToken)
@@ -16,6 +17,9 @@ async function verifyUserData(){
       buttonText: 'Entendido'
     });   
        window.location.href = "../sessoes/login.html";
+    }else{
+        var userName =JSON.parse(localStorage.getItem("user")).name
+        document.getElementById("userName").textContent = userName
     }
     
 
