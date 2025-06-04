@@ -357,6 +357,15 @@ html {
     object-fit: cover;
 }
 
+.userType {
+    font-size: 12px;
+    color: #888;
+
+
+
+}
+
+
 /* Dropdowns de notificações e carrinho */
 .notifications-dropdown, .cart-dropdown {
     display: none;

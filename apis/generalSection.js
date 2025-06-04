@@ -43,12 +43,30 @@ async function verifyUserData(){
 
         // Cria o span com o nome e o ícone da seta
         const span = document.createElement('span');
-        span.innerHTML = `${user.name} <i class="fas fa-chevron-down"></i>`;
+      
+         // Define o tipo de usuário com lógica correta
+        const typeUser = user.role;
+        let userType = 'Not provider';
 
-        // Insere no DOM antes do dropdown
+        if (typeUser == 0) {
+            userType = 'Administrador';
+        } else {
+            userType = 'Cliente';
+        }
+          
+
+        span.innerHTML = `${user.name}<p class ="userType" >${userType}</p> <i class="fas fa-chevron-down"></i>`;
+
+         
+
+
         userProfile.insertBefore(iconOrImage, dropdown);
+   
         userProfile.insertBefore(span, dropdown);
-    }
+        
+        
+       
+            }
     
 
 }
