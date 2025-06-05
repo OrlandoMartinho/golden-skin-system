@@ -26,3 +26,36 @@ async function getUser(accessToken) {
     return 500; // Erro interno
   }
 }
+
+
+
+async function getAllUser(accessToken) {
+  try {
+    const url = `${api_host}/api/users`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        token: accessToken
+      },
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      localStorage.setItem("users",JSON.stringify(result))
+      console.log(result)
+      return response.status;
+    } else {
+      return response.status;
+    }
+  } catch (error) {
+  
+    return 500; // Erro interno
+  }
+}
+
+
+
+
+
+

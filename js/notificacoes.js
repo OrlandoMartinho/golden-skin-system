@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const result = await getNotifications(accessToken);
 
         if (result && Array.isArray(result)) {
+            document.getElementById('TotalDeNotificacoes').textContent = result.length;
             result.forEach(notification => {
                 // Determinar o ícone com base na descrição
                 let icon = 'fa-solid fa-bell';

@@ -307,6 +307,8 @@ html {
 
 /* ===== PERFIL DO USUÁRIO E DROPDOWNS ===== */
 .user-profile {
+
+    
     position: relative;
     display: flex;
     align-items: center;

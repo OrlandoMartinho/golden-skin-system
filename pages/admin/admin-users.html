@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pele Douro - Gerenciar Usuários</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <link rel="stylesheet" href="../../css/admin/admin-users.css">
 </head>
 <body>
@@ -91,6 +90,7 @@
                         <option value="all">Todas as funções</option>
                         <option value="admin">Administrador</option>
                         <option value="customer">Cliente</option>
+                        <option value="employee">Funcionário</option>
                     </select>
                     <select id="user-status-filter">
                         <option value="all">Todos os status</option>
@@ -113,59 +113,18 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Nome</th>
                                 <th>Email</th>
+                                <th>Telefone</th>
                                 <th>Função</th>
                                 <th>Status</th>
+                                <th>Criado em</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <!-- User 1 -->
-                            <tr>
-                                <td>João Silva</td>
-                                <td>joao.silva@example.com</td>
-                                <td>Administrador</td>
-                                <td><span class="status-active">Ativo</span></td>
-                                <td>
-                                    <button class="action-btn" onclick="editUser(1)">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="action-btn" onclick="deleteUser(1)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <!-- User 2 -->
-                            <tr>
-                                <td>Maria Oliveira</td>
-                                <td>maria.oliveira@example.com</td>
-                                <td>Cliente</td>
-                                <td><span class="status-active">Ativo</span></td>
-                                <td>
-                                    <button class="action-btn" onclick="editUser(2)">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="action-btn" onclick="deleteUser(2)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <!-- User 3 -->
-                            <tr>
-                                <td>Pedro Santos</td>
-                                <td>pedro.santos@example.com</td>
-                                <td>Cliente</td>
-                                <td><span class="status-inactive">Inativo</span></td>
-                                <td>
-                                    <button class="action-btn" onclick="editUser(3)">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="action-btn" onclick="deleteUser(3)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                        <tbody id="users-table-body">
+                            <!-- Dynamically populated -->
                         </tbody>
                     </table>
                 </div>
@@ -187,10 +146,15 @@
                         <input type="email" id="user-email" placeholder="Digite o email do usuário" required>
                     </div>
                     <div class="form-group">
+                        <label for="user-phone">Telefone</label>
+                        <input type="text" id="user-phone" placeholder="Digite o telefone do usuário">
+                    </div>
+                    <div class="form-group">
                         <label for="user-role">Função</label>
                         <select id="user-role" required>
                             <option value="admin">Administrador</option>
                             <option value="customer">Cliente</option>
+                            <option value="employee">Funcionário</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -244,6 +208,6 @@
     <script src="../../js/admin/admin-users.js"></script>
     <script src="../../apis/generalSection.js"></script>
     <script src="../../apis/users.js"></script>
-     <script src="../../js/messageModal.js"></script>
+    <script src="../../js/messageModal.js"></script>
 </body>
 </html>

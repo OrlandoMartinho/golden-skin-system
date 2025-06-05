@@ -1,6 +1,6 @@
 
 setInterval(async () => {
-    console.clear()
+
     await verifyUserData()
 }, 1000);
 
@@ -11,7 +11,7 @@ setInterval(async () => {
 async function verifyUserData(){
     const accessToken = localStorage.getItem("accessToken")
     const result = await getUser(accessToken)
-    console.log(result)
+   
     if(result !== 200){
     showMessageModal('error', 'Erro!', 'Sessão expirada por favor faça login novamente', {
       buttonText: 'Entendido'
@@ -55,7 +55,7 @@ async function verifyUserData(){
         }
           
 
-        span.innerHTML = `${user.name}<p class ="userType" >${userType}</p> <i class="fas fa-chevron-down"></i>`;
+        span.innerHTML = `${user.name}<span><p class="userType">(${userType})</p></span> <i class="fas fa-chevron-down"> </i>  `;
 
          
 
