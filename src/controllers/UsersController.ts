@@ -391,7 +391,7 @@ class Users {
     const validatedData = await this.zodError(userSchema.DeleteUser, data);
     const validatedKey = await this.zodError(userSchema.tokenSchema, key);
     const { token } = validatedKey;
-
+   
     try {
       const userRole = await this.tokenService.userRole(token);
       const isTokenValid = await this.tokenService.checkTokenUser(token);
@@ -409,8 +409,18 @@ class Users {
         throw new ItemNotFoundException('User not found');
       }
 
+      if(user.role == 0){
+        throw new ForbiddenExceptionError("It is not allowed to delete the Administrator")
+      }
+
+      const userAdmin = await prisma.users.findFirst({where:{role:0}})
+
+      if(!userAdmin){
+        throw new ItemNotFoundException("Administrator not found, please contact a backend technician")
+      }
+
       if (!validatedData?.idUser) {
-        await this.notification.add('User management', 'A user deleted their account from the app', 0);
+        await this.notification.add('User management', 'A user deleted their account from the app', userAdmin.idUser);
       }
 
       await prisma.users.delete({ where: { idUser: idUser as number } });
@@ -420,10 +430,12 @@ class Users {
       if (
         error instanceof AuthorizationException ||
         error instanceof ItemNotFoundException ||
+        error instanceof ForbiddenExceptionError||
         error instanceof InvalidDataException
       ) {
         throw error;
       }
+      
       throw new InternalServerErrorException('An error occurred when trying to delete user');
     }
   }

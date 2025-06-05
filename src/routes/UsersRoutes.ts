@@ -187,6 +187,7 @@ export async function userRoutes(app: FastifyTypedInstance) {
           200: ResponsesSchemas.success_response,
           400: ResponsesSchemas.error_400_response,
           401: ResponsesSchemas.general_error_response,
+          403: ResponsesSchemas.general_error_response,
           404: ResponsesSchemas.general_error_response,
           500: ResponsesSchemas.general_error_response,
         },
