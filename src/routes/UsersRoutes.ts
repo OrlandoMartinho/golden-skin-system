@@ -198,6 +198,30 @@ export async function userRoutes(app: FastifyTypedInstance) {
     }
   );
 
+
+    // Update user
+    app.put(
+      "/users/update-worker",
+      {
+        schema: {
+          description: "Update user information",
+          tags: ["Users"],
+          body: UsersSchemas.UsersWorkerUpdate,
+          headers: tokenSchema,
+          response: {
+            200: ResponsesSchemas.success_response,
+            400: ResponsesSchemas.error_400_response,
+            401: ResponsesSchemas.general_error_response,
+            404: ResponsesSchemas.general_error_response,
+            500: ResponsesSchemas.general_error_response,
+          },
+        },
+      },
+      async (request, reply) => {
+       return reply.status(200).send(await controller.updateWorker(request.body, request.headers));
+      }
+    );
+
   // Delete user
   app.delete(
     "/users",

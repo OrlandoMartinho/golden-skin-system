@@ -444,9 +444,71 @@ class Users {
       ) {
         throw error;
       }
+      console.log("Error:",error)
       throw new InternalServerErrorException('An error occurred when trying to update user');
     }
   }
+
+
+  
+  public async updateWorker(data: any, key: any): Promise<z.infer<typeof this.responseSquema>> {
+    const validatedData = await this.zodError(userSchema.UsersWorkerUpdate, data);
+    const validatedKey = await this.zodError(userSchema.tokenSchema, key);
+    const { token } = validatedKey;
+
+    try {
+      const isTokenValid = await this.tokenService.checkTokenUser(token);
+      const userRole = await this.tokenService.userRole(token);
+      if (!isTokenValid || userRole !== 0) {
+        throw new AuthorizationException('Not authorized');
+      }
+
+      const userId = await this.tokenService.userId(token);
+      if (!userId) {
+        throw new AuthorizationException('Invalid user ID');
+      }
+
+      
+
+      
+
+      const { name, phoneNumber, status,email,idUser } = validatedData;
+
+      const user = await prisma.users.findUnique({ where: { idUser } });
+      if (!user) {
+        throw new ItemNotFoundException('User not found');
+      }
+
+
+      const existingUser = await prisma.users.findUnique({ where: { email } });
+      if (existingUser) {
+        throw new ItemAlreadyExistsException('User already exists');
+      }
+      await prisma.users.update({
+        where: { idUser: user.idUser },
+        data: {
+          name,
+          updatedIn: new Date(),
+          phoneNumber: phoneNumber || user.phoneNumber,
+          status: status !== undefined ? status : user.status,
+          email:email !=undefined ? email :user.email
+        },
+      });
+
+      return { message: 'User updated successfully' };
+    } catch (error) {
+      if (
+        error instanceof AuthorizationException ||
+        error instanceof ItemNotFoundException ||
+        error instanceof InvalidDataException
+      ) {
+        throw error;
+      }
+      console.log("Error:",error)
+      throw new InternalServerErrorException('An error occurred when trying to update user');
+    }
+  }
+
 
   public async delete(data: any, key: any): Promise<z.infer<typeof this.responseSquema>> {
     const validatedData = await this.zodError(userSchema.DeleteUser, data);

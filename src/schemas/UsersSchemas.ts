@@ -67,6 +67,14 @@ static userSchema = z.object({
     phoneNumber: z.string().optional(),
   });
 
+  static UsersWorkerUpdate = z.object({
+    name: z.string(),
+    status: z.boolean(),
+    phoneNumber: z.string(),
+    email:z.string(),
+    idUser:z.number()
+  });
+
   static UserRegister = z.object({
     name: z.string().min(1, "Name is required"),
     email: z.string().email("Invalid email format").min(1, "Email is required"),
