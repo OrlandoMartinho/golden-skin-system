@@ -88,7 +88,6 @@
                 <div class="filter-box">
                     <select id="user-role-filter">
                         <option value="all">Todas as funções</option>
-                        <option value="admin">Administrador</option>
                         <option value="customer">Cliente</option>
                         <option value="employee">Funcionário</option>
                     </select>
@@ -151,8 +150,8 @@
                     </div>
                     <div class="form-group">
                         <label for="user-role">Função</label>
-                        <select id="user-role" required>
-                            <option value="admin">Administrador</option>
+                        <select id="user-role" required aria-readonly="false">
+                      
                             <option value="customer">Cliente</option>
                             <option value="employee">Funcionário</option>
                         </select>
