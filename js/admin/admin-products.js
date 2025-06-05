@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <td>${product.name || '-'}</td>
         <td>${product.category || '-'}</td>
         <td>${((product.priceInCents || 0) / 100).toFixed(2)}</td>
-        <td>${product.stock || '-'}</td>
+        <td>${product.amount || '-'}</td>
         <td><span class="status-${product.status ? 'active' : 'inactive'}">${product.status ? 'Ativo' : 'Inativo'}</span></td>
         <td>
           <button class="action-btn" onclick="editProduct(${product.idProduct})">
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             name: product.name,
             category: product.category,
             price: product.priceInCents / 100,
-            stock: product.stock,
+            stock: product.amount,
             status: product.status
           });
           form.dataset.productId = productId;
@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       priceInCents: Math.round(price * 100),
       status,
       category,
-      stock // Included for UI consistency, may be ignored by API
+      amount :stock
     };
     console.log("Prepared productData:", productData);
 

@@ -5,7 +5,7 @@ async function registerProduct(accessToken, productData) {
   console.log("registerProduct called with accessToken:", accessToken, "productData:", productData);
   try {
     const url = `${api_host}/api/products/register`;
-    console.log("Registering product at URL:", url);
+   
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -15,17 +15,17 @@ async function registerProduct(accessToken, productData) {
       body: JSON.stringify(productData)
     });
 
-    console.log("registerProduct response status:", response.status);
+  
     if (response.ok) {
       const result = await response.json();
       console.log("registerProduct response data:", result);
       return response.status;
     } else {
-      console.warn("registerProduct failed with status:", response.status);
+
       return response.status;
     }
   } catch (error) {
-    console.error("Error in registerProduct:", error.message, error.stack);
+   
     return 500;
   }
 }
@@ -35,7 +35,7 @@ async function updateProduct(accessToken, productData) {
   console.log("updateProduct called with accessToken:", accessToken, "productData:", productData);
   try {
     const url = `${api_host}/api/products/update`;
-    console.log("Updating product at URL:", url);
+  
     const response = await fetch(url, {
       method: 'PUT',
       headers: {
