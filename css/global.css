@@ -538,17 +538,23 @@ html {
     height: 100%;
     background-color: var(--modal-overlay);
     z-index: 1000;
+    
     justify-content: center;
     align-items: center;
+    overflow-y: auto;
 }
 
 .modal-content {
+  
     background-color: var(--background-white);
     padding: 25px;
     border-radius: 10px;
     width: 90%;
     max-width: 400px;
     position: relative;
+    max-height: 80vh; 
+    overflow-y: auto; 
+    box-sizing: border-box;
 }
 
 .modal h3 {
@@ -571,6 +577,7 @@ html {
 
 .form-group {
     margin-bottom: 15px;
+    margin-top: 1vh;
 }
 
 .form-group label {

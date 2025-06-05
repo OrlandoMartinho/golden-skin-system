@@ -131,7 +131,57 @@ tr:hover {
     background: var(--status-active-bg);
     color: var(--status-active-text);
 }
+/* Estilizar a imagem na tabela */
+.product-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+}
 
+/* Estilizar a coluna de foto na tabela */
+.products-table th:first-child,
+.products-table td:first-child {
+    width: 80px;
+    text-align: center;
+}
+
+/* Estilizar o input de arquivo */
+#product-photo {
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    width: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+#product-photo:hover {
+    border-color: #007bff;
+}
+
+/* Estilizar a pré-visualização da imagem */
+#photo-preview {
+    max-width: 150px;
+    height: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    margin-top: 10px;
+    display: none;
+}
+
+/* Estilizar o form-group para o campo de foto */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
 .status-inactive {
     display: inline-block;
     padding: 3px 10px;

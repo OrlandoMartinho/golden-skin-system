@@ -18,6 +18,8 @@ async function registerProduct(accessToken, productData) {
   
     if (response.ok) {
       const result = await response.json();
+      console.log(result)
+      localStorage.setItem("idProduct",result.message)
       console.log("registerProduct response data:", result);
       return response.status;
     } else {
@@ -61,7 +63,7 @@ async function updateProduct(accessToken, productData) {
 }
 
 // Delete a product
-async function deleteProduct(accessToken, idProduct) {
+async function deleteAnyProduct(accessToken, idProduct) {
   console.log("deleteProduct called with accessToken:", accessToken, "idProduct:", idProduct);
   try {
     const url = `${api_host}/api/products`;
@@ -125,7 +127,7 @@ async function getAllProducts(accessToken) {
 async function getProduct(accessToken, idProduct) {
   console.log("getProduct called with accessToken:", accessToken, "idProduct:", idProduct);
   try {
-    const url = `${api_host}/api/products/view-a/${idProduct}`;
+    const url = `${api_host}/api/products/${Number(idProduct)}`;
     console.log("Fetching product from URL:", url);
     const response = await fetch(url, {
       method: 'GET',

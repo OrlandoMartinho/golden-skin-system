@@ -329,33 +329,30 @@ async function deleteAnyUser(accessToken, idUser) {
 }
 
 // Upload user photo
-async function uploadPhoto(accessToken, file) {
-  console.log("uploadPhoto called with accessToken:", accessToken, "file:", file);
+async function uploadPhoto(accessToken, file, idProduct) {
   try {
     const url = `${api_host}/api/users/upload-photo`;
-    console.log("Uploading photo at URL:", url);
+
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('idProduct', idProduct);
 
     const response = await fetch(url, {
       method: 'PATCH',
       headers: {
-        token: accessToken
+        token: accessToken // não incluir 'Content-Type' aqui!
       },
       body: formData
     });
 
-    console.log("uploadPhoto response status:", response.status);
     if (response.ok) {
       const result = await response.json();
-      console.log("uploadPhoto response data:", result);
       return { status: response.status, url: result.url };
     } else {
-      console.warn("uploadPhoto failed with status:", response.status);
       return { status: response.status };
     }
   } catch (error) {
-    console.error("Error in uploadPhoto:", error.message, error.stack);
+    console.error("Erro no uploadPhoto:", error.message, error.stack);
     return { status: 500 };
   }
 }
