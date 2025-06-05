@@ -58,29 +58,29 @@ class NotificationsController {
   }
 
   // Add a new notification
-  public async add(icon: string, description: string, idUser: number) {
-    const data = { icon, description, idUser };
-    const validatedData = await this.zodError(NotificationsSchemas.AddNotification, data);
+  public async add( description: string, idUser: number) {
+    const data = {  description, idUser };
+
 
     try {
-      const user = await prisma.users.findUnique({ where: { idUser: validatedData.idUser } });
+      const user = await prisma.users.findUnique({ where: { idUser: data.idUser } });
       if (!user) {
         throw new ItemNotFoundException('User not found');
       }
 
       await prisma.notifications.create({
         data: {
-          icon: validatedData.icon,
-          description: validatedData.description,
+         
+          description: data.description,
           notificationTime: new Date().toISOString(),
           read: false,
           createdIn: new Date().toISOString(),
           updatedIn: new Date().toISOString(),
-          idUser: validatedData.idUser,
+          idUser: data.idUser,
         },
       });
 
-      console.log(`Notification added for user ID ${validatedData.idUser}`);
+      console.log(`Notification added for user ID ${data.idUser}`);
     } catch (error) {
      console.error('Error adding notification:', error);
     }

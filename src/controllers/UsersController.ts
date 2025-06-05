@@ -256,7 +256,9 @@ class Users {
 
   public async register(data: any): Promise<z.infer<typeof userSchema.AuthenticateResponse>> {
     const validatedData = await this.zodError(userSchema.UserRegister, data);
+   
     const { name, email, password, code } = validatedData;
+
 
     try {
       const verificationRecord = await prisma.verificationCodes.findFirst({
@@ -300,8 +302,7 @@ class Users {
           role: newUser.role,
           access_level: newUser.role,
         },
-        secretKey.secretKey,
-        { expiresIn: '1h' }
+        secretKey.secretKey
       );
 
       await prisma.verificationCodes.update({
@@ -311,7 +312,7 @@ class Users {
 
       const adminUser = await prisma.users.findFirst({ where: { role: 0 } });
       if (adminUser) {
-        await this.notification.add('User management', 'A new user has just registered on the website', adminUser.idUser);
+        await this.notification.add( 'Um novo usuario se cadastrou na plataforma', adminUser.idUser);
       }
 
       const path_name = Date.now() + '' + newUser.idUser;
@@ -340,6 +341,66 @@ class Users {
       throw new InternalServerErrorException('An error occurred when trying to register user');
     }
   }
+
+  
+  public async registerWorker(data: any,key:any): Promise<z.infer<typeof this.responseSquema>> {
+    const validatedData = await this.zodError(userSchema.UserWorker, data);
+    const { name, email,phoneNumber,role } = validatedData;
+    const validatedToken= await this.zodError(userSchema.tokenSchema,key)
+    const {token} = validatedToken
+
+    try {
+
+      
+      const userId = await this.tokenService.userId(token);
+      if (!userId) {
+        throw new AuthorizationException('Not authorized');
+      }
+      const existingUser = await prisma.users.findUnique({ where: { email } });
+      if (existingUser) {
+        throw new ItemAlreadyExistsException('User already exists');
+      }
+
+      
+
+      const newUser = await prisma.users.create({
+        data: {
+          password:"1234567",
+          name,
+          email,
+          status: true,
+          phoneNumber,
+          role: role,
+          createdIn: new Date(),
+        },
+      });
+
+     
+
+     
+
+   
+
+      const adminUser = await prisma.users.findFirst({ where: { role: 0 } });
+      if (adminUser) {
+        await this.notification.add( 'Um novo usuario se cadastrou na plataforma', adminUser.idUser);
+      }
+
+
+      return { message: 'Worker registered successfully' };
+    } catch (error) {
+      if (
+        error instanceof ItemNotFoundException ||
+        error instanceof ItemAlreadyExistsException ||
+        error instanceof InvalidDataException
+      ) {
+        console.log("Error:",error)
+        throw error;
+      }
+      throw new InternalServerErrorException('An error occurred when trying to register user');
+    }
+  }
+
 
   public async update(data: any, key: any): Promise<z.infer<typeof this.responseSquema>> {
     const validatedData = await this.zodError(userSchema.UsersUpdate, data);
@@ -416,11 +477,14 @@ class Users {
       const userAdmin = await prisma.users.findFirst({where:{role:0}})
 
       if(!userAdmin){
+       
         throw new ItemNotFoundException("Administrator not found, please contact a backend technician")
       }
 
       if (!validatedData?.idUser) {
-        await this.notification.add('User management', 'A user deleted their account from the app', userAdmin.idUser);
+
+        await this.notification.add( 'Um usuario apagou a sua onta da plataforma', userAdmin.idUser);
+
       }
 
       await prisma.users.delete({ where: { idUser: idUser as number } });
@@ -508,6 +572,7 @@ class Users {
       ) {
         throw error;
       }
+      console.log("error:",error)
       throw new InternalServerErrorException('An error occurred when trying to retrieve users');
     }
   }
@@ -533,8 +598,7 @@ class Users {
 
       const token = jwt.sign(
         { idUser: user.idUser, email: user.email, role: user.role },
-        secretKey.secretKey,
-        { expiresIn: '8h' }
+        secretKey.secretKey
       );
 
       await prisma.users.update({

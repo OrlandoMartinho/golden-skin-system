@@ -32,6 +32,30 @@ export async function userRoutes(app: FastifyTypedInstance) {
     }
   );
 
+   // Register Worker
+   app.post(
+    "/users/register-worker",
+    {
+      schema: {
+        description: "Register a new worker",
+        tags: ["Users"],
+        body: UsersSchemas.UserWorker,
+        headers:UsersSchemas.tokenSchema,
+        response: {
+          200: ResponsesSchemas.success_response,
+          400: ResponsesSchemas.error_400_response,
+          409: ResponsesSchemas.general_error_response,
+          500: ResponsesSchemas.general_error_response,
+        },
+      },
+    },
+    async (request, reply) => {
+     return reply.status(200).send(await controller.registerWorker(request.body,request.headers));
+    }
+  );
+
+
+
   // Authenticate user
   app.post(
     "/users/authenticate",

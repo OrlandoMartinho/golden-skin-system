@@ -32,7 +32,7 @@ static userSchema = z.object({
   idUser: z.number(),
   name: z.string(),
   password: z.string(),
-  token: z.string(),
+  token: z.string().nullable(),
   email: z.string(),
   photo: z.string().nullable(),
   phoneNumber: z.string().nullable(),
@@ -73,6 +73,15 @@ static userSchema = z.object({
     password: z.string().min(1, "Password is required"),
     phoneNumber: z.string().optional(),
     code: z.string().optional(),
+   });
+
+
+   static UserWorker = z.object({
+      name: z.string().min(1, "Name is required"),
+      email: z.string().email("Invalid email format").min(1, "Email is required"),
+      phoneNumber: z.string(),
+      role:z.number(),
+      status:z.boolean()
    });
 
   // Password Update
