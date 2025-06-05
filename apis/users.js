@@ -67,17 +67,25 @@ async function getAllUser(accessToken) {
 }
 
 // Register a new user
-async function registerUser(userData) {
+async function registerUser(userData,accessToken) {
  
   try {
-    const url = `${api_host}/api/users/register`;
-  ;
+    const url = `${api_host}/api/users/register-worker`;
+
+    const data = {
+      "name": userData.name,
+      "email": userData.email,
+      "phoneNumber": userData.phoneNumber,
+      "role": userData.role,
+      "status": userData.status
+    }
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        token:accessToken
       },
-      body: JSON.stringify(userData)
+      body: JSON.stringify(data)
     });
 
 
@@ -251,18 +259,22 @@ async function editPassword(accessToken, passwordData) {
 }
 
 // Update user information
-async function updateUser(accessToken, userData) {
+async function updateAnyUser(accessToken, userData,idUser) {
   console.log("updateUser called with accessToken:", accessToken, "userData:", userData);
 
   const data={
       name:userData.name,
       status: userData.status,
-      phoneNumber: userData.phoneNumber
+      phoneNumber: userData.phoneNumber,
+      email:userData.email,
+      idUser
   }
+
+  console.log(data)
 
 
   try {
-    const url = `${api_host}/api/users/update`;
+    const url = `${api_host}/api/users/update-worker`;
     console.log("Updating user at URL:", url);
     const response = await fetch(url, {
       method: 'PUT',

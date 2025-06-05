@@ -148,10 +148,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     status: document.getElementById('user-status').value === 'active'
                 };
 
+                console.log("data:",userData)
+
                 try {
                     if (editUserId !== null) {
                         // Update existing user
-                        const response = await updateUser(accessToken, editUserId, userData);
+                        const response = await updateAnyUser(accessToken,userData,editUserId);
                         if (response === 200) {
                             const index = usersData.findIndex(u => u.idUser === editUserId);
                             if (index !== -1) {
@@ -160,29 +162,36 @@ document.addEventListener('DOMContentLoaded', async () => {
                                     ...userData,
                                     updatedIn: new Date().toISOString()
                                 };
-                                showMessageModal('success', 'Sucesso!', 'Usuário atualizado com sucesso', {
+                                showMessageModal('success', 'Sucesso!', 'Funcionário atualizado com sucesso', {
                                     buttonText: 'Ótimo!'
                                 });
                             }
+                        }else if(response === 409){
+                            showMessageModal('error', 'Erro!', 'Este email já foi cadastrado na plataforma', {
+                                buttonText: 'Entendido'
+                            });
+                        }else{
+                            showMessageModal('error', 'Erro!', 'Ocorreu um erro ao processar o Funcionário', {
+                                buttonText: 'Entendido'
+                            }); 
                         }
                     } else {
                         // Add new user
-                        const response = await createUser(accessToken, userData);
+                        const response = await registerUser(userData,accessToken);
+                        
                         if (response === 200) {
-                            const newId = usersData.length ? Math.max(...usersData.map(u => u.idUser)) + 1 : 0;
-                            usersData.push({
-                                ...userData,
-                                idUser: newId,
-                                password: "hashed_password_default",
-                                token: `token_${newId}`,
-                                photo: "path/to/default_photo.jpg",
-                                path: "string",
-                                createdIn: new Date().toISOString(),
-                                updatedIn: new Date().toISOString()
-                            });
+                           
                             showMessageModal('success', 'Sucesso!', 'Usuário criado com sucesso', {
                                 buttonText: 'Ótimo!'
                             });
+                        }else if(response === 409){
+                            showMessageModal('error', 'Erro!', 'Este email já foi cadastrado na plataforma', {
+                                buttonText: 'Entendido'
+                            });
+                        }else{
+                            showMessageModal('error', 'Erro!', 'Ocorreu um erro ao processar o Funcionário', {
+                                buttonText: 'Entendido'
+                            }); 
                         }
                     }
                     closeModal('user-modal');
@@ -232,7 +241,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         populateUsersTable(usersData);
 
     } catch (error) {
-        console.error('Error initializing application:', error);
+        
         showMessageModal('error', 'Erro!', 'Falha ao inicializar a aplicação', {
             buttonText: 'Entendido'
         });
