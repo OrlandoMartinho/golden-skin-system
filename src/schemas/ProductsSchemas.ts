@@ -10,18 +10,21 @@ class ProductsSchemas {
     status: z.boolean(),
     category: z.string(),
     photo: z.string().nullable(),
-    createdIn: z.string(),
-    updatedIn: z.string(),
+    createdIn: z.date(),
+    amount:z.number().nullable(),
+    updatedIn: z.date(),
   });
 
   // Schema for registering a product
   static RegisterProduct = z.object({
-    name: z.string().min(1, "Name is required"),
-    description: z.string().min(1, "Description is required"),
-    priceInCents: z.number().int().positive("Price in cents must be a positive integer"),
-    status: z.boolean(),
-    category: z.string().min(1, "Category is required"),
-  });
+    name: z.string(),
+    description: z.string(),
+    priceInCents: z.string(),
+    status: z.string(),
+    amount:z.string(),
+    category: z.string(),
+    file:z.any().optional()
+  }).nullable();
 
   // Schema for updating a product
   static UpdateProduct = z.object({
@@ -30,6 +33,7 @@ class ProductsSchemas {
     description: z.string().min(1, "Description is required"),
     priceInCents: z.number().int().positive("Price in cents must be a positive integer"),
     status: z.boolean(),
+    amount:z.number().nullable(),
     category: z.string().min(1, "Category is required"),
   });
 
@@ -40,7 +44,7 @@ class ProductsSchemas {
 
   // Schema for viewing a single product
   static ViewProduct = z.object({
-    idProduct: z.number().int().positive("ID Product must be a positive integer"),
+    idProduct: z.string(),
   });
 
   // Schema for viewing all products
@@ -48,9 +52,9 @@ class ProductsSchemas {
 
   // Schema for uploading a product photo
   static UploadPhotoProduct = z.object({
-    idProduct: z.number().int().positive("ID Product must be a positive integer"),
-    photo: z.string().min(1, "Photo URL is required"),
-  });
+    idProduct: z.string(),
+    photo: z.string().min(1, "Photo URL is required").optional(),
+  }).nullable();
 
   // Schema for token validation
   static tokenSchema = z.object({

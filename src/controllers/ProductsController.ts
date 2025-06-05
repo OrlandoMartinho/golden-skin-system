@@ -6,10 +6,13 @@ import ItemNotFoundException from '../errors/ItemNotFoundException';
 import AuthorizationException from '../errors/AuthorizationException';
 import InternalServerErrorException from '../errors/InternalServerErrorException';
 import TokenService from '../services/TokensServices';
+import FileService from '../services/StorageServices';
+import path from 'path';
 
 class ProductsController {
   private tokenService: TokenService = new TokenService();
   private readonly responseSchema = ProductsSchemas.success_response;
+  private fileService: FileService = new FileService();
 
   private async zodError(schema: z.ZodSchema, data: any): Promise<any> {
     try {
@@ -21,43 +24,74 @@ class ProductsController {
       throw error;
     }
   }
+  public async register(data: any, key: any, file: any): Promise<z.infer<typeof this.responseSchema>> {
+    
 
-  public async register(data: any, key: any): Promise<z.infer<typeof this.responseSchema>> {
+   console.log(data)
     const validatedData = await this.zodError(ProductsSchemas.RegisterProduct, data);
+    
+  
     const validatedKey = await this.zodError(ProductsSchemas.tokenSchema, key);
-    const { name, description, priceInCents, status, category } = validatedData;
+    
+   console.log("values:",validatedData)
+    const { name, description, priceInCents, status, category, amount } = validatedData;
     const { token } = validatedKey;
-
+  
     try {
       const userId = await this.tokenService.userId(token);
+    
+      
       if (!userId) {
+   
         throw new AuthorizationException('Not authorized');
       }
-
-      await prisma.products.create({
+  
+      if (!file) {
+       
+        throw new InvalidDataException("File not provider");
+      }
+  
+      const photo = file;
+      const fileBuffer = await photo.toBuffer();
+      const fileName = Date.now() + path.extname(photo.filename);
+  
+      console.log('[REGISTER] File buffer length:', fileBuffer.length);
+      console.log('[REGISTER] File name:', fileName);
+  
+      await this.fileService.saveFile(fileBuffer, fileName, 'products/');
+      console.log('[REGISTER] File saved successfully');
+  
+      const product = await prisma.products.create({
         data: {
           name,
           description,
-          priceInCents,
-          status,
+          priceInCents:Number(priceInCents),
+          amount:Number(amount),
+          status:Boolean(status),
           category,
-          photo: null,
+          photo: fileName,
           createdIn: new Date().toISOString(),
           updatedIn: new Date().toISOString(),
         },
       });
-
-      return { message: 'Product registered successfully' };
+  
+      console.log('[REGISTER] Product created:', product);
+  
+      return { message: "Product registered sucessufuly" };
     } catch (error) {
+      console.error('[REGISTER] Error occurred:', error);
+  
       if (
         error instanceof AuthorizationException ||
         error instanceof InvalidDataException
       ) {
         throw error;
       }
+      console.log("Error:",error)
       throw new InternalServerErrorException('An error occurred when trying to register product');
     }
   }
+  
 
   public async update(data: any, key: any): Promise<z.infer<typeof this.responseSchema>> {
     const validatedData = await this.zodError(ProductsSchemas.UpdateProduct, data);
@@ -137,8 +171,8 @@ class ProductsController {
       if (!userId) {
         throw new AuthorizationException('Not authorized');
       }
-
-      const product = await prisma.products.findUnique({ where: { idProduct } });
+      console.log(idProduct)
+      const product = await prisma.products.findUnique({ where: { idProduct:Number(idProduct) } });
       if (!product) {
         throw new ItemNotFoundException('Product not found');
       }
@@ -167,7 +201,7 @@ class ProductsController {
       }
 
       const products = await prisma.products.findMany();
-
+      
       return ProductsSchemas.productsResponseSchema.parse(products);
     } catch (error) {
       if (
@@ -176,33 +210,57 @@ class ProductsController {
       ) {
         throw error;
       }
+      console.log("Error:",error)
       throw new InternalServerErrorException('An error occurred when trying to retrieve products');
     }
   }
+  public async uploadPhoto( file: any,data:any): Promise<z.infer<typeof this.responseSchema>> {
 
-  public async uploadPhoto(data: any, key: any): Promise<z.infer<typeof this.responseSchema>> {
+    console.log(data)
+
     const validatedData = await this.zodError(ProductsSchemas.UploadPhotoProduct, data);
-    const validatedKey = await this.zodError(ProductsSchemas.tokenSchema, key);
-    const { idProduct, photo } = validatedData;
+    const validatedKey = await this.zodError(ProductsSchemas.tokenSchema, data);
+    ;
+    const { idProduct } = validatedData;
     const { token } = validatedKey;
-
+  
     try {
-      const userId = await this.tokenService.userId(token);
-      if (!userId) {
+      if (!await this.tokenService.checkTokenUser(token)) {
         throw new AuthorizationException('Not authorized');
       }
-
+  
+      const userId = await this.tokenService.userId(token);
+      if (!userId) {
+        throw new InvalidDataException('Invalid ID');
+      }
+  
       const product = await prisma.products.findUnique({ where: { idProduct } });
       if (!product) {
         throw new ItemNotFoundException('Product not found');
       }
-
+  
+      const fileBuffer = await file.toBuffer();
+      const fileName = Date.now() + path.extname(file.filename);
+  
+      const pathh = 'products/'
+      if (!pathh) {
+        throw new InvalidDataException('Invalid folder. Please reset the database.');
+      }
+  
+      await this.fileService.saveFile(fileBuffer, fileName, pathh);
+  
+      const fileUrl = fileName;
       await prisma.products.update({
         where: { idProduct },
-        data: { photo, updatedIn: new Date().toISOString() },
+        data: { photo: fileUrl, updatedIn: new Date().toISOString() },
       });
-
-      return { message: 'Product photo uploaded successfully' };
+  
+      // const generatedUrl = this.fileService.generateLink(pathh, req, fileName);
+  
+      return {
+        // url: generatedUrl,
+        message: 'Product photo uploaded successfully'
+      };
     } catch (error) {
       if (
         error instanceof ItemNotFoundException ||

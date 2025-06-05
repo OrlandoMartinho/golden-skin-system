@@ -48,15 +48,11 @@ class Server {
 
     new FileService().createFolderSystem();
 
-    this.app.register(fastifyMultipart, {
-      limits: {
-        fileSize: 10 * 1024 * 1024, // 10MB limit example
-        files: 5 // Maximum number of files
-      }
-    });
+     // Registra o plugin de multipart
+     this.app.register(fastifyMultipart);
 
     this.app.register(fastifyCors, { 
-      origin: 'http://127.0.0.1:5500',
+      origin: '*',
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization','token'],
   

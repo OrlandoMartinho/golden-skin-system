@@ -4,9 +4,10 @@ import ProductsSchemas from "../schemas/ProductsSchemas";
 import tokenSchema from "../schemas/TokensServicesSchemas";
 import ResponsesSchemas from "../schemas/ResponsesSchemas";
 import type { FastifyReply } from "fastify";
-
+import DataExtracMultipart from "../utils/fastify_multipart_data_extraction";
 export async function productsRoutes(app: FastifyTypedInstance) {
   const controller = new ProductsController();
+  const extractData = new DataExtracMultipart()
 
   // Register a new product
   app.post(
@@ -15,6 +16,7 @@ export async function productsRoutes(app: FastifyTypedInstance) {
       schema: {
         description: "Register a new product",
         tags: ["Products"],
+        consumes: ['multipart/form-data'],
         body: ProductsSchemas.RegisterProduct,
         headers: tokenSchema,
         response: {
@@ -27,7 +29,9 @@ export async function productsRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.register(request.body, request.headers));
+        const file = await request.file();
+        const data = await extractData.extractFields(file)
+        return reply.status(200).send(await controller.register(data,request.headers,file))  
     }
   );
 
@@ -79,13 +83,13 @@ export async function productsRoutes(app: FastifyTypedInstance) {
 
   // View a single product
   app.get(
-    "/products/view-a",
+    "/products/:idProduct",
     {
       schema: {
         description: "View a single product",
         tags: ["Products"],
-        params: ProductsSchemas.ViewProduct,
         headers: tokenSchema,
+        params: ProductsSchemas.ViewProduct,
         response: {
           200: ProductsSchemas.productSchema,
           400: ResponsesSchemas.error_400_response,
@@ -96,7 +100,9 @@ export async function productsRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.viewA(request.body, request.headers));
+
+      console.log(request.params)
+      return reply.status(200).send(await controller.viewA(request.params, request.headers));
     }
   );
 
@@ -121,26 +127,28 @@ export async function productsRoutes(app: FastifyTypedInstance) {
     }
   );
 
-  // Upload a product photo
-  app.patch(
-    "/products/upload-photo",
-    {
-      schema: {
-        description: "Upload a photo for a product",
-        tags: ["Products"],
-        body: ProductsSchemas.UploadPhotoProduct,
-        headers: tokenSchema,
-        response: {
-          200: ProductsSchemas.success_response,
-          400: ResponsesSchemas.error_400_response,
-          401: ResponsesSchemas.general_error_response,
-          404: ResponsesSchemas.general_error_response,
-          500: ResponsesSchemas.general_error_response,
-        },
-      },
-    },
-    async (request, reply) => {
-      return reply.status(200).send(await controller.uploadPhoto(request.body, request.headers));
-    }
-  );
+  // // Upload a product photo
+  // app.patch(
+  //   "/products/upload-photo",
+  //   {
+  //     schema: {
+  //       description: "Upload a photo for a product",
+  //       tags: ["Products"],
+  //       body: ProductsSchemas.UploadPhotoProduct,
+  //       headers: tokenSchema,
+  //       response: {
+  //         200: ProductsSchemas.success_response,
+  //         400: ResponsesSchemas.error_400_response,
+  //         401: ResponsesSchemas.general_error_response,
+  //         404: ResponsesSchemas.general_error_response,
+  //         500: ResponsesSchemas.general_error_response,
+  //       },
+  //     },
+  //   },
+  //   async (request, reply) => {
+
+      
+  //     return reply.status(200).send(await controller.uploadPhoto(await request.file(), request.headers));
+  //   }
+  // );
 }
