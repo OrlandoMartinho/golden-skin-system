@@ -92,9 +92,7 @@ async function registerUser(userData,accessToken) {
     if (response.ok) {
       const result = await response.json();
      
-      localStorage.setItem("accessToken", result.accessToken);
-      localStorage.setItem("userRole", result.userRole);
-      localStorage.setItem("idUser", result.idUser);
+   
       
       return response.status;
     } else {

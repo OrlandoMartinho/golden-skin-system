@@ -81,6 +81,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         const modal = document.getElementById('confirm-modal');
         const messageElement = document.getElementById('confirm-message');
         const action = messageElement.dataset.action;
+        const confirmButton = document.getElementById('confirm-button');
+        
+        // Adiciona loader ao botão de confirmação
+        const originalConfirmText = confirmButton.innerHTML;
+        confirmButton.innerHTML = `<span class="button-loader"></span>Processando...`;
+        confirmButton.disabled = true;
 
         if (action.startsWith('deleteProduct-')) {
             const productId = parseInt(action.split('-')[1]);
@@ -97,6 +103,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 showMessageModal('error', 'Erro!', 'Ocorreu um erro ao excluir o produto', { buttonText: 'Entendido' });
             }
         }
+        
+        // Restaura o botão de confirmação
+        confirmButton.innerHTML = originalConfirmText;
+        confirmButton.disabled = false;
         modal.classList.remove('active');
     };
 
@@ -137,7 +147,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     document.getElementById('product-status').value = product.status ? 'active' : 'inactive';
                     form.dataset.productId = productId;
                     
-                    // Mostrar a imagem atual do produto no preview
                     const preview = document.getElementById('photo-preview');
                     if (product.photo) {
                         preview.src = product.photo;
@@ -167,6 +176,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('product-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        const submitButton = e.target.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.innerHTML;
+        
+        // Adiciona loader
+        submitButton.innerHTML = `<span class="button-loader"></span>Processando...`;
+        submitButton.classList.add('button-loading');
+        submitButton.disabled = true;
+
         const productId = parseInt(e.target.dataset.productId) || null;
         const name = document.getElementById('product-name').value.trim();
         const category = document.getElementById('product-category').value.trim();
@@ -174,21 +191,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         const stock = parseInt(document.getElementById('product-stock').value);
         const status = document.getElementById('product-status').value === 'active';
 
-        // Client-side validation
+        // Validação
         if (!name || !category || isNaN(price) || isNaN(stock)) {
             showMessageModal('error', 'Erro!', 'Por favor, preencha todos os campos obrigatórios.', {
                 buttonText: 'Entendido',
             });
+            submitButton.innerHTML = originalButtonText;
+            submitButton.classList.remove('button-loading');
+            submitButton.disabled = false;
             return;
         }
 
         if (price < 0) {
             showMessageModal('error', 'Erro!', 'O preço não pode ser negativo.', { buttonText: 'Entendido' });
+            submitButton.innerHTML = originalButtonText;
+            submitButton.classList.remove('button-loading');
+            submitButton.disabled = false;
             return;
         }
 
         if (stock < 0) {
             showMessageModal('error', 'Erro!', 'O estoque não pode ser negativo.', { buttonText: 'Entendido' });
+            submitButton.innerHTML = originalButtonText;
+            submitButton.classList.remove('button-loading');
+            submitButton.disabled = false;
             return;
         }
 
@@ -203,7 +229,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         try {
             if (productId) {
-                // Update existing product
+                // Atualizar produto existente
                 productData.idProduct = productId;
                 const fileInput = document.getElementById('product-photo');
                 const file = fileInput.files[0];
@@ -223,7 +249,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     showMessageModal('error', 'Erro!', 'Falha ao atualizar o produto', { buttonText: 'Entendido' });
                 }
             } else {
-                // Add new product
+                // Adicionar novo produto
                 const fileInput = document.getElementById('product-photo');
                 const file = fileInput.files[0];
                 const response = await registerProduct(accessToken, productData, file);
@@ -241,6 +267,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             e.target.dataset.productId = '';
         } catch (error) {
             showMessageModal('error', 'Erro!', 'Ocorreu um erro ao processar o produto', { buttonText: 'Entendido' });
+        } finally {
+            // Restaura o botão
+            submitButton.innerHTML = originalButtonText;
+            submitButton.classList.remove('button-loading');
+            submitButton.disabled = false;
         }
     });
 
@@ -271,7 +302,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         populateProductsTable(filteredProducts);
     }
 
-    // Attach event listeners for filters
+    // Event listeners para filtros
     if (searchInput) {
         searchInput.addEventListener('input', filterProducts);
     }
@@ -298,6 +329,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         modal.classList.add('active');
     }
 
-    // Initialize products on load
+    // Inicializa os produtos ao carregar
     await initializeProducts();
 });
