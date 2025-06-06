@@ -100,7 +100,7 @@ class ProductsController {
     const { idProduct, name, description, priceInCents, status, category } = validatedData;
     const { token } = validatedKey;
 
-    try {
+    try { 
       const userId = await this.tokenService.userId(token);
       if (!userId) {
         throw new AuthorizationException('Not authorized');
