@@ -8,6 +8,7 @@ import InternalServerErrorException from '../errors/InternalServerErrorException
 import TokenService from '../services/TokensServices';
 import FileService from '../services/StorageServices';
 import path from 'path';
+import { FastifyRequest } from 'fastify/fastify';
 
 class ProductsController {
   private tokenService: TokenService = new TokenService();
@@ -93,7 +94,7 @@ class ProductsController {
   }
   
 
-  public async update(data: any, key: any): Promise<z.infer<typeof this.responseSchema>> {
+  public async update(data: any, key: any,file:any): Promise<z.infer<typeof this.responseSchema>> {
     const validatedData = await this.zodError(ProductsSchemas.UpdateProduct, data);
     const validatedKey = await this.zodError(ProductsSchemas.tokenSchema, key);
     const { idProduct, name, description, priceInCents, status, category } = validatedData;
@@ -105,14 +106,28 @@ class ProductsController {
         throw new AuthorizationException('Not authorized');
       }
 
-      const product = await prisma.products.findUnique({ where: { idProduct } });
+      const product = await prisma.products.findUnique({ where: { idProduct:Number(idProduct) } });
       if (!product) {
         throw new ItemNotFoundException('Product not found');
       }
 
+       if (!file) {
+       
+        throw new InvalidDataException("File not provider");
+      }
+  
+      const photo = file;
+      const fileBuffer = await photo.toBuffer();
+      const fileName = Date.now() + path.extname(photo.filename);
+  
+      console.log('[REGISTER] File buffer length:', fileBuffer.length);
+      console.log('[REGISTER] File name:', fileName);
+  
+      await this.fileService.saveFile(fileBuffer, fileName, 'products/');
+
       await prisma.products.update({
-        where: { idProduct },
-        data: { name, description, priceInCents, status, category, updatedIn: new Date().toISOString() },
+        where: { idProduct :Number(idProduct) },
+        data: { name, description, priceInCents:Number(priceInCents), status:Boolean(status), category, updatedIn: new Date().toISOString(),photo:fileName },
       });
 
       return { message: 'Product updated successfully' };
@@ -124,6 +139,7 @@ class ProductsController {
       ) {
         throw error;
       }
+      console.log("Erro:",error)
       throw new InternalServerErrorException('An error occurred when trying to update product');
     }
   }
@@ -160,7 +176,7 @@ class ProductsController {
     }
   }
 
-  public async viewA(data: any, key: any): Promise<z.infer<typeof ProductsSchemas.productSchema>> {
+  public async viewA(data: any, key: any,req: FastifyRequest): Promise<z.infer<typeof ProductsSchemas.productSchema>> {
     const validatedData = await this.zodError(ProductsSchemas.ViewProduct, data);
     const validatedKey = await this.zodError(ProductsSchemas.tokenSchema, key);
     const { idProduct } = validatedData;
@@ -176,6 +192,9 @@ class ProductsController {
       if (!product) {
         throw new ItemNotFoundException('Product not found');
       }
+      if (product.photo ) {
+        product.photo = this.fileService.generateLink('products', req,product.photo);
+      }
 
       return ProductsSchemas.productSchema.parse(product);
     } catch (error) {
@@ -190,7 +209,7 @@ class ProductsController {
     }
   }
 
-  public async viewAll(key: any): Promise<z.infer<typeof ProductsSchemas.productsResponseSchema>> {
+  public async viewAll(key: any,req:FastifyRequest): Promise<z.infer<typeof ProductsSchemas.productsResponseSchema>> {
     const validatedKey = await this.zodError(ProductsSchemas.tokenSchema, key);
     const { token } = validatedKey;
 
@@ -201,6 +220,14 @@ class ProductsController {
       }
 
       const products = await prisma.products.findMany();
+
+      for(const product of products){
+
+        if (product.photo ) {
+         product.photo = this.fileService.generateLink('products', req,product.photo);
+         }
+
+      }
       
       return ProductsSchemas.productsResponseSchema.parse(products);
     } catch (error) {

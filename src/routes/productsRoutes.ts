@@ -42,6 +42,7 @@ export async function productsRoutes(app: FastifyTypedInstance) {
       schema: {
         description: "Update a product",
         tags: ["Products"],
+        consumes: ['multipart/form-data'],
         body: ProductsSchemas.UpdateProduct,
         headers: tokenSchema,
         response: {
@@ -54,7 +55,9 @@ export async function productsRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.update(request.body, request.headers));
+       const file = await request.file();
+        const data = await extractData.extractFields(file)
+      return reply.status(200).send(await controller.update(data, request.headers,file));
     }
   );
 
@@ -102,7 +105,7 @@ export async function productsRoutes(app: FastifyTypedInstance) {
     async (request, reply) => {
 
       console.log(request.params)
-      return reply.status(200).send(await controller.viewA(request.params, request.headers));
+      return reply.status(200).send(await controller.viewA(request.params, request.headers,request));
     }
   );
 
@@ -123,7 +126,7 @@ export async function productsRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.viewAll(request.headers));
+      return reply.status(200).send(await controller.viewAll(request.headers,request));
     }
   );
 

@@ -1,3 +1,4 @@
+import { file } from 'pdfkit';
 import { z } from 'zod';
 
 class ProductsSchemas {
@@ -28,14 +29,15 @@ class ProductsSchemas {
 
   // Schema for updating a product
   static UpdateProduct = z.object({
-    idProduct: z.number().int().positive("ID Product must be a positive integer"),
+    idProduct: z.string(),
     name: z.string().min(1, "Name is required"),
     description: z.string().min(1, "Description is required"),
-    priceInCents: z.number().int().positive("Price in cents must be a positive integer"),
-    status: z.boolean(),
-    amount:z.number().nullable(),
+    priceInCents: z.string(),
+    status: z.string(),
+    amount:z.string(),
     category: z.string().min(1, "Category is required"),
-  });
+    file:z.any().optional()
+  }).nullable();
 
   // Schema for deleting a product
   static DeleteProduct = z.object({
