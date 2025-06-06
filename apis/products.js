@@ -1,50 +1,76 @@
 
 
 // Register a new product
-async function registerProduct(accessToken, productData) {
+// Register a new product
+async function registerProduct(accessToken, productData, file) {
   console.log("registerProduct called with accessToken:", accessToken, "productData:", productData);
+
+  const data = new FormData();
+
+  // Adiciona os dados do produto manualmente ao FormData
+  for (const key in productData) {
+    if (productData.hasOwnProperty(key)) {
+      data.append(key, productData[key]);
+    }
+  }
+
+  // Adiciona o arquivo
+  if (file) {
+    data.append("file", file);
+  }
+
   try {
     const url = `${api_host}/api/products/register`;
-   
+
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         token: accessToken
       },
-      body: JSON.stringify(productData)
+      body: data
     });
 
-  
     if (response.ok) {
       const result = await response.json();
-      console.log(result)
-      localStorage.setItem("idProduct",result.message)
       console.log("registerProduct response data:", result);
       return response.status;
     } else {
-
+      console.warn("Erro ao registrar produto:", response.status);
       return response.status;
     }
   } catch (error) {
-   
+    console.error("Erro no registerProduct:", error);
     return 500;
   }
 }
 
+
 // Update an existing product
-async function updateProduct(accessToken, productData) {
+async function updateProduct(accessToken, productData,file) {
   console.log("updateProduct called with accessToken:", accessToken, "productData:", productData);
   try {
     const url = `${api_host}/api/products/update`;
+
+     const data = new FormData();
+
+  // Adiciona os dados do produto manualmente ao FormData
+  for (const key in productData) {
+    if (productData.hasOwnProperty(key)) {
+      data.append(key, productData[key]);
+    }
+  }
+
+  // Adiciona o arquivo
+  if (file) {
+    data.append("file", file);
+  }
   
     const response = await fetch(url, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
         token: accessToken
       },
-      body: JSON.stringify(productData)
+      body: data
     });
 
     console.log("updateProduct response status:", response.status);
