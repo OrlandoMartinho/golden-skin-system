@@ -72,7 +72,7 @@ class NotificationsController {
         data: {
          
           description: data.description,
-          notificationTime: new Date().toISOString(),
+          notificationTime: "",
           read: false,
           createdIn: new Date().toISOString(),
           updatedIn: new Date().toISOString(),
@@ -219,41 +219,53 @@ class NotificationsController {
     }
   }
 
-  // View all notifications for a user
-  public async viewAll(key: any): Promise<z.infer<typeof NotificationsSchemas.notificationsResponseSchema>> {
-    const validatedKey = await this.zodError(NotificationsSchemas.tokenSchema, key);
-    const { token } = validatedKey;
+// View all notifications for a user
+public async viewAll(
+  key: any
+): Promise<z.infer<typeof NotificationsSchemas.notificationsResponseSchema>> {
+  const validatedKey = await this.zodError(NotificationsSchemas.tokenSchema, key);
+  const { token } = validatedKey;
 
-    try {
-      const userId = await this.tokenService.userId(token);
-      if (!userId) {
-        throw new AuthorizationException('Not authorized');
-      }
-
-      const notifications = await prisma.notifications.findMany({
-        where: { idUser: userId },
-        orderBy: {
-          notificationTime: 'desc',
-        },
-      });
-
-      // Adiciona o tempo formatado a cada notificação
-      const notificationsWithTimeAgo = notifications.map(notification => ({
-        ...notification,
-        timeAgo: this.formatTimeAgo(notification.notificationTime as string)
-      }));
-
-      return NotificationsSchemas.notificationsResponseSchema.parse(notificationsWithTimeAgo);
-    } catch (error) {
-      if (
-        error instanceof AuthorizationException ||
-        error instanceof InvalidDataException
-      ) {
-        throw error;
-      }
-      throw new InternalServerErrorException('An error occurred when trying to retrieve notifications');
+  try {
+    const userId = await this.tokenService.userId(token);
+    if (!userId) {
+      throw new AuthorizationException('Not authorized');
     }
+
+    const notifications = await prisma.notifications.findMany({
+      where: { idUser: userId },
+      orderBy: {
+        createdIn: 'desc',
+      },
+    });
+
+    // Formata a data relativa de cada notificação
+    const notificationsWithTimeAgo = notifications.map(notification => ({
+      ...notification,
+      notificationTime: this.formatTimeAgo(
+        (notification.createdIn instanceof Date
+          ? notification.createdIn.toISOString()
+          : String(notification.createdIn))
+      ),
+    }));
+
+    return NotificationsSchemas.notificationsResponseSchema.parse(notificationsWithTimeAgo);
+
+  } catch (error) {
+    if (
+      error instanceof AuthorizationException ||
+      error instanceof InvalidDataException
+    ) {
+      throw error;
+    }
+
+    console.error('Erro ao buscar notificações:', error);
+    throw new InternalServerErrorException(
+      'An error occurred when trying to retrieve notifications'
+    );
   }
+}
+
 }
 
 export default NotificationsController;

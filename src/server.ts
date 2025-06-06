@@ -49,7 +49,11 @@ class Server {
     new FileService().createFolderSystem();
 
      // Registra o plugin de multipart
-     this.app.register(fastifyMultipart);
+    this.app.register(fastifyMultipart, {
+    limits: {
+      fileSize: 5 * 1024 * 1024 // 5 MB em bytes
+      }
+  });
 
     this.app.register(fastifyCors, { 
       origin: '*',

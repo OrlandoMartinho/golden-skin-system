@@ -352,10 +352,10 @@ class Users {
     try {
 
       
-      const userId = await this.tokenService.userId(token);
-      if (!userId) {
-        throw new AuthorizationException('Not authorized');
-      }
+      // const userId = await this.tokenService.userId(token);
+      // if (!userId) {
+      //   throw new AuthorizationException('Not authorized');
+      // }
       const existingUser = await prisma.users.findUnique({ where: { email } });
       if (existingUser) {
         throw new ItemAlreadyExistsException('User already exists');
@@ -572,12 +572,7 @@ class Users {
 
     try {
         
-      if(token === "undefined"){
-       
-          throw new AuthorizationException('Invalid Token');
-
-      }
-
+    
 
       if (!await this.tokenService.checkTokenUser(token)) {
         throw new AuthorizationException('Not authorized');
@@ -606,6 +601,8 @@ class Users {
       ) {
         throw error;
       }
+
+      
 
      
       throw new InternalServerErrorException('An error occurred when trying to retrieve user');

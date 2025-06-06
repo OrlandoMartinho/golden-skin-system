@@ -4,12 +4,12 @@ class NotificationsSchemas {
   // Schema for a single notification
   static notificationSchema = z.object({
     idNotification: z.number(),
-    icon: z.string(),
+    icon: z.string().nullable(),
     description: z.string(),
-    notificationTime: z.string(),
+    notificationTime: z.string().nullable(),
     read: z.boolean(),
-    createdIn: z.string(),
-    updatedIn: z.string(),
+    createdIn: z.date(),
+    updatedIn: z.date().nullable(),
     idUser: z.number(),
   });
 
