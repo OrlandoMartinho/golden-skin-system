@@ -86,7 +86,7 @@ static userSchema = z.object({
 
    static UserWorker = z.object({
       name: z.string().min(1, "Name is required"),
-      email: z.string().email("Invalid email format").min(1, "Email is required"),
+      email: z.string(),
       phoneNumber: z.string(),
       role:z.number(),
       status:z.boolean()
