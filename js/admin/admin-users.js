@@ -13,7 +13,6 @@ function formatDateTime(isoString) {
 // Function to get role text based on role value
 function getRoleText(role) {
     const roles = {
-     
         1: 'Cliente',
         2: 'Funcionário'
     };
@@ -27,29 +26,28 @@ function populateUsersTable(users) {
     
     tbody.innerHTML = ''; // Clear existing rows
     users
-    .filter(user => user.role !== 0) // Filtra usuários cujo role é diferente de 0
-    .forEach(user => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-          <td>${user.idUser || '-'}</td>
-          <td>${user.name || '-'}</td>
-          <td>${user.email || '-'}</td>
-          <td>${user.phoneNumber || '-'}</td>
-          <td>${getRoleText(user.role)}</td>
-          <td><span class="status-${user.status ? 'active' : 'inactive'}">${user.status ? 'Ativo' : 'Inativo'}</span></td>
-          <td>${formatDateTime(user.createdIn)}</td>
-          <td>
-              <button class="action-btn" onclick="editUser(${user.idUser})">
-                  <i class="fas fa-edit"></i>
-              </button>
-              <button class="action-btn" onclick="deleteUser(${user.idUser})">
-                  <i class="fas fa-trash"></i>
-              </button>
-          </td>
-      `;
-      tbody.appendChild(row);
-    });
-  
+        .filter(user => user.role !== 0) // Filtra usuários cujo role é diferente de 0
+        .forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.idUser || '-'}</td>
+                <td>${user.name || '-'}</td>
+                <td>${user.email || '-'}</td>
+                <td>${user.phoneNumber || '-'}</td>
+                <td>${getRoleText(user.role)}</td>
+                <td><span class="status-${user.status ? 'active' : 'inactive'}">${user.status ? 'Ativo' : 'Inativo'}</span></td>
+                <td>${formatDateTime(user.createdIn)}</td>
+                <td>
+                    <button class="action-btn" onclick="editUser(${user.idUser})">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn" onclick="deleteUser(${user.idUser})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -115,6 +113,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.confirmAction = async () => {
             if (!editUserId) return;
             
+            const confirmButton = document.getElementById('confirm-button');
+            const originalConfirmText = confirmButton.innerHTML;
+            confirmButton.innerHTML = `<span class="button-loader"></span>Processando...`;
+            confirmButton.disabled = true;
+
             try {
                 const result = await deleteAnyUser(accessToken, editUserId);
                 
@@ -132,6 +135,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     buttonText: 'Entendido'
                 });
             } finally {
+                confirmButton.innerHTML = originalConfirmText;
+                confirmButton.disabled = false;
                 closeModal('confirm-modal');
             }
         };
@@ -140,20 +145,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             userForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 
+                const submitButton = e.target.querySelector('button[type="submit"]');
+                const originalButtonText = submitButton.innerHTML;
+                submitButton.innerHTML = `<span class="button-loader"></span>Processando...`;
+                submitButton.classList.add('button-loading');
+                submitButton.disabled = true;
+
                 const userData = {
                     name: document.getElementById('user-name').value.trim(),
                     email: document.getElementById('user-email').value.trim(),
                     phoneNumber: document.getElementById('user-phone').value.trim() || null,
-                    role:document.getElementById('user-role').value === 'customer' ? 1 : 2,
+                    role: document.getElementById('user-role').value === 'customer' ? 1 : 2,
                     status: document.getElementById('user-status').value === 'active'
                 };
-
-                console.log("data:",userData)
 
                 try {
                     if (editUserId !== null) {
                         // Update existing user
-                        const response = await updateAnyUser(accessToken,userData,editUserId);
+                        const response = await updateAnyUser(accessToken, userData, editUserId);
                         if (response === 200) {
                             const index = usersData.findIndex(u => u.idUser === editUserId);
                             if (index !== -1) {
@@ -166,32 +175,33 @@ document.addEventListener('DOMContentLoaded', async () => {
                                     buttonText: 'Ótimo!'
                                 });
                             }
-                        }else if(response === 409){
+                        } else if (response === 409) {
                             showMessageModal('error', 'Erro!', 'Este email já foi cadastrado na plataforma', {
                                 buttonText: 'Entendido'
                             });
-                        }else{
+                        } else {
                             showMessageModal('error', 'Erro!', 'Ocorreu um erro ao processar o Funcionário', {
                                 buttonText: 'Entendido'
-                            }); 
+                            });
                         }
                     } else {
                         // Add new user
-                        const response = await registerUser(userData,accessToken);
+                        const response = await registerUser(userData, accessToken);
                         
                         if (response === 200) {
-                           
+                            await getAllUser(accessToken); // Refresh user data
+                            usersData = JSON.parse(localStorage.getItem('users')) || [];
                             showMessageModal('success', 'Sucesso!', 'Usuário criado com sucesso', {
                                 buttonText: 'Ótimo!'
                             });
-                        }else if(response === 409){
+                        } else if (response === 409) {
                             showMessageModal('error', 'Erro!', 'Este email já foi cadastrado na plataforma', {
                                 buttonText: 'Entendido'
                             });
-                        }else{
+                        } else {
                             showMessageModal('error', 'Erro!', 'Ocorreu um erro ao processar o Funcionário', {
                                 buttonText: 'Entendido'
-                            }); 
+                            });
                         }
                     }
                     closeModal('user-modal');
@@ -200,6 +210,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     showMessageModal('error', 'Erro!', 'Ocorreu um erro ao processar o usuário', {
                         buttonText: 'Entendido'
                     });
+                } finally {
+                    submitButton.innerHTML = originalButtonText;
+                    submitButton.classList.remove('button-loading');
+                    submitButton.disabled = false;
                 }
             });
         }
@@ -218,15 +232,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const filteredUsers = usersData.filter(user => {
                 const matchesSearch = (user.name || '').toLowerCase().includes(searchTerm) ||
-                                    (user.email || '').toLowerCase().includes(searchTerm) ||
-                                    (user.phoneNumber || '').toLowerCase().includes(searchTerm);
+                                     (user.email || '').toLowerCase().includes(searchTerm) ||
+                                     (user.phoneNumber || '').toLowerCase().includes(searchTerm);
                 const matchesRole = roleFilterValue === 'all' ||
-                                  (roleFilterValue === 'admin' && user.role === 0) ||
-                                  (roleFilterValue === 'customer' && user.role === 1) ||
-                                  (roleFilterValue === 'employee' && user.role === 2);
+                                    (roleFilterValue === 'admin' && user.role === 0) ||
+                                    (roleFilterValue === 'customer' && user.role === 1) ||
+                                    (roleFilterValue === 'employee' && user.role === 2);
                 const matchesStatus = statusFilterValue === 'all' ||
-                                    (statusFilterValue === 'active' && user.status) ||
-                                    (statusFilterValue === 'inactive' && !user.status);
+                                     (statusFilterValue === 'active' && user.status) ||
+                                     (statusFilterValue === 'inactive' && !user.status);
                 return matchesSearch && matchesRole && matchesStatus;
             });
 
@@ -241,7 +255,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         populateUsersTable(usersData);
 
     } catch (error) {
-        
         showMessageModal('error', 'Erro!', 'Falha ao inicializar a aplicação', {
             buttonText: 'Entendido'
         });
