@@ -480,8 +480,8 @@ class Users {
       }
 
 
-      const existingUser = await prisma.users.findUnique({ where: { email } });
-      if (existingUser) {
+      const existingUser = await prisma.users.findMany({ where: { email } });
+      if (existingUser.length > 1) {
         throw new ItemAlreadyExistsException('User already exists');
       }
       await prisma.users.update({
