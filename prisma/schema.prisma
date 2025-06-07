@@ -186,7 +186,7 @@ model Plans {
   services     String?       @db.Text
   priceInCents Int
   createdIn    DateTime
-  updatedIn    DateTime
+  updatedIn    DateTime?
 
 
   subscribers  Subscribers[]
@@ -198,7 +198,7 @@ model Subscribers {
   idUser          Int
   idPlan          Int
   createdIn       DateTime
-  updatedIn       DateTime
+  updatedIn       DateTime?
 
   plan            Plans     @relation(fields: [idPlan], references: [idPlan])
 }
