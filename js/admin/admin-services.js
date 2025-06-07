@@ -1,4 +1,3 @@
-// === Image Preview Handler ===
 document.getElementById('service-photo').addEventListener('change', function (event) {
     const file = event.target.files[0];
     const preview = document.getElementById('photo-preview');
@@ -17,12 +16,10 @@ document.getElementById('service-photo').addEventListener('change', function (ev
     }
 });
 
-// === Main Application Logic ===
 document.addEventListener('DOMContentLoaded', async () => {
     const accessToken = localStorage.getItem('accessToken');
     let servicesData = [];
 
-    // === Initialize Services ===
     async function initializeServices() {
         try {
             const result = await getAllServices(accessToken);
@@ -39,12 +36,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // === Populate Services Table ===
     function populateServicesTable(services) {
         const tbody = document.querySelector('.services-table tbody');
-        if (!tbody) {
-            return;
-        }
+        if (!tbody) return;
 
         tbody.innerHTML = '';
         services.forEach((service) => {
@@ -69,7 +63,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // === Modal Control Functions ===
     window.closeModal = function (modalId) {
         const modal = document.getElementById(modalId);
         if (modal) {
@@ -83,7 +76,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const action = messageElement.dataset.action;
         const confirmButton = document.getElementById('confirm-button');
 
-        // Add loader to confirm button
         const originalConfirmText = confirmButton.innerHTML;
         confirmButton.innerHTML = `<span class="button-loader"></span>Processando...`;
         confirmButton.disabled = true;
@@ -91,7 +83,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (action.startsWith('deleteService-')) {
             const serviceId = parseInt(action.split('-')[1]);
             try {
-                const result = await deleteService(accessToken, serviceId);
+                const result = await deleteAnyService(accessToken, serviceId);
                 if (result === 200) {
                     servicesData = servicesData.filter((s) => s.idService !== serviceId);
                     populateServicesTable(servicesData);
@@ -104,21 +96,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
-        // Restore confirm button
         confirmButton.innerHTML = originalConfirmText;
         confirmButton.disabled = false;
         modal.classList.remove('active');
     };
 
-    // === Service Modal Functions ===
     window.openAddServiceModal = function () {
         const modal = document.getElementById('service-modal');
         const form = document.getElementById('service-form');
         const title = document.getElementById('modal-title');
 
-        if (!modal || !form || !title) {
-            return;
-        }
+        if (!modal || !form || !title) return;
 
         title.textContent = 'Adicionar Serviço';
         form.reset();
@@ -133,15 +121,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         const form = document.getElementById('service-form');
         const title = document.getElementById('modal-title');
 
-        if (!modal || !form || !title) {
-            return;
+        if (!modal || !form || !title ||!serviceId) {
+            showMessageModal('error', 'Erro!', 'Serviço não encontrado', { buttonText: 'Entendido' });
+            return
         }
 
         try {
+         
             const result = await getService(accessToken, serviceId);
             if (result === 200) {
                 const service = JSON.parse(localStorage.getItem('service'));
+                console.log('Service data loaded:', service); // KEPT - editing related
                 if (service) {
+                    localStorage.setItem("idService",service.idService)
                     title.textContent = 'Editar Serviço';
                     document.getElementById('service-name').value = service.name || '';
                     document.getElementById('service-category').value = service.category || '';
@@ -150,12 +142,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                     document.getElementById('service-benefits').value = service.benefits || '';
                     document.getElementById('service-reviews').value = service.reviews || '';
                     document.getElementById('service-status').value = service.status ? 'active' : 'inactive';
-                    form.dataset.serviceId = serviceId;
+                    form.dataset.serviceId = service.idService;
+                    console.log('Form populated with service ID:', service.idService); // KEPT - editing related
 
                     const preview = document.getElementById('photo-preview');
                     if (service.photo) {
                         preview.src = service.photo;
                         preview.style.display = 'block';
+                        console.log('Photo preview set to:', service.photo); // KEPT - editing related
                     } else {
                         preview.src = '#';
                         preview.style.display = 'none';
@@ -177,14 +171,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         showConfirmModal(`Tem certeza que deseja excluir o serviço ${serviceId}?`, `deleteService-${serviceId}`);
     };
 
-    // === Form Submission Handler ===
     document.getElementById('service-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const submitButton = e.target.querySelector('button[type="submit"]');
         const originalButtonText = submitButton.innerHTML;
 
-        // Add loader
         submitButton.innerHTML = `<span class="button-loader"></span>Processando...`;
         submitButton.classList.add('button-loading');
         submitButton.disabled = true;
@@ -198,7 +190,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const reviews = document.getElementById('service-reviews').value.trim();
         const status = document.getElementById('service-status').value === 'active';
 
-        // Validation
         if (!name || !category || isNaN(price) || isNaN(duration)) {
             showMessageModal('error', 'Erro!', 'Por favor, preencha todos os campos obrigatórios.', {
                 buttonText: 'Entendido',
@@ -238,11 +229,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         try {
             if (serviceId) {
-                // Update existing service
+                
+                const idService = localStorage.getItem("idService")
+                console.log("Id service:",idService)
+                console.log("idService:",serviceId)
                 serviceData.idService = serviceId;
                 const fileInput = document.getElementById('service-photo');
                 const file = fileInput.files[0];
-                const response = await editService(accessToken, serviceData, file);
+              // KEPT - editing related
+              console.log("Id service 2:",idService)
+              console.log("idService 2:",serviceId)
+              console.log("Service:",serviceData)
+                const response = await editAnyService(accessToken, serviceData, file);
+                console.log('Edit service response:', response); // KEPT - editing related
                 if (response === 200) {
                     const index = servicesData.findIndex((s) => s.idService === serviceId);
                     if (index !== -1) {
@@ -258,11 +257,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     showMessageModal('error', 'Erro!', 'Falha ao atualizar o serviço', { buttonText: 'Entendido' });
                 }
             } else {
-                // Add new service
                 const fileInput = document.getElementById('service-photo');
                 const file = fileInput.files[0];
                 const response = await addService(accessToken, serviceData, file);
-                
                 if (response === 200) {
                     await getAllServices(accessToken);
                     servicesData = JSON.parse(localStorage.getItem('services')) || [];
@@ -277,22 +274,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (error) {
             showMessageModal('error', 'Erro!', 'Ocorreu um erro ao processar o serviço', { buttonText: 'Entendido' });
         } finally {
-            // Restore button
             submitButton.innerHTML = originalButtonText;
             submitButton.classList.remove('button-loading');
             submitButton.disabled = false;
         }
     });
 
-    // === Search and Filter Functionality ===
     const searchInput = document.getElementById('service-search');
     const statusFilter = document.getElementById('service-status-filter');
     const categoryFilter = document.getElementById('service-category-filter');
 
     function filterServices() {
-        if (!searchInput || !statusFilter || !categoryFilter) {
-            return;
-        }
+        if (!searchInput || !statusFilter || !categoryFilter) return;
 
         const search = searchInput.value.toLowerCase().trim();
         const statusFilterValue = statusFilter.value;
@@ -311,72 +304,57 @@ document.addEventListener('DOMContentLoaded', async () => {
         populateServicesTable(filteredServices);
     }
 
-    // Event listeners for filters
-    if (searchInput) {
-        searchInput.addEventListener('input', filterServices);
-    }
+    if (searchInput) searchInput.addEventListener('input', filterServices);
+    if (statusFilter) statusFilter.addEventListener('change', filterServices);
+    if (categoryFilter) categoryFilter.addEventListener('change', filterServices);
 
-    if (statusFilter) {
-        statusFilter.addEventListener('change', filterServices);
-    }
-
-    if (categoryFilter) {
-        categoryFilter.addEventListener('change', filterServices);
-    }
-
-    // === Helper Functions ===
     function showConfirmModal(message, action) {
         const modal = document.getElementById('confirm-modal');
         const messageElement = document.getElementById('confirm-message');
-
-        if (!modal || !messageElement) {
-            return;
-        }
+        if (!modal || !messageElement) return;
 
         messageElement.textContent = message;
         messageElement.dataset.action = action;
         modal.classList.add('active');
     }
 
-    // Initialize services on load
     await initializeServices();
 });
 
-// === Tab Navigation ===
 function openTab(tabName) {
-    // Hide all tab contents
     const tabContents = document.querySelectorAll('.tab-content');
     tabContents.forEach(content => {
         content.classList.remove('active');
     });
 
-    // Remove active class from all tab links
     const tabLinks = document.querySelectorAll('.tab-link');
     tabLinks.forEach(link => {
         link.classList.remove('active');
     });
 
-    // Show the selected tab content and set the active tab link
     document.getElementById(tabName).classList.add('active');
     event.currentTarget.classList.add('active');
 }
 
-// === Plan Modal Functions ===
 function openAddPlanModal() {
-    document.getElementById('plan-modal').style.display = 'block';
-    document.getElementById('plan-modal-title').textContent = 'Adicionar Plano';
+    const modal = document.getElementById('plan-modal').style.display = 'block';
+    const title = document.getElementById('plan-modal-title');
+    document.getElementById('modal-title').textContent = 'Adicionar Plano';
     document.getElementById('plan-form').reset();
 }
 
 function editPlan(id) {
-    document.getElementById('plan-modal').style.display = 'block';
-    document.getElementById('plan-modal-title').textContent = 'Editar Plano';
-    // Populate form with plan data (requires backend integration)
+    const modal = document.getElementById('plan-modal').style;
+    const title = document.getElementById('modal-title').textContent;
+    modal.style.display = 'block';
+    title.textContent = 'Editar Modal';
+    console.log('Editing plan with ID:', id); // KEPT - editing related
 }
 
 function deletePlan(id) {
-    document.getElementById('confirm-modal').style.display = 'block';
-    document.getElementById('confirm-message').textContent = 'Tem certeza que deseja excluir este plano?';
-    // Store the id for confirmation action
-    document.getElementById('confirm-modal').dataset.planId = id;
+    const modal = document.getElementById('confirm-modal').style.display = 'block';
+    const message = document.getElementById('confirm-message');
+    message.textContent = 'Confirm delete plan with ID: ' + id;
+    console.log('Opening delete confirmation for plan ID:', id); // KEPT - editing related
+    modal.dataset.planId = id;
 }
