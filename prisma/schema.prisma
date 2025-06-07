@@ -178,3 +178,27 @@ model VerificationCodes {
   code                 String  @db.LongText
   used                 Boolean
 }
+
+
+model Plans {
+  idPlan       Int           @id @default(autoincrement())
+  description  String        @db.VarChar(255)
+  services     String?       @db.Text
+  priceInCents Int
+  createdIn    DateTime
+  updatedIn    DateTime
+
+
+  subscribers  Subscribers[]
+}
+
+model Subscribers {
+  idSubscriber    Int      @id @default(autoincrement())
+  subscriberName  String   @db.VarChar(255)
+  idUser          Int
+  idPlan          Int
+  createdIn       DateTime
+  updatedIn       DateTime
+
+  plan            Plans     @relation(fields: [idPlan], references: [idPlan])
+}

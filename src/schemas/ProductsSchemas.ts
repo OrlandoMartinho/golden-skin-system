@@ -4,11 +4,11 @@ import { z } from 'zod';
 class ProductsSchemas {
   // Schema for a single product
   static productSchema = z.object({
-    idProduct: z.number().optional(),
+    idProduct: z.number().nullable(),
     name: z.string(),
     description: z.string(),
-    priceInCents: z.number(),
-    status: z.boolean(),
+    priceInCents: z.number().nullable(),
+    status: z.boolean().nullable(),
     category: z.string(),
     photo: z.string().nullable(),
     createdIn: z.date(),
