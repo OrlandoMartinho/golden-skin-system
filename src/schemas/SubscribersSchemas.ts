@@ -6,14 +6,14 @@ class SubscribersSchemas {
     idSubscriber: z.number(),
     subscriberName: z.string(),
     idUser: z.number(),
+    idPlan:z.number(),
     createdIn: z.string(),
     updatedIn: z.string(),
   });
 
   // Schema for registering a subscriber
   static RegisterSubscriber = z.object({
-    subscriberName: z.string().min(1, "Subscriber name is required"),
-    idUser: z.number().int().positive("User ID must be a positive integer"),
+    idPlan:z.number(),
   });
 
   // Schema for deleting a subscriber
@@ -23,8 +23,7 @@ class SubscribersSchemas {
 
   // Schema for updating a subscriber
   static UpdateSubscriber = z.object({
-    idSubscriber: z.number().int().positive("Subscriber ID must be a positive integer"),
-    subscriberName: z.string().min(1, "Subscriber name is required"),
+    idPlan:z.number(),
   });
 
   // Schema for viewing a single subscriber

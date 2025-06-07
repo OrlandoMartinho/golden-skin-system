@@ -25,7 +25,7 @@ class SubscribersController {
   public async registerSubscriber(data: any, key: any): Promise<z.infer<typeof this.responseSchema>> {
     const validatedData = await this.zodError(SubscribersSchemas.RegisterSubscriber, data);
     const validatedKey = await this.zodError(SubscribersSchemas.tokenSchema, key);
-    const { subscriberName, idUser,idPlan } = validatedData;
+    const {idPlan } = validatedData;
     const { token } = validatedKey;
 
     try {
@@ -33,14 +33,16 @@ class SubscribersController {
       if (!currentUserId) {
         throw new AuthorizationException('Not authorized');
       }
-      if (currentUserId !== idUser) {
-        throw new AuthorizationException('Not authorized to create subscriber for this user');
+     
+      const user =  await prisma.users.findUnique({where:{idUser:currentUserId}})
+      if(!user){
+        throw new ItemNotFoundException("User not found")
       }
-
+      const subscriberName = user.name
       await prisma.subscribers.create({
         data: {
           subscriberName,
-          idUser,
+          idUser:currentUserId,
           idPlan,
           createdIn: new Date().toISOString(),
           updatedIn: new Date().toISOString(),
@@ -98,7 +100,7 @@ class SubscribersController {
   public async updateSubscriber(data: any, key: any): Promise<z.infer<typeof this.responseSchema>> {
     const validatedData = await this.zodError(SubscribersSchemas.UpdateSubscriber, data);
     const validatedKey = await this.zodError(SubscribersSchemas.tokenSchema, key);
-    const { idSubscriber, subscriberName } = validatedData;
+    const { idSubscriber, idPlan } = validatedData;
     const { token } = validatedKey;
 
     try {
@@ -115,9 +117,15 @@ class SubscribersController {
         throw new AuthorizationException('Not authorized to update this subscriber');
       }
 
+      const user =  await prisma.users.findUnique({where:{idUser:userId}})
+      if(!user){
+        throw new ItemNotFoundException("User not found")
+      }
+      const subscriberName = user?.name
+
       await prisma.subscribers.update({
         where: { idSubscriber },
-        data: { subscriberName, updatedIn: new Date().toISOString() },
+        data: {idPlan, updatedIn: new Date().toISOString(),subscriberName },
       });
 
       return { message: 'Subscriber updated successfully' };
