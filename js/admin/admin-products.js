@@ -1,5 +1,60 @@
 // === Image Preview Handler ===
-document.getElementById('service-photo').addEventListener('change', function (event) {
+async function urlToFile(photo) {
+    try {
+      console.log('Starting urlToFile function with photo URL:', photo);
+  
+      // Extrai o nome do arquivo do URL
+      const filename = photo.split('/').pop();
+      console.log('Extracted filename:', filename);
+  
+      // Extrai a extensão do arquivo do URL
+      const extension = filename.split('.').pop().toLowerCase();
+      console.log('Extracted extension:', extension);
+  
+      // Mapeia a extensão para o tipo MIME
+      const mimeTypes = {
+        'jpg': 'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'png': 'image/png',
+        'gif': 'image/gif',
+        'webp': 'image/webp',
+        // Adicione mais extensões conforme necessário
+      };
+  
+      const mimeType = mimeTypes[extension] || 'application/octet-stream'; // Tipo padrão se a extensão não for reconhecida
+      console.log('Determined mimeType:', mimeType);
+  
+      // Faz o fetch da imagem
+      console.log('Fetching image from URL...');
+      const response = await fetch(photo);
+      if (!response.ok) {
+        console.error('Fetch failed with status:', response.status);
+        throw new Error('Falha ao carregar a imagem');
+      }
+  
+      // Converte a resposta em um blob
+      console.log('Converting response to blob...');
+      const blob = await response.blob();
+      console.log('Blob created with size:', blob.size, 'bytes and type:', blob.type);
+  
+      // Cria um objeto File a partir do blob
+      const file = new File([blob], filename, { type: mimeType });
+      console.log('File created:', {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        lastModified: file.lastModified
+      });
+  
+      return file;
+    } catch (error) {
+      console.error('Error in urlToFile:', error);
+      return null;
+    }
+  }
+
+  
+document.getElementById('product-photo').addEventListener('change', function (event) {
     const file = event.target.files[0];
     const preview = document.getElementById('photo-preview');
 
@@ -20,47 +75,47 @@ document.getElementById('service-photo').addEventListener('change', function (ev
 // === Main Application Logic ===
 document.addEventListener('DOMContentLoaded', async () => {
     const accessToken = localStorage.getItem('accessToken');
-    let servicesData = [];
+    let productsData = [];
 
-    // === Initialize Services ===
-    async function initializeServices() {
+    // === Initialize Products ===
+    async function initializeProducts() {
         try {
-            const result = await getAllServices(accessToken);
+            const result = await getAllProducts(accessToken);
 
             if (result === 200) {
-                const storedServices = localStorage.getItem('services');
-                servicesData = storedServices ? JSON.parse(storedServices) : [];
-                populateServicesTable(servicesData);
+                const storedProducts = localStorage.getItem('products');
+                productsData = storedProducts ? JSON.parse(storedProducts) : [];
+                populateProductsTable(productsData);
             } else {
-                showMessageModal('error', 'Erro!', 'Falha ao carregar serviços', { buttonText: 'Entendido' });
+                showMessageModal('error', 'Erro!', 'Falha ao carregar produtos', { buttonText: 'Entendido' });
             }
         } catch (error) {
             showMessageModal('error', 'Erro!', 'Falha ao inicializar a aplicação', { buttonText: 'Entendido' });
         }
     }
 
-    // === Populate Services Table ===
-    function populateServicesTable(services) {
-        const tbody = document.querySelector('.services-table tbody');
+    // === Populate Products Table ===
+    function populateProductsTable(products) {
+        const tbody = document.querySelector('.products-table tbody');
         if (!tbody) {
             return;
         }
 
         tbody.innerHTML = '';
-        services.forEach((service) => {
+        products.forEach((product) => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${service.photo ? `<img src="${service.photo}" alt="${service.name}" style="max-width: 50px; max-height: 50px;">` : '-'}</td>
-                <td>${service.name || '-'}</td>
-                <td>${service.category || '-'}</td>
-                <td>${((service.priceInCents || 0) / 100).toFixed(2)}</td>
-                <td>${service.duration || '-'}</td>
-                <td><span class="status-${service.status ? 'active' : 'inactive'}">${service.status ? 'Ativo' : 'Inativo'}</span></td>
+                <td>${product.photo ? `<img src="${product.photo}" alt="${product.name}" style="max-width: 50px; max-height: 50px;">` : '-'}</td>
+                <td>${product.name || '-'}</td>
+                <td>${product.category || '-'}</td>
+                <td>${((product.priceInCents || 0) / 100).toFixed(2)}</td>
+                <td>${product.amount || '-'}</td>
+                <td><span class="status-${product.status ? 'active' : 'inactive'}">${product.status ? 'Ativo' : 'Inativo'}</span></td>
                 <td>
-                    <button class="action-btn" onclick="editService(${service.idService})">
+                    <button class="action-btn" onclick="editProduct(${product.idProduct})">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="action-btn" onclick="deleteService(${service.idService})">
+                    <button class="action-btn" onclick="deleteProduct(${product.idProduct})">
                         <i class="fas fa-trash"></i>
                     </button>
                 </td>
@@ -88,19 +143,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         confirmButton.innerHTML = `<span class="button-loader"></span>Processando...`;
         confirmButton.disabled = true;
 
-        if (action.startsWith('deleteService-')) {
-            const serviceId = parseInt(action.split('-')[1]);
+        if (action.startsWith('deleteProduct-')) {
+            const productId = parseInt(action.split('-')[1]);
             try {
-                const result = await deleteService(accessToken, serviceId);
+                const result = await deleteAnyProduct(accessToken, productId);
                 if (result === 200) {
-                    servicesData = servicesData.filter((s) => s.idService !== serviceId);
-                    populateServicesTable(servicesData);
-                    showMessageModal('success', 'Sucesso!', 'Serviço eliminado com sucesso', { buttonText: 'Ótimo!' });
+                    productsData = productsData.filter((p) => p.idProduct !== productId);
+                    populateProductsTable(productsData);
+                    showMessageModal('success', 'Sucesso!', 'Produto eliminado com sucesso', { buttonText: 'Ótimo!' });
                 } else {
-                    showMessageModal('error', 'Erro!', 'Falha ao excluir o serviço', { buttonText: 'Entendido' });
+                    showMessageModal('error', 'Erro!', 'Falha ao excluir o produto', { buttonText: 'Entendido' });
                 }
             } catch (error) {
-                showMessageModal('error', 'Erro!', 'Ocorreu um erro ao excluir o serviço', { buttonText: 'Entendido' });
+                showMessageModal('error', 'Erro!', 'Ocorreu um erro ao excluir o produto', { buttonText: 'Entendido' });
             }
         }
         
@@ -110,27 +165,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         modal.classList.remove('active');
     };
 
-    // === Service Modal Functions ===
-    window.openAddServiceModal = function () {
-        const modal = document.getElementById('service-modal');
-        const form = document.getElementById('service-form');
+    // === Product Modal Functions ===
+    window.openAddProductModal = function () {
+        const modal = document.getElementById('product-modal');
+        const form = document.getElementById('product-form');
         const title = document.getElementById('modal-title');
 
         if (!modal || !form || !title) {
             return;
         }
 
-        title.textContent = 'Adicionar Serviço';
+        title.textContent = 'Adicionar Produto';
         form.reset();
-        const preview = document.getElementById('photo-preview');
-        preview.src = '#';
-        preview.style.display = 'none';
         modal.classList.add('active');
     };
 
-    window.editService = async function (serviceId) {
-        const modal = document.getElementById('service-modal');
-        const form = document.getElementById('service-form');
+    window.editProduct = async function (productId) {
+        const modal = document.getElementById('product-modal');
+        const form = document.getElementById('product-form');
         const title = document.getElementById('modal-title');
 
         if (!modal || !form || !title) {
@@ -138,23 +190,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         try {
-            const result = await getService(accessToken, serviceId);
+            const result = await getProduct(accessToken, productId);
             if (result === 200) {
-                const service = JSON.parse(localStorage.getItem('service'));
-                if (service) {
-                    title.textContent = 'Editar Serviço';
-                    document.getElementById('service-name').value = service.name || '';
-                    document.getElementById('service-category').value = service.category || '';
-                    document.getElementById('service-price').value = ((service.priceInCents || 0) / 100).toFixed(2);
-                    document.getElementById('service-duration').value = service.duration || 0;
-                    document.getElementById('service-benefits').value = service.benefits || '';
-                    document.getElementById('service-reviews').value = service.reviews || '';
-                    document.getElementById('service-status').value = service.status ? 'active' : 'inactive';
-                    form.dataset.serviceId = service.idService;
-
+                const product = JSON.parse(localStorage.getItem('product'));
+                if (product) {
+                    title.textContent = 'Editar Produto';
+                    document.getElementById('product-name').value = product.name || '';
+                    document.getElementById('product-category').value = product.category || '';
+                    document.getElementById('product-price').value = ((product.priceInCents || 0) / 100).toFixed(2);
+                    document.getElementById('product-stock').value = product.amount || 0;
+                    document.getElementById('product-status').value = product.status ? 'active' : 'inactive';
+                    form.dataset.productId = productId;
+                    
                     const preview = document.getElementById('photo-preview');
-                    if (service.photo) {
-                        preview.src = service.photo;
+                    if (product.photo) {
+                        preview.src = product.photo;
                         preview.style.display = 'block';
                     } else {
                         preview.src = '#';
@@ -163,22 +213,22 @@ document.addEventListener('DOMContentLoaded', async () => {
                     
                     modal.classList.add('active');
                 } else {
-                    showMessageModal('error', 'Erro!', 'Serviço não encontrado', { buttonText: 'Entendido' });
+                    showMessageModal('error', 'Erro!', 'Produto não encontrado', { buttonText: 'Entendido' });
                 }
             } else {
-                showMessageModal('error', 'Erro!', 'Falha ao carregar o serviço', { buttonText: 'Entendido' });
+                showMessageModal('error', 'Erro!', 'Falha ao carregar o produto', { buttonText: 'Entendido' });
             }
         } catch (error) {
-            showMessageModal('error', 'Erro!', 'Ocorreu um erro ao carregar o serviço', { buttonText: 'Entendido' });
+            showMessageModal('error', 'Erro!', 'Ocorreu um erro ao carregar o produto', { buttonText: 'Entendido' });
         }
     };
 
-    window.deleteService = function (serviceId) {
-        showConfirmModal(`Tem certeza que deseja excluir o serviço ${serviceId}?`, `deleteService-${serviceId}`);
+    window.deleteProduct = function (productId) {
+        showConfirmModal(`Tem certeza que deseja excluir o produto ${productId}?`, `deleteProduct-${productId}`);
     };
 
     // === Form Submission Handler ===
-    document.getElementById('service-form').addEventListener('submit', async (e) => {
+    document.getElementById('product-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const submitButton = e.target.querySelector('button[type="submit"]');
@@ -189,17 +239,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         submitButton.classList.add('button-loading');
         submitButton.disabled = true;
 
-        const serviceId = parseInt(e.target.dataset.serviceId) || null;
-        const name = document.getElementById('service-name').value.trim();
-        const category = document.getElementById('service-category').value.trim();
-        const price = parseFloat(document.getElementById('service-price').value);
-        const duration = parseInt(document.getElementById('service-duration').value);
-        const benefits = document.getElementById('service-benefits').value.trim();
-        const reviews = document.getElementById('service-reviews').value.trim();
-        const status = document.getElementById('service-status').value === 'active';
+        const productId = parseInt(e.target.dataset.productId) || null;
+        const name = document.getElementById('product-name').value.trim();
+        const category = document.getElementById('product-category').value.trim();
+        const price = parseFloat(document.getElementById('product-price').value);
+        const stock = parseInt(document.getElementById('product-stock').value);
+        const status = document.getElementById('product-status').value === 'active';
 
         // Validação
-        if (!name || !category || isNaN(price) || isNaN(duration)) {
+        if (!name || !category || isNaN(price) || isNaN(stock)) {
             showMessageModal('error', 'Erro!', 'Por favor, preencha todos os campos obrigatórios.', {
                 buttonText: 'Entendido',
             });
@@ -217,65 +265,68 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        if (duration < 1) {
-            showMessageModal('error', 'Erro!', 'A duração deve ser maior que 0 minutos.', { buttonText: 'Entendido' });
+        if (stock < 0) {
+            showMessageModal('error', 'Erro!', 'O estoque não pode ser negativo.', { buttonText: 'Entendido' });
             submitButton.innerHTML = originalButtonText;
             submitButton.classList.remove('button-loading');
             submitButton.disabled = false;
             return;
         }
 
-        const serviceData = {
+        const productData = {
             name,
             description: name,
             priceInCents: Math.round(price * 100),
             status,
             category,
-            duration,
-            benefits,
-            reviews,
+            amount: stock,
         };
 
         try {
-            if (serviceId) {
-                // Atualizar serviço existente
-                serviceData.idService = serviceId;
-                const fileInput = document.getElementById('service-photo');
-                const file = fileInput.files[0];
-                const response = await editService(accessToken, serviceData, file);
+            if (productId) {
+                // Atualizar produto existente
+                productData.idProduct = productId;
+                const fileInput = document.getElementById('product-photo');
+                let file = fileInput.files[0];
+                if (!file) {
+                    file = await urlToFile(service.photo)
+                } 
+
+
+                const response = await updateProduct(accessToken, productData, file);
                 if (response === 200) {
-                    const index = servicesData.findIndex((s) => s.idService === serviceId);
+                    const index = productsData.findIndex((p) => p.idProduct === productId);
                     if (index !== -1) {
-                        servicesData[index] = {
-                            ...servicesData[index],
-                            ...serviceData,
+                        productsData[index] = {
+                            ...productsData[index],
+                            ...productData,
                             updatedIn: new Date().toISOString(),
                         };
-                        populateServicesTable(servicesData);
-                        showMessageModal('success', 'Sucesso!', 'Serviço atualizado com sucesso', { buttonText: 'Ótimo!' });
+                        populateProductsTable(productsData);
+                        showMessageModal('success', 'Sucesso!', 'Produto atualizado com sucesso', { buttonText: 'Ótimo!' });
                     }
                 } else {
-                    showMessageModal('error', 'Erro!', 'Falha ao atualizar o serviço', { buttonText: 'Entendido' });
+                    showMessageModal('error', 'Erro!', 'Falha ao atualizar o produto', { buttonText: 'Entendido' });
                 }
             } else {
-                // Adicionar novo serviço
-                const fileInput = document.getElementById('service-photo');
+                // Adicionar novo produto
+                const fileInput = document.getElementById('product-photo');
                 const file = fileInput.files[0];
-                const response = await addService(accessToken, serviceData, file);
+                const response = await registerProduct(accessToken, productData, file);
                 
                 if (response === 200) {
-                    await getAllServices(accessToken);
-                    servicesData = JSON.parse(localStorage.getItem('services')) || [];
-                    populateServicesTable(servicesData);
-                    showMessageModal('success', 'Sucesso!', 'Serviço criado com sucesso', { buttonText: 'Ótimo!' });
+                    await getAllProducts(accessToken);
+                    productsData = JSON.parse(localStorage.getItem('products')) || [];
+                    populateProductsTable(productsData);
+                    showMessageModal('success', 'Sucesso!', 'Produto criado com sucesso', { buttonText: 'Ótimo!' });
                 } else {
-                    showMessageModal('error', 'Erro!', 'Falha ao criar o serviço', { buttonText: 'Entendido' });
+                    showMessageModal('error', 'Erro!', 'Falha ao criar o produto', { buttonText: 'Entendido' });
                 }
             }
-            closeModal('service-modal');
-            e.target.dataset.serviceId = '';
+            closeModal('product-modal');
+            e.target.dataset.productId = '';
         } catch (error) {
-            showMessageModal('error', 'Erro!', 'Ocorreu um erro ao processar o serviço', { buttonText: 'Entendido' });
+            showMessageModal('error', 'Erro!', 'Ocorreu um erro ao processar o produto', { buttonText: 'Entendido' });
         } finally {
             // Restaura o botão
             submitButton.innerHTML = originalButtonText;
@@ -285,11 +336,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // === Search and Filter Functionality ===
-    const searchInput = document.getElementById('service-search');
-    const statusFilter = document.getElementById('service-status-filter');
-    const categoryFilter = document.getElementById('service-category-filter');
+    const searchInput = document.getElementById('product-search');
+    const statusFilter = document.getElementById('product-status-filter');
+    const categoryFilter = document.getElementById('product-category-filter');
 
-    function filterServices() {
+    function filterProducts() {
         if (!searchInput || !statusFilter || !categoryFilter) {
             return;
         }
@@ -298,30 +349,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         const statusFilterValue = statusFilter.value;
         const categoryFilterValue = categoryFilter.value;
 
-        const filteredServices = servicesData.filter((service) => {
-            const matchesSearch = (service.name || '').toLowerCase().includes(search);
+        const filteredProducts = productsData.filter((product) => {
+            const matchesSearch = (product.name || '').toLowerCase().includes(search);
             const matchesStatus =
                 statusFilterValue === 'all' ||
-                (statusFilterValue === 'active' && service.status) ||
-                (statusFilterValue === 'inactive' && !service.status);
+                (statusFilterValue === 'active' && product.status) ||
+                (statusFilterValue === 'inactive' && !product.status);
             const matchesCategory =
-                categoryFilterValue === 'all' || (service.category || '').toLowerCase() === categoryFilterValue.toLowerCase();
+                categoryFilterValue === 'all' || (product.category || '').toLowerCase() === categoryFilterValue.toLowerCase();
             return matchesSearch && matchesStatus && matchesCategory;
         });
-        populateServicesTable(filteredServices);
+        populateProductsTable(filteredProducts);
     }
 
     // Event listeners para filtros
     if (searchInput) {
-        searchInput.addEventListener('input', filterServices);
+        searchInput.addEventListener('input', filterProducts);
     }
 
     if (statusFilter) {
-        statusFilter.addEventListener('change', filterServices);
+        statusFilter.addEventListener('change', filterProducts);
     }
 
     if (categoryFilter) {
-        categoryFilter.addEventListener('change', filterServices);
+        categoryFilter.addEventListener('change', filterProducts);
     }
 
     // === Helper Functions ===
@@ -338,40 +389,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         modal.classList.add('active');
     }
 
-    // Inicializa os serviços ao carregar
-    await initializeServices();
+    // Inicializa os produtos ao carregar
+    await initializeProducts();
 });
-
-// === Tab Navigation ===
-function openTab(tabName) {
-    const tabContents = document.querySelectorAll('.tab-content');
-    tabContents.forEach(content => {
-        content.classList.remove('active');
-    });
-
-    const tabLinks = document.querySelectorAll('.tab-link');
-    tabLinks.forEach(link => {
-        link.classList.remove('active');
-    });
-
-    document.getElementById(tabName).classList.add('active');
-    event.currentTarget.classList.add('active');
-}
-
-// === Plan Modal Functions ===
-function openAddPlanModal() {
-    document.getElementById('plan-modal').style.display = 'block';
-    document.getElementById('plan-modal-title').textContent = 'Adicionar Plano';
-    document.getElementById('plan-form').reset();
-}
-
-function editPlan(id) {
-    document.getElementById('plan-modal').style.display = 'block';
-    document.getElementById('plan-modal-title').textContent = 'Editar Plano';
-}
-
-function deletePlan(id) {
-    document.getElementById('confirm-modal').style.display = 'block';
-    document.getElementById('confirm-message').textContent = 'Tem certeza que deseja excluir este plano?';
-    document.getElementById('confirm-modal').dataset.planId = id;
-}

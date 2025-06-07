@@ -1,3 +1,60 @@
+async function urlToFile(photo) {
+    try {
+      console.log('Starting urlToFile function with photo URL:', photo);
+  
+      // Extrai o nome do arquivo do URL
+      const filename = photo.split('/').pop();
+      console.log('Extracted filename:', filename);
+  
+      // Extrai a extensão do arquivo do URL
+      const extension = filename.split('.').pop().toLowerCase();
+      console.log('Extracted extension:', extension);
+  
+      // Mapeia a extensão para o tipo MIME
+      const mimeTypes = {
+        'jpg': 'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'png': 'image/png',
+        'gif': 'image/gif',
+        'webp': 'image/webp',
+        // Adicione mais extensões conforme necessário
+      };
+  
+      const mimeType = mimeTypes[extension] || 'application/octet-stream'; // Tipo padrão se a extensão não for reconhecida
+      console.log('Determined mimeType:', mimeType);
+  
+      // Faz o fetch da imagem
+      console.log('Fetching image from URL...');
+      const response = await fetch(photo);
+      if (!response.ok) {
+        console.error('Fetch failed with status:', response.status);
+        throw new Error('Falha ao carregar a imagem');
+      }
+  
+      // Converte a resposta em um blob
+      console.log('Converting response to blob...');
+      const blob = await response.blob();
+      console.log('Blob created with size:', blob.size, 'bytes and type:', blob.type);
+  
+      // Cria um objeto File a partir do blob
+      const file = new File([blob], filename, { type: mimeType });
+      console.log('File created:', {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        lastModified: file.lastModified
+      });
+  
+      return file;
+    } catch (error) {
+      console.error('Error in urlToFile:', error);
+      return null;
+    }
+  }
+
+  
+  
+
 document.getElementById('service-photo').addEventListener('change', function (event) {
     const file = event.target.files[0];
     const preview = document.getElementById('photo-preview');
@@ -229,17 +286,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         try {
             if (serviceId) {
-                
-                const idService = localStorage.getItem("idService")
-                console.log("Id service:",idService)
-                console.log("idService:",serviceId)
+                console.log(localStorage.getItem("service"))
+                const service =JSON.parse(localStorage.getItem("service"))
+                console.log(service)
                 serviceData.idService = serviceId;
                 const fileInput = document.getElementById('service-photo');
-                const file = fileInput.files[0];
-              // KEPT - editing related
-              console.log("Id service 2:",idService)
-              console.log("idService 2:",serviceId)
-              console.log("Service:",serviceData)
+                let file = fileInput.files[0];
+                if (!file) {
+                    
+                    file = await urlToFile(service.photo)
+                } 
+
+                // await urlToFile(ser)
                 const response = await editAnyService(accessToken, serviceData, file);
                 console.log('Edit service response:', response); // KEPT - editing related
                 if (response === 200) {
