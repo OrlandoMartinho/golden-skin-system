@@ -3,16 +3,16 @@ import { z } from 'zod';
 class ServicesSchemas {
   // Schema for a single service
   static serviceSchema = z.object({
-    idService: z.number().optional(),
+    idService: z.number(),
     name: z.string(),
     description: z.string(),
-    priceInCents: z.number(),
+    priceInCents: z.number().nullable(),
     benefits: z.string(),
-    reviews: z.number(),
-    status: z.string(),
-    duration: z.number(),
+    reviews: z.number().nullable(),
+    status: z.boolean(),
+    duration: z.number().nullable(),
     photo: z.string().nullable(),
-    updatedIn: z.string(),
+    updatedIn: z.date().nullable(),
   });
 
   // Schema for adding a service
@@ -47,7 +47,7 @@ class ServicesSchemas {
 
   // Schema for viewing a single service
   static ViewService = z.object({
-    idService: z.number().int().positive("ID Service must be a positive integer"),
+    idService: z.string(),
   });
 
   // Schema for viewing all services
