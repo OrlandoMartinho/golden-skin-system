@@ -46,7 +46,7 @@ class ServicesController {
     if(!validatedData){
       throw new InvalidDataException("Invalid Data received")
     }
-    const { name, description, priceInCents, benefits, reviews, status, duration } = validatedData;
+    const { name, description, priceInCents, benefits, category, status, duration } = validatedData;
     const { token } = validatedKey;
 
     try {
@@ -65,7 +65,7 @@ class ServicesController {
           description,
           priceInCents: Number(priceInCents),
           benefits,
-          reviews:Number(reviews),
+          category,
           status: Boolean(status),
           duration: Number(duration),
           photo: fileName,
@@ -94,7 +94,10 @@ class ServicesController {
   ): Promise<z.infer<typeof this.responseSchema>> {
     const validatedData = await this.validateSchema(ServicesSchemas.EditService, data);
     const validatedKey = await this.validateSchema(ServicesSchemas.tokenSchema, key);
-    const { idService, name, description, priceInCents, benefits, reviews, status, duration } = validatedData;
+    if(!validatedData){
+      throw new InvalidDataException("Invalid Data")
+    }
+    const { idService, name, description, priceInCents, benefits,category, status, duration } = validatedData;
     const { token } = validatedKey;
 
     try {
@@ -121,7 +124,7 @@ class ServicesController {
           description,
           priceInCents: Number(priceInCents),
           benefits,
-          reviews:Number(reviews),
+          category,
           status: Boolean(status),
           duration: Number(duration),
           photo: fileName,
@@ -192,7 +195,7 @@ class ServicesController {
 
     try {
       await this.verifyAuthorization(token);
-
+      console.log("Id service",idService)
       const service = await prisma.services.findUnique({
         where: { idService: Number(idService) },
       });

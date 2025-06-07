@@ -13,6 +13,7 @@ class ServicesSchemas {
     duration: z.number().nullable(),
     photo: z.string().nullable(),
     updatedIn: z.date().nullable(),
+    category:z.string().nullable()
   });
 
   // Schema for adding a service
@@ -21,9 +22,9 @@ class ServicesSchemas {
     description: z.string().min(1, "Description is required"),
     priceInCents: z.string().min(1,"Price in cents must be a positive integer"),
     benefits: z.string().min(1, "Benefits are required"),
-    reviews: z.string().min(1,"Reviews must be a non-negative number"),
     status: z.string().min(1, "Status is required"),
     duration: z.string().min(1,"Duration must be a positive integer"),
+    category:z.string(),
     file:z.any().optional()
   }).nullable();
 
@@ -34,16 +35,16 @@ class ServicesSchemas {
 
   // Schema for editing a service
   static EditService = z.object({
-    idService: z.number().int().positive("ID Service must be a positive integer"),
+    idService: z.string(),
     name: z.string().min(1, "Name is required"),
     description: z.string().min(1, "Description is required"),
     priceInCents: z.string().min(1,"Price in cents must be a positive integer"),
     benefits: z.string().min(1, "Benefits are required"),
-    reviews: z.string().min(1,"Reviews must be a non-negative number"),
     status: z.string().min(1, "Status is required"),
     duration: z.string().min(1,"Duration must be a positive integer"),
+    category:z.string(),
     file:z.any().optional()
-  });
+  }).nullable();
 
   // Schema for viewing a single service
   static ViewService = z.object({
