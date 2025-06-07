@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pele Douro - Gerenciar Serviços e Planos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
- 
     <link rel="stylesheet" href="../../css/admin/admin-services.css">
 </head>
 <body>
@@ -72,7 +71,7 @@
                             <a href="admin-settings.html">
                                 <i class="fas fa-cog"></i> Definições
                             </a>
-                            <a href="../sessoes/login.html"><i class="fas fa-sign-out-alt"></i> Terminar sessão</a>
+                            <a href="#"  id="logout"><i class="fas fa-sign-out-alt" id="logout"></i> Terminar sessão</a>
                         </div>
                     </div>
                 </div>
@@ -122,63 +121,17 @@
                         <table>
                             <thead>
                                 <tr>
+                                    <th>Foto</th>
                                     <th>Nome</th>
                                     <th>Categoria</th>
-                                    <th>Duração</th>
                                     <th>Preço</th>
+                                    <th>Duração</th>
                                     <th>Status</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Service 1 -->
-                                <tr>
-                                    <td>Massagem Relaxante</td>
-                                    <td>Massagem</td>
-                                    <td>60 min</td>
-                                    <td>AOA 120,00</td>
-                                    <td><span class="status-active">Ativo</span></td>
-                                    <td>
-                                        <button class="action-btn" onclick="editService(1)">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="deleteService(1)">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <!-- Service 2 -->
-                                <tr>
-                                    <td>Tratamento Facial</td>
-                                    <td>Tratamento Facial</td>
-                                    <td>45 min</td>
-                                    <td>AOA 85,00</td>
-                                    <td><span class="status-active">Ativo</span></td>
-                                    <td>
-                                        <button class="action-btn" onclick="editService(2)">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="deleteService(2)">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <!-- Service 3 -->
-                                <tr>
-                                    <td>Depilação a Laser</td>
-                                    <td>Depilação a Laser</td>
-                                    <td>30 min</td>
-                                    <td>AOA 150,00</td>
-                                    <td><span class="status-inactive">Inativo</span></td>
-                                    <td>
-                                        <button class="action-btn" onclick="editService(3)">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="deleteService(3)">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                <!-- Dynamic content will be populated by JavaScript -->
                             </tbody>
                         </table>
                     </div>
@@ -266,6 +219,11 @@
                     <h3 id="modal-title">Adicionar Serviço</h3>
                     <form id="service-form">
                         <div class="form-group">
+                            <label for="service-photo">Foto do Serviço</label>
+                            <input type="file" id="service-photo" accept="image/jpeg,image/png">
+                            <img id="photo-preview" style="display: none; max-width: 100%; margin-top: 10px;">
+                        </div>
+                        <div class="form-group">
                             <label for="service-name">Nome</label>
                             <input type="text" id="service-name" placeholder="Digite o nome do serviço" required>
                         </div>
@@ -278,12 +236,20 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="service-price">Preço (AOA)</label>
+                            <input type="number" id="service-price" step="0.01" min="0" placeholder="Digite o preço" required>
+                        </div>
+                        <div class="form-group">
                             <label for="service-duration">Duração (minutos)</label>
                             <input type="number" id="service-duration" min="1" placeholder="Digite a duração" required>
                         </div>
                         <div class="form-group">
-                            <label for="service-price">Preço (AOA)</label>
-                            <input type="number" id="service-price" step="0.01" min="0" placeholder="Digite o preço" required>
+                            <label for="service-benefits">Benefícios</label>
+                            <textarea id="service-benefits" placeholder="Descreva os benefícios do serviço"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="service-reviews">Avaliações</label>
+                            <textarea id="service-reviews" placeholder="Insira avaliações do serviço"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="service-status">Status</label>
@@ -341,7 +307,7 @@
                     <p id="confirm-message"></p>
                     <div class="modal-buttons">
                         <button class="cancel" onclick="closeModal('confirm-modal')">Cancel</button>
-                        <button class="confirm" onclick="confirmAction()">Confirmar</button>
+                        <button class="confirm" id="confirm-button" onclick="confirmAction()">Confirmar</button>
                     </div>
                 </div>
             </div>
@@ -370,6 +336,8 @@
     <script src="../../js/admin/admin-services.js"></script>
     <script src="../../apis/generalSection.js"></script>
     <script src="../../apis/users.js"></script>
-     <script src="../../js/messageModal.js"></script>
+    <script src="../../apis/services.js"></script>
+    <script src="../../js/messageModal.js"></script>
+
 </body>
 </html>
