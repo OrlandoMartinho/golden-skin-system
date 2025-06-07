@@ -43,6 +43,9 @@ class ServicesController {
   ): Promise<z.infer<typeof this.responseSchema>> {
     const validatedData = await this.validateSchema(ServicesSchemas.AddService, data);
     const validatedKey = await this.validateSchema(ServicesSchemas.tokenSchema, key);
+    if(!validatedData){
+      throw new InvalidDataException("Invalid Data received")
+    }
     const { name, description, priceInCents, benefits, reviews, status, duration } = validatedData;
     const { token } = validatedKey;
 
@@ -118,7 +121,7 @@ class ServicesController {
           description,
           priceInCents: Number(priceInCents),
           benefits,
-          reviews,
+          reviews:Number(reviews),
           status: Boolean(status),
           duration: Number(duration),
           photo: fileName,
