@@ -19,9 +19,9 @@ class ServicesSchemas {
   static AddService = z.object({
     name: z.string().min(1, "Name is required"),
     description: z.string().min(1, "Description is required"),
-    priceInCents: z.number().int().positive("Price in cents must be a positive integer"),
+    priceInCents: z.string().min(1,"Price in cents must be a positive integer"),
     benefits: z.string().min(1, "Benefits are required"),
-    reviews: z.number().nonnegative("Reviews must be a non-negative number"),
+    reviews: z.string().min(1,"Reviews must be a non-negative number"),
     status: z.string().min(1, "Status is required"),
     duration: z.number().int().positive("Duration must be a positive integer"),
   });

@@ -62,7 +62,7 @@ class ServicesController {
           description,
           priceInCents: Number(priceInCents),
           benefits,
-          reviews,
+          reviews:Number(reviews),
           status: Boolean(status),
           duration: Number(duration),
           photo: fileName,

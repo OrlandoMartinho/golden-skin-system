@@ -2,7 +2,7 @@ import fastify, { FastifyInstance } from 'fastify';
 import fastifyMultipart from '@fastify/multipart'; 
 import fastifyStatic from '@fastify/static';
 import { routes } from './routes/routes';
-
+import { ZodError } from 'zod';
 import swaggerCSS from './utils/swagger_ui';
 import path from 'path';
 import dotenv from 'dotenv';
@@ -111,6 +111,64 @@ class Server {
         statusCode: error.statusCode || 500,
         error: error.name || 'InternalServerError',
         message: error.message || 'Unexpected server error'
+      });
+    });
+
+
+    this.app.setErrorHandler((error, req, reply) => {
+      generalExceptionHandler(error, req, reply);
+      console.error('Error occurred:', error);
+    
+      // 🔥 Captura erros de validação do Zod
+      if (error instanceof ZodError) {
+        const details = error.errors.map((err) => {
+          const field = err.path.join('.') || 'campo';
+          return `Campo "${field}" é obrigatório ou inválido.`;
+        });
+    
+        return reply.status(400).send({
+          statusCode: 400,
+          error: 'Bad Request',
+          message: 'Erro de validação nos dados enviados.',
+          details
+        });
+      }
+    
+      // 🔁 Captura erro de validação do Fastify (fallback)
+      if (error.validation) {
+        const details = error.validation.map((err: any) => {
+          const fieldPath = err.instancePath?.replace('/', '') || err.params?.missingProperty || 'campo';
+          return `Campo "${fieldPath}" é obrigatório ou inválido.`;
+        });
+    
+        return reply.status(400).send({
+          statusCode: 400,
+          error: 'Bad Request',
+          message: 'Erro de validação nos dados enviados.',
+          details
+        });
+      }
+    
+      if (error.code === 'FST_ERR_RESPONSE_SERIALIZATION') {
+        return reply.status(500).send({
+          statusCode: 500,
+          error: 'Internal Server Error',
+          message: 'Formato de resposta inesperado. Verifique o schema da resposta.'
+        });
+      }
+    
+      if (error instanceof SyntaxError && error.message.includes('JSON')) {
+        return reply.status(400).send({
+          statusCode: 400,
+          error: 'Bad Request',
+          message: `Formato JSON inválido: ${error.message}`
+        });
+      }
+    
+      return reply.status(error.statusCode || 500).send({
+        statusCode: error.statusCode || 500,
+        error: error.name || 'InternalServerError',
+        message: error.message || 'Erro interno inesperado no servidor.'
       });
     });
 
