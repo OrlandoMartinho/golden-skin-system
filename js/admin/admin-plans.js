@@ -6,63 +6,63 @@ document.addEventListener('DOMContentLoaded', async () => {
     let servicesData = [];
 async function initializeData() {
     try {
-        console.log('Inicializando dados...');
+       
 
         // Initialize Services
-        console.log('Carregando serviços...');
+      
         const servicesResult = await getAllServices(accessToken);
-        console.log('Resultado da chamada de serviços:', servicesResult);
+     
         if (servicesResult === 200) {
             const storedServices = localStorage.getItem('services');
             servicesData = storedServices ? JSON.parse(storedServices) : [];
-            console.log('Serviços carregados do localStorage:', servicesData);
+          
             populateServicesDropdown(servicesData);
         } else {
             showMessageModal('error', 'Erro!', 'Falha ao carregar serviços', { buttonText: 'Entendido' });
         }
 
-        // Initialize Users
-        console.log('Carregando usuários...');
+      
         const usersResult = await getAllUser(accessToken);
-        console.log('Resultado da chamada de usuários:', usersResult);
         if (usersResult === 200) {
             const storedUsers = localStorage.getItem('users');
             usersData = storedUsers ? JSON.parse(storedUsers) : [];
-            console.log('Usuários carregados do localStorage:', usersData);
+        
             populateEmailDropdown(usersData);
         } else {
             showMessageModal('error', 'Erro!', 'Falha ao carregar usuários', { buttonText: 'Entendido' });
         }
 
-        // Initialize Plans
-        console.log('Carregando planos...');
+       
         const plansResult = await getAllPlanss(accessToken);
-        console.log('Resultado da chamada de planos:', plansResult);
-        if (plansResult === 200) {
+        
+        if (plansResult.status === 200) {
             const storedPlans = localStorage.getItem('plans');
             plansData = storedPlans ? JSON.parse(storedPlans) : [];
-            console.log('Planos carregados do localStorage:', plansData);
+
             populatePlansTable(plansData);
+      
             populatePlanDropdown(plansData);
+
             populateSubscriberPlanFilter(plansData);
+      
         } else {
             showMessageModal('error', 'Erro!', 'Falha ao carregar planos', { buttonText: 'Entendido' });
         }
 
         // Initialize Subscribers
-        console.log('Carregando assinantes...');
+       
         const subscribersResult = await getAllSubscribers(accessToken);
-        console.log('Resultado da chamada de assinantes:', subscribersResult);
+  
         if (subscribersResult === 200) {
             const storedSubscribers = localStorage.getItem('subscribers');
             subscribersData = storedSubscribers ? JSON.parse(storedSubscribers) : [];
-            console.log('Assinantes carregados do localStorage:', subscribersData);
+        
             populateSubscribersTable(subscribersData);
         } else {
             showMessageModal('error', 'Erro!', 'Falha ao carregar assinantes', { buttonText: 'Entendido' });
         }
 
-        console.log('Inicialização completa.');
+       
     } catch (error) {
         console.error('Erro ao inicializar dados:', error);
         showMessageModal('error', 'Erro!', 'Falha ao inicializar a aplicação', { buttonText: 'Entendido' });
@@ -75,21 +75,13 @@ async function initializeData() {
 
         tbody.innerHTML = '';
         plans.forEach((plan) => {
-            const serviceNames = Array.isArray(plan.services)
-                ? plan.services
-                    .map(idService => {
-                        const service = servicesData.find(s => s.idService === idService);
-                        return service ? service.name : null;
-                    })
-                    .filter(name => name)
-                    .join(', ') || '-'
-                : '-';
+            
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${plan.name || '-'}</td>
+                <td>${plan.description || '-'}</td>
                 <td>${plan.type || '-'}</td>
                 <td>${((plan.priceInCents || 0) / 100).toFixed(2)}</td>
-                <td>${serviceNames}</td>
+                <td>${plan.services}</td>
                 <td><span class="status-${plan.status ? 'active' : 'inactive'}">${plan.status ? 'Ativo' : 'Inativo'}</span></td>
                 <td>
                     <button class="action-btn" onclick="editPlan(${plan.idPlan})">
@@ -429,13 +421,13 @@ async function initializeData() {
                     showMessageModal('error', 'Erro!', 'Falha ao atualizar o plano', { buttonText: 'Entendido' });
                 }
             } else {
-                console.log("Data:",planData)
+               
                 const response = await addAnyPlan(accessToken, planData);
-                if (response === 200) {
+                if (response.status === 200) {
                     const result = await getAllPlanss(accessToken);
-                    console.log("Result:",result)
+                   
                     plansData = JSON.parse(localStorage.getItem('plans')) || [];
-                    console.log(console.log("ALll plans:",planData))
+                   
                     populatePlansTable(plansData);
                     populatePlanDropdown(plansData);
                     populateSubscriberPlanFilter(plansData);
