@@ -186,6 +186,9 @@ model Plans {
   description  String        @db.VarChar(255)
   services     String?       @db.Text
   priceInCents Int
+  name          String
+  type          String
+  status        Boolean
   createdIn    DateTime
   updatedIn    DateTime?
 

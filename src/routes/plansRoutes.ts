@@ -78,7 +78,7 @@ export async function plansRoutes(app: FastifyTypedInstance) {
 
   // View a single plan
   app.get(
-    "/plans/view",
+    "/plans/view/:idPlan",
     {
       schema: {
         description: "View a single plan",

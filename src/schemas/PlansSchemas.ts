@@ -7,6 +7,9 @@ class PlansSchemas {
     description: z.string(),
     services: z.string(),
     priceInCents: z.number(),
+    name:z.string(),
+    type:z.string(),
+    status:z.boolean(),
     createdIn: z.date(),
     updatedIn: z.date().nullable(),
   });
@@ -18,6 +21,9 @@ class PlansSchemas {
     description: z.string().min(1, "Description is required"),
     services: z.string().min(1, "Services text is required"),
     priceInCents: z.number().int().positive("Price in cents must be a positive integer"),
+    name:z.string(),
+    status:z.boolean(),
+    type:z.string(),
   });
 
   // Schema for deleting a plan
@@ -31,11 +37,14 @@ class PlansSchemas {
     description: z.string().min(1, "Description is required"),
     services: z.string().min(1, "Services text is required"),
     priceInCents: z.number().int().positive("Price in cents must be a positive integer"),
+    name:z.string(),
+    type:z.string(),
+    status:z.boolean()
   });
 
   // Schema for viewing a single plan
   static ViewPlan = z.object({
-    idPlan: z.number().int().positive("Plan ID must be a positive integer"),
+    idPlan: z.string(),
   });
 
   // Schema for viewing all plans

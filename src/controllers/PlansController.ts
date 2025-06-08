@@ -25,7 +25,7 @@ class PlansController {
   public async registerPlan(data: any, key: any): Promise<z.infer<typeof this.responseSchema>> {
     const validatedData = await this.zodError(PlansSchemas.RegisterPlan, data);
     const validatedKey = await this.zodError(PlansSchemas.tokenSchema, key);
-    const { description, services, priceInCents } = validatedData;
+    const { description, services, priceInCents,type,name ,status} = validatedData;
     const { token } = validatedKey;
 
     try {
@@ -39,6 +39,9 @@ class PlansController {
           description,
           services,
           priceInCents,
+          type,
+          name,
+          status,
           createdIn: new Date().toISOString(),
           updatedIn: new Date().toISOString(),
         },
@@ -92,7 +95,7 @@ class PlansController {
   public async updatePlan(data: any, key: any): Promise<z.infer<typeof this.responseSchema>> {
     const validatedData = await this.zodError(PlansSchemas.UpdatePlan, data);
     const validatedKey = await this.zodError(PlansSchemas.tokenSchema, key);
-    const { idPlan, description, services, priceInCents } = validatedData;
+    const { idPlan, description, services, priceInCents ,type,name, status} = validatedData;
     const { token } = validatedKey;
 
     try {
@@ -108,7 +111,7 @@ class PlansController {
 
       await prisma.plans.update({
         where: { idPlan },
-        data: { description, services, priceInCents, updatedIn: new Date().toISOString() },
+        data: { description, services, priceInCents, updatedIn: new Date().toISOString() ,type,name, status},
       });
 
       return { message: 'Plan updated successfully' };
@@ -136,7 +139,7 @@ class PlansController {
         throw new AuthorizationException('Not authorized');
       }
 
-      const plan = await prisma.plans.findUnique({ where: { idPlan } });
+      const plan = await prisma.plans.findUnique({ where: { idPlan:Number(idPlan) } });
       if (!plan) {
         throw new ItemNotFoundException('Plan not found');
       }
