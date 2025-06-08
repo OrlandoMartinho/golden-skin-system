@@ -1,83 +1,64 @@
-async function addPlan(accessToken, planData) {
-  const data = new FormData();
+async function addAnyPlan(accessToken, planData) {
 
-  // Add plan data manually to FormData
-  for (const key in planData) {
-    if (planData.hasOwnProperty(key)) {
-      data.append(key, planData[key]);
-    }
-  }
 
   try {
-    const url = `${api_host}/api/plans/add`;
+
+    console.log("fetch plan for data:",planData)
+    const url = `${api_host}/api/plans/register`;
 
     const response = await fetch(url, {
       method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
         token: accessToken
       },
-      body: data
+      body: JSON.stringify(planData)
     });
 
+    const result = await response.json();
+    console.log(result)
     if (response.ok) {
-      const result = await response.json();
-      return response.status;
+      return { status: response.status, data: result };
     } else {
-      console.warn("Erro ao adicionar plano:", response.status);
-      return response.status;
+      console.warn("Error adding plan:", response.status, result.message);
+      return { status: response.status, error: result };
     }
   } catch (error) {
-    console.error("Erro no addPlan:", error.message, error.stack);
-    return 500;
+    console.error("Error in addPlan:", error.message, error.stack);
+    return { status: 500, error: { message: "Internal server error" } };
   }
 }
 
-async function editAnyPlan(accessToken, planData) {
-  console.log('Starting editPlan, accessToken:', accessToken, 'planData:', planData);
+async function editPlan(accessToken, planData) {
   try {
-    const url = `${api_host}/api/plans/edit`;
-    console.log('API URL:', url);
+    const url = `${api_host}/api/plans`;
 
-    const data = new FormData();
-    console.log('Creating FormData for plan update');
-
-    // Add plan data manually to FormData
-    for (const key in planData) {
-      if (planData.hasOwnProperty(key)) {
-        data.append(key, planData[key]);
-        console.log(`Appending to FormData: ${key}=${planData[key]}`);
-      }
-    }
-
-    console.log('Sending PUT request to API');
     const response = await fetch(url, {
       method: 'PUT',
       headers: {
+        'Content-Type': 'application/json',
         token: accessToken
       },
-      body: data
+      body: JSON.stringify(planData)
     });
 
-    console.log('Response received, status:', response.status, 'ok:', response.ok);
+    const result = await response.json();
     if (response.ok) {
-      const result = await response.json();
-      console.log('editPlan response data:', result);
-      return response.status;
+      return { status: response.status, data: result };
     } else {
-      console.warn('editPlan failed with status:', response.status, 'statusText:', response.statusText);
-      return response.status;
+      console.warn("Error editing plan:", response.status, result.message);
+      return { status: response.status, error: result };
     }
   } catch (error) {
-    console.error('Error in editPlan:', error.message, error.stack);
-    return 500;
+    console.error("Error in editPlan:", error.message, error.stack);
+    return { status: 500, error: { message: "Internal server error" } };
   }
 }
 
-async function deleteAnyPlan(accessToken, idPlan) {
-  console.log("deletePlan called with accessToken:", accessToken, "idPlan:", idPlan);
+async function deletePlan(accessToken, idPlan) {
   try {
     const url = `${api_host}/api/plans`;
-    console.log("Deleting plan at URL:", url);
+
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
@@ -87,22 +68,20 @@ async function deleteAnyPlan(accessToken, idPlan) {
       body: JSON.stringify({ idPlan })
     });
 
-    console.log("deletePlan response status:", response.status);
+    const result = await response.json();
     if (response.ok) {
-      const result = await response.json();
-      console.log("deletePlan response data:", result);
-      return response.status;
+      return { status: response.status, data: result };
     } else {
-      console.warn("deletePlan failed with status:", response.status);
-      return response.status;
+      console.warn("Error deleting plan:", response.status, result.message);
+      return { status: response.status, error: result };
     }
   } catch (error) {
     console.error("Error in deletePlan:", error.message, error.stack);
-    return 500;
+    return { status: 500, error: { message: "Internal server error" } };
   }
 }
 
-async function getAllPlans(accessToken) {
+async function getAllPlanss(accessToken) {
   try {
     const url = `${api_host}/api/plans`;
 
@@ -111,45 +90,46 @@ async function getAllPlans(accessToken) {
       headers: {
         'Content-Type': 'application/json',
         token: accessToken
-      },
+      }
     });
 
+    const result = await response.json();
+    console.log("Result:",result)
     if (response.ok) {
-      const result = await response.json();
       localStorage.setItem("plans", JSON.stringify(result));
-      return response.status;
+      return { status: response.status, data: result };
     } else {
-      console.warn("getAllPlans failed with status:", response.status);
-      return response.status;
+      console.warn("Error getting all plans:", response.status, result.message);
+      return { status: response.status, error: result };
     }
   } catch (error) {
     console.error("Error in getAllPlans:", error.message, error.stack);
-    return 500;
+    return { status: 500, error: { message: "Internal server error" } };
   }
 }
 
 async function getPlan(accessToken, idPlan) {
   try {
-    const url = `${api_host}/api/plans/${Number(idPlan)}`;
+    const url = `${api_host}/api/plans/view?idPlan=${Number(idPlan)}`;
 
     const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         token: accessToken
-      },
+      }
     });
 
+    const result = await response.json();
     if (response.ok) {
-      const result = await response.json();
       localStorage.setItem("plan", JSON.stringify(result));
-      return response.status;
+      return { status: response.status, data: result };
     } else {
-      console.warn("getPlan failed with status:", response.status);
-      return response.status;
+      console.warn("Error getting plan:", response.status, result.message);
+      return { status: response.status, error: result };
     }
   } catch (error) {
     console.error("Error in getPlan:", error.message, error.stack);
-    return 500;
+    return { status: 500, error: { message: "Internal server error" } };
   }
 }

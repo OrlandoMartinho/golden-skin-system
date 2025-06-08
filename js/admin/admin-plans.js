@@ -4,54 +4,70 @@ document.addEventListener('DOMContentLoaded', async () => {
     let subscribersData = [];
     let usersData = [];
     let servicesData = [];
+async function initializeData() {
+    try {
+        console.log('Inicializando dados...');
 
-    async function initializeData() {
-        try {
-            // Initialize Services
-            const servicesResult = await getAllServices(accessToken);
-            if (servicesResult === 200) {
-                const storedServices = localStorage.getItem('services');
-                servicesData = storedServices ? JSON.parse(storedServices) : [];
-                populateServicesDropdown(servicesData);
-            } else {
-                showMessageModal('error', 'Erro!', 'Falha ao carregar serviços', { buttonText: 'Entendido' });
-            }
-
-            // Initialize Users
-            const usersResult = await getAllUsers(accessToken);
-            if (usersResult === 200) {
-                const storedUsers = localStorage.getItem('users');
-                usersData = storedUsers ? JSON.parse(storedUsers) : [];
-                populateEmailDropdown(usersData);
-            } else {
-                showMessageModal('error', 'Erro!', 'Falha ao carregar usuários', { buttonText: 'Entendido' });
-            }
-
-            // Initialize Plans
-            const plansResult = await getAllPlans(accessToken);
-            if (plansResult === 200) {
-                const storedPlans = localStorage.getItem('plans');
-                plansData = storedPlans ? JSON.parse(storedPlans) : [];
-                populatePlansTable(plansData);
-                populatePlanDropdown(plansData);
-                populateSubscriberPlanFilter(plansData);
-            } else {
-                showMessageModal('error', 'Erro!', 'Falha ao carregar planos', { buttonText: 'Entendido' });
-            }
-
-            // Initialize Subscribers
-            const subscribersResult = await getAllSubscribers(accessToken);
-            if (subscribersResult === 200) {
-                const storedSubscribers = localStorage.getItem('subscribers');
-                subscribersData = storedSubscribers ? JSON.parse(storedSubscribers) : [];
-                populateSubscribersTable(subscribersData);
-            } else {
-                showMessageModal('error', 'Erro!', 'Falha ao carregar assinantes', { buttonText: 'Entendido' });
-            }
-        } catch (error) {
-            showMessageModal('error', 'Erro!', 'Falha ao inicializar a aplicação', { buttonText: 'Entendido' });
+        // Initialize Services
+        console.log('Carregando serviços...');
+        const servicesResult = await getAllServices(accessToken);
+        console.log('Resultado da chamada de serviços:', servicesResult);
+        if (servicesResult === 200) {
+            const storedServices = localStorage.getItem('services');
+            servicesData = storedServices ? JSON.parse(storedServices) : [];
+            console.log('Serviços carregados do localStorage:', servicesData);
+            populateServicesDropdown(servicesData);
+        } else {
+            showMessageModal('error', 'Erro!', 'Falha ao carregar serviços', { buttonText: 'Entendido' });
         }
+
+        // Initialize Users
+        console.log('Carregando usuários...');
+        const usersResult = await getAllUser(accessToken);
+        console.log('Resultado da chamada de usuários:', usersResult);
+        if (usersResult === 200) {
+            const storedUsers = localStorage.getItem('users');
+            usersData = storedUsers ? JSON.parse(storedUsers) : [];
+            console.log('Usuários carregados do localStorage:', usersData);
+            populateEmailDropdown(usersData);
+        } else {
+            showMessageModal('error', 'Erro!', 'Falha ao carregar usuários', { buttonText: 'Entendido' });
+        }
+
+        // Initialize Plans
+        console.log('Carregando planos...');
+        const plansResult = await getAllPlanss(accessToken);
+        console.log('Resultado da chamada de planos:', plansResult);
+        if (plansResult === 200) {
+            const storedPlans = localStorage.getItem('plans');
+            plansData = storedPlans ? JSON.parse(storedPlans) : [];
+            console.log('Planos carregados do localStorage:', plansData);
+            populatePlansTable(plansData);
+            populatePlanDropdown(plansData);
+            populateSubscriberPlanFilter(plansData);
+        } else {
+            showMessageModal('error', 'Erro!', 'Falha ao carregar planos', { buttonText: 'Entendido' });
+        }
+
+        // Initialize Subscribers
+        console.log('Carregando assinantes...');
+        const subscribersResult = await getAllSubscribers(accessToken);
+        console.log('Resultado da chamada de assinantes:', subscribersResult);
+        if (subscribersResult === 200) {
+            const storedSubscribers = localStorage.getItem('subscribers');
+            subscribersData = storedSubscribers ? JSON.parse(storedSubscribers) : [];
+            console.log('Assinantes carregados do localStorage:', subscribersData);
+            populateSubscribersTable(subscribersData);
+        } else {
+            showMessageModal('error', 'Erro!', 'Falha ao carregar assinantes', { buttonText: 'Entendido' });
+        }
+
+        console.log('Inicialização completa.');
+    } catch (error) {
+        console.error('Erro ao inicializar dados:', error);
+        showMessageModal('error', 'Erro!', 'Falha ao inicializar a aplicação', { buttonText: 'Entendido' });
     }
+}
 
     function populatePlansTable(plans) {
         const tbody = document.querySelector('.plans-table tbody');
@@ -362,7 +378,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const servicesSelect = document.getElementById('plan-services');
         const services = Array.from(servicesSelect.options)
             .filter(option => option.selected)
-            .map(option => parseInt(option.value));
+            .map(option => option.textContent);
         const description = document.getElementById('plan-description').value.trim();
         const status = document.getElementById('plan-status').value === 'active';
 
@@ -383,12 +399,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             submitButton.disabled = false;
             return;
         }
-
+   
+     
+        const servicesString = services.toString()
         const planData = {
             name,
             type,
             priceInCents: Math.round(price * 100),
-            services,
+            services:servicesString,
             description,
             status,
         };
@@ -396,6 +414,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             if (planId) {
                 planData.idPlan = planId;
+                
                 const response = await editAnyPlan(accessToken, planData);
                 if (response === 200) {
                     const index = plansData.findIndex(p => p.idPlan === planId);
@@ -410,10 +429,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                     showMessageModal('error', 'Erro!', 'Falha ao atualizar o plano', { buttonText: 'Entendido' });
                 }
             } else {
-                const response = await addPlan(accessToken, planData);
+                console.log("Data:",planData)
+                const response = await addAnyPlan(accessToken, planData);
                 if (response === 200) {
-                    await getAllPlans(accessToken);
+                    const result = await getAllPlanss(accessToken);
+                    console.log("Result:",result)
                     plansData = JSON.parse(localStorage.getItem('plans')) || [];
+                    console.log(console.log("ALll plans:",planData))
                     populatePlansTable(plansData);
                     populatePlanDropdown(plansData);
                     populateSubscriberPlanFilter(plansData);
