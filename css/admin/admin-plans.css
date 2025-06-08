@@ -1,0 +1,542 @@
+@import url('../global.css');
+
+/* ============ BASE STYLES ============ */
+.plans-container,
+.subscribers-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 20px;
+    background: var(--background-white);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--shadow-light);
+    padding: 25px;
+    margin-top: 20px;
+}
+
+/* ============ HEADER (PLANS & SUBSCRIBERS) ============ */
+.plans-header,
+.subscribers-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.plans-header h2,
+.subscribers-header h2 {
+    font-size: 20px;
+    color: var(--text-dark);
+}
+
+.add-plan-btn,
+.add-subscriber-btn {
+    background: var(--primary-color);
+    color: var(--background-white);
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.add-plan-btn:hover,
+.add-subscriber-btn:hover {
+    background: var(--secondary-color);
+}
+
+.add-plan-btn i,
+.add-subscriber-btn i {
+    font-size: 14px;
+}
+
+/* ============ SEARCH AND FILTER ============ */
+.search-filter-container {
+    padding: 10px 15px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.search-box {
+    flex: 1;
+    position: relative;
+}
+
+.search-box i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px 10px 10px 35px;
+    border: 1px solid var(--border-light);
+    border-radius: 20px;
+    font-size: 14px;
+    outline: none;
+}
+
+.filter-box {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-box select {
+    padding: 10px 15px;
+    border: 1px solid var(--border-light);
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+}
+
+/* ============ TABLES (PLANS & SUBSCRIBERS) ============ */
+.plans-table,
+.subscribers-table {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.plans-table table,
+.subscribers-table table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px; /* Ensures table content doesn't collapse too much */
+}
+
+.plans-table th,
+.plans-table td,
+.subscribers-table th,
+.subscribers-table td {
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 14px;
+    color: var(--text-dark);
+    border-bottom: 1px solid var(--border-lighter);
+    white-space: nowrap; /* Prevents text wrapping in table cells */
+}
+
+.plans-table th,
+.subscribers-table th {
+    background: var(--table-header-bg);
+    font-weight: 600;
+}
+
+.plans-table tr:hover,
+.subscribers-table tr:hover {
+    background: var(--table-hover-bg);
+}
+
+.status-active {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    background: var(--status-active-bg);
+    color: var(--status-active-text);
+}
+
+.status-inactive {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    background: var(--status-inactive-bg);
+    color: var(--status-inactive-text);
+}
+
+.status-cancelled {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    background: #f0f0f0; /* Neutral background for cancelled status */
+    color: #666; /* Neutral text color */
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: color 0.3s ease;
+}
+
+.action-btn:hover {
+    color: var(--secondary-color);
+}
+
+/* ============ TAB NAVIGATION ============ */
+.tab-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    margin-top: 2vh;
+}
+
+.tab-link {
+    background: var(--tab-background);
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.tab-link:hover {
+    background: var(--tab-hover);
+}
+
+.tab-link.active {
+    background: var(--primary-color);
+    color: var(--background-white);
+    font-weight: bold;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ============ MODAL ============ */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--modal-overlay);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: opacity 0.3s ease;
+}
+
+.modal.active {
+    opacity: 1;
+    pointer-events: auto;
+    display: flex;
+}
+
+.modal-content {
+    background: var(--background-white);
+    border-radius: 8px;
+    box-shadow: 0 5px 15px var(--shadow-medium);
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    position: relative;
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-content h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: var(--text-dark);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid var(--border-light);
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-buttons .cancel,
+.modal-buttons .confirm {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.modal-buttons .cancel {
+    background: var(--modal-background);
+    color: var(--text-dark);
+}
+
+.modal-buttons .confirm {
+    background: var(--primary-color);
+    color: var(--background-white);
+}
+
+.modal-buttons .confirm:hover {
+    background: var(--secondary-color);
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    color: var(--text-gray);
+    cursor: pointer;
+}
+
+/* ============ NOTIFICATIONS DROPDOWN ============ */
+.notifications-dropdown {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: var(--background-white);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px var(--shadow-light);
+    width: 300px;
+    display: none;
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid var(--border-lighter);
+}
+
+.notification-item i {
+    font-size: 18px;
+    margin-right: 10px;
+    color: var(--accent-purple);
+}
+
+.notification-item p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-dark);
+}
+
+.notification-item small {
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+/* ============ RESPONSIVENESS ============ */
+@media (max-width: 992px) {
+    .plans-container,
+    .subscribers-container {
+        padding: 20px;
+    }
+
+    .modal-content {
+        max-width: 450px;
+    }
+
+    .notifications-dropdown {
+        width: 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .search-filter-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .filter-box {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .plans-header,
+    .subscribers-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .plans-table,
+    .subscribers-table {
+        font-size: 12px;
+    }
+
+    .plans-table th,
+    .plans-table td,
+    .subscribers-table th,
+    .subscribers-table td {
+        padding: 8px;
+    }
+
+    .tab-nav {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .tab-link {
+        width: 100%;
+        text-align: center;
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .notifications-dropdown {
+        width: 90%;
+        max-width: 280px;
+        right: 5%;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 250px;
+        height: 100%;
+        background: var(--background-white);
+        transition: left 0.3s ease;
+        z-index: 1001;
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--overlay-dark);
+        z-index: 1000;
+    }
+
+    .overlay.active {
+        display: block;
+    }
+}
+
+@media (max-width: 576px) {
+    .plans-header h2,
+    .subscribers-header h2 {
+        font-size: 18px;
+    }
+
+    .plans-table th,
+    .plans-table td,
+    .subscribers-table th,
+    .subscribers-table td {
+        font-size: 11px;
+        padding: 6px;
+    }
+
+    .search-box input,
+    .filter-box select {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .search-box input {
+        padding-left: 30px;
+    }
+
+    .search-box i {
+        font-size: 12px;
+        left: 10px;
+    }
+
+    .add-plan-btn,
+    .add-subscriber-btn {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .modal-content {
+        max-width: 90%;
+        padding: 15px;
+    }
+
+    .modal-content h3 {
+        font-size: 16px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .modal-buttons .cancel,
+    .modal-buttons .confirm {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    .close {
+        font-size: 20px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .plans-container,
+    .subscribers-container {
+        padding: 35px;
+    }
+
+    .plans-header h2,
+    .subscribers-header h2 {
+        font-size: 24px;
+    }
+
+    .tab-link {
+        font-size: 18px;
+        padding: 12px 24px;
+    }
+
+    .modal-content {
+        max-width: 650px;
+    }
+
+    .notifications-dropdown {
+        width: 350px;
+    }
+}

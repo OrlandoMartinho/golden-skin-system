@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pele Douro - Gerenciar Serviços e Planos</title>
+    <title>Pele Douro - Gerenciar Serviços</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/admin/admin-services.css">
 </head>
@@ -32,7 +32,11 @@
                 </a>
                 <a href="admin-services.html" class="nav-item active">
                     <i class="fas fa-concierge-bell"></i>
-                    <span>Serviços e Planos</span>
+                    <span>Serviços</span>
+                </a>
+                <a href="admin-plans.html" class="nav-item">
+                    <i class="fas fa-list"></i>
+                    <span>Planos</span>
                 </a>
                 <a href="admin-products.html" class="nav-item">
                     <i class="fas fa-store"></i>
@@ -56,8 +60,8 @@
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="page-title">
-                    <h1>Gerenciar Serviços e Planos</h1>
-                    <p>Administre os serviços e planos oferecidos pela clínica</p>
+                    <h1>Gerenciar Serviços</h1>
+                    <p>Administre os serviços oferecidos pela clínica</p>
                 </div>
                 <div class="header-icons">
                     <div class="notification-icon">
@@ -71,19 +75,13 @@
                             <a href="admin-settings.html">
                                 <i class="fas fa-cog"></i> Definições
                             </a>
-                            <a href="#"  id="logout"><i class="fas fa-sign-out-alt" id="logout"></i> Terminar sessão</a>
+                            <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Terminar sessão</a>
                         </div>
                     </div>
                 </div>
             </div>
 
             <hr>
-
-            <!-- Tab Navigation -->
-            <div class="tab-nav">
-                <button class="tab-link active" onclick="openTab('services-tab')">Serviços</button>
-                <button class="tab-link" onclick="openTab('plans-tab')">Planos</button>
-            </div>
 
             <!-- Services Tab -->
             <div id="services-tab" class="tab-content active">
@@ -132,80 +130,6 @@
                             </thead>
                             <tbody>
                                 <!-- Dynamic content will be populated by JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Plans Tab -->
-            <div id="plans-tab" class="tab-content">
-                <!-- Search and Filter -->
-                <div class="search-filter-container">
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Pesquisar planos..." id="plan-search">
-                    </div>
-                    <div class="filter-box">
-                        <select id="plan-status-filter">
-                            <option value="all">Todos os status</option>
-                            <option value="active">Ativos</option>
-                            <option value="inactive">Inativos</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Plans Container -->
-                <div class="plans-container">
-                    <div class="plans-header">
-                        <h2>Lista de Planos</h2>
-                        <button class="add-plan-btn" onclick="openAddPlanModal()">
-                            <i class="fas fa-plus"></i> Adicionar Plano
-                        </button>
-                    </div>
-
-                    <div class="plans-table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Descrição</th>
-                                    <th>Preço Mensal</th>
-                                    <th>Status</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Plan 1 -->
-                                <tr>
-                                    <td>Plano Básico</td>
-                                    <td>1 sessão de massagem por mês</td>
-                                    <td>AOA 100,00</td>
-                                    <td><span class="status-active">Ativo</span></td>
-                                    <td>
-                                        <button class="action-btn" onclick="editPlan(1)">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="deletePlan(1)">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <!-- Plan 2 -->
-                                <tr>
-                                    <td>Plano Premium</td>
-                                    <td>4 sessões de qualquer serviço por mês</td>
-                                    <td>AOA 350,00</td>
-                                    <td><span class="status-active">Ativo</span></td>
-                                    <td>
-                                        <button class="action-btn" onclick="editPlan(2)">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="deletePlan(2)">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -266,39 +190,6 @@
                 </div>
             </div>
 
-            <!-- Add/Edit Plan Modal -->
-            <div id="plan-modal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeModal('plan-modal')">×</span>
-                    <h3 id="plan-modal-title">Adicionar Plano</h3>
-                    <form id="plan-form">
-                        <div class="form-group">
-                            <label for="plan-name">Nome</label>
-                            <input type="text" id="plan-name" placeholder="Digite o nome do plano" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="plan-description">Descrição</label>
-                            <textarea id="plan-description" placeholder="Descreva o plano" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="plan-price">Preço Mensal (AOA)</label>
-                            <input type="number" id="plan-price" step="0.01" min="0" placeholder="Digite o preço mensal" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="plan-status">Status</label>
-                            <select id="plan-status" required>
-                                <option value="active">Ativo</option>
-                                <option value="inactive">Inativo</option>
-                            </select>
-                        </div>
-                        <div class="modal-buttons">
-                            <button type="button" onclick="closeModal('plan-modal')">Cancel</button>
-                            <button type="submit" class="confirm">Enviar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
             <!-- Confirmation Modal -->
             <div id="confirm-modal" class="modal">
                 <div class="modal-content">
@@ -338,6 +229,5 @@
     <script src="../../apis/users.js"></script>
     <script src="../../apis/services.js"></script>
     <script src="../../js/messageModal.js"></script>
-
 </body>
 </html>

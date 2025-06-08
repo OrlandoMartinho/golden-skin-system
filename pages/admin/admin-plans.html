@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pele Douro - Gerenciar Planos e Assinantes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/admin/admin-plans.css">
+</head>
+<body>
+    <div class="container">
+        <div class="overlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="../../assets/img/logo.png" alt="Logo Pele Douro">
+            </div>
+
+            <button class="close-sidebar">
+                <i class="fa-solid fa-x"></i>
+            </button>
+
+            <nav class="sidebar-nav">
+                <a href="admin-home.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Painel</span>
+                </a>
+                <a href="admin-users.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Usuários</span>
+                </a>
+                <a href="admin-services.html" class="nav-item">
+                    <i class="fas fa-concierge-bell"></i>
+                    <span>Serviços</span>
+                </a>
+                <a href="admin-plans.html" class="nav-item active">
+                    <i class="fas fa-list"></i>
+                    <span>Planos</span>
+                </a>
+                <a href="admin-products.html" class="nav-item">
+                    <i class="fas fa-store"></i>
+                    <span>Produtos</span>
+                </a>
+                <a href="admin-reports.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Relatórios</span>
+                </a>
+                <a href="admin-chat.html" class="nav-item">
+                    <i class="far fa-comments"></i>
+                    <span>Chat</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="page-title">
+                    <h1>Gerenciar Planos e Assinantes</h1>
+                    <p>Administre os planos de assinatura e os assinantes da clínica</p>
+                </div>
+                <div class="header-icons">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Admin <i class="fas fa-chevron-down"></i></span>
+                        <div class="dropdown-content">
+                            <a href="admin-settings.html">
+                                <i class="fas fa-cog"></i> Definições
+                            </a>
+                            <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Terminar sessão</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Tab Navigation -->
+            <div class="tab-nav">
+                <button class="tab-link active" onclick="openTab('plans-tab')">Planos</button>
+                <button class="tab-link" onclick="openTab('subscribers-tab')">Assinantes</button>
+            </div>
+
+            <!-- Plans Tab -->
+            <div id="plans-tab" class="tab-content active">
+                <!-- Search and Filter -->
+                <div class="search-filter-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Pesquisar planos..." id="plan-search">
+                    </div>
+                    <div class="filter-box">
+                        <select id="plan-status-filter">
+                            <option value="all">Todos os status</option>
+                            <option value="active">Ativos</option>
+                            <option value="inactive">Inativos</option>
+                        </select>
+                        <select id="plan-type-filter">
+                            <option value="all">Todos os tipos</option>
+                            <option value="monthly">Mensal</option>
+                            <option value="quarterly">Trimestral</option>
+                            <option value="annual">Anual</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Plans Container -->
+                <div class="plans-container">
+                    <div class="plans-header">
+                        <h2>Lista de Planos</h2>
+                        <button class="add-plan-btn" onclick="openAddPlanModal()">
+                            <i class="fas fa-plus"></i> Adicionar Plano
+                        </button>
+                    </div>
+
+                    <div class="plans-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Tipo</th>
+                                    <th>Preço (AOA)</th>
+                                    <th>Serviços Incluídos</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dynamic content will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subscribers Tab -->
+            <div id="subscribers-tab" class="tab-content">
+                <!-- Search and Filter -->
+                <div class="search-filter-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Pesquisar assinantes..." id="subscriber-search">
+                    </div>
+                    <div class="filter-box">
+                        <select id="subscriber-status-filter">
+                            <option value="all">Todos os status</option>
+                            <option value="active">Ativos</option>
+                            <option value="inactive">Inativos</option>
+                            <option value="cancelled">Cancelados</option>
+                        </select>
+                        <select id="subscriber-plan-filter">
+                            <option value="all">Todos os planos</option>
+                            <!-- Dynamic plan options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Subscribers Container -->
+                <div class="subscribers-container">
+                    <div class="subscribers-header">
+                        <h2>Lista de Assinantes</h2>
+                        <button class="add-subscriber-btn" onclick="openAddSubscriberModal()">
+                            <i class="fas fa-plus"></i> Adicionar Assinante
+                        </button>
+                    </div>
+
+                    <div class="subscribers-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Plano</th>
+                                    <th>Data de Início</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dynamic content will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add/Edit Plan Modal -->
+            <div id="plan-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('plan-modal')">×</span>
+                    <h3 id="modal-title">Adicionar Plano</h3>
+                    <form id="plan-form">
+                        <div class="form-group">
+                            <label for="plan-name">Nome</label>
+                            <input type="text" id="plan-name" placeholder="Digite o nome do plano" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="plan-type">Tipo</label>
+                            <select id="plan-type" required>
+                                <option value="monthly">Mensal</option>
+                                <option value="quarterly">Trimestral</option>
+                                <option value="annual">Anual</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="plan-price">Preço (AOA)</label>
+                            <input type="number" id="plan-price" step="0.01" min="0" placeholder="Digite o preço" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="plan-services">Serviços Incluídos</label>
+                            <textarea id="plan-services" placeholder="Liste os serviços incluídos no plano"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="plan-description">Descrição</label>
+                            <textarea id="plan-description" placeholder="Descreva os benefícios do plano"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="plan-status">Status</label>
+                            <select id="plan-status" required>
+                                <option value="active">Ativo</option>
+                                <option value="inactive">Inativo</option>
+                            </select>
+                        </div>
+                        <div class="modal-buttons">
+                            <button type="button" onclick="closeModal('plan-modal')">Cancel</button>
+                            <button type="submit" class="confirm">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Add/Edit Subscriber Modal -->
+            <div id="subscriber-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('subscriber-modal')">×</span>
+                    <h3 id="subscriber-modal-title">Adicionar Assinante</h3>
+                    <form id="subscriber-form">
+                        <div class="form-group">
+                            <label for="subscriber-email">Email</label>
+                            <select id="subscriber-email" required>
+                                <!-- Dynamic email options will be populated by JavaScript -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="subscriber-plan">Plano</label>
+                            <select id="subscriber-plan" required>
+                                <!-- Dynamic plan options will be populated by JavaScript -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="subscriber-start-date">Data de Início</label>
+                            <input type="date" id="subscriber-start-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subscriber-status">Status</label>
+                            <select id="subscriber-status" required>
+                                <option value="active">Ativo</option>
+                                <option value="inactive">Inativo</option>
+                                <option value="cancelled">Cancelado</option>
+                            </select>
+                        </div>
+                        <div class="modal-buttons">
+                            <button type="button" onclick="closeModal('subscriber-modal')">Cancel</button>
+                            <button type="submit" class="confirm">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Confirmation Modal -->
+            <div id="confirm-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('confirm-modal')">×</span>
+                    <h3>Confirmar Ação</h3>
+                    <p id="confirm-message"></p>
+                    <div class="modal-buttons">
+                        <button class="cancel" onclick="closeModal('confirm-modal')">Cancel</button>
+                        <button class="confirm" id="confirm-button" onclick="confirmAction()">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Dropdown -->
+            <div class="notifications-dropdown">
+                <div class="notification-item">
+                    <i class="fas fa-list"></i>
+                    <div>
+                        <p>Novo plano adicionado</p>
+                        <small>15 minutos atrás</small>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <i class="fas fa-edit"></i>
+                    <div>
+                        <p>Plano atualizado</p>
+                        <small>Hoje, 10:00</small>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <i class="fas fa-user-plus"></i>
+                    <div>
+                        <p>Novo assinante adicionado</p>
+                        <small>Hoje, 09:30</small>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/global.js"></script>
+    <script src="../../js/admin/admin-plans.js"></script>
+    <script src="../../apis/generalSection.js"></script>
+    <script src="../../apis/users.js"></script>
+    <script src="../../apis/plans.js"></script>
+    <script src="../../apis/subscribers.js"></script>
+    <script src="../../js/messageModal.js"></script>
+</body>
+</html>
