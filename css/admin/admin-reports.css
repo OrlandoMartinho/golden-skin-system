@@ -327,3 +327,21 @@ tr:hover {
         width: 350px;
     }
 }
+
+.report-chart {
+    max-width: 600px;
+    margin: 20px auto;
+}
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.report-table th, .report-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+.report-table th {
+    background-color: #5a8f7b;
+    color: white;
+}

@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pele Douro - Relatórios</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
     <link rel="stylesheet" href="../../css/admin/admin-reports.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -77,7 +80,7 @@
                             <a href="admin-settings.html">
                                 <i class="fas fa-cog"></i> Definições
                             </a>
-                            <a href="#"  id="logout"><i class="fas fa-sign-out-alt" id="logout"></i> Terminar sessão</a>
+                            <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Terminar sessão</a>
                         </div>
                     </div>
                 </div>
@@ -87,31 +90,33 @@
 
             <!-- Report Generation Form -->
             <div class="reports-container">
-                <div class="report-form">
-                    <h2>Gerar Relatório</h2>
-                    <form id="report-form">
-                        <div class="form-group">
-                            <label for="report-type">Tipo de Relatório</label>
-                            <select id="report-type" required>
-                                <option value="sales">Vendas</option>
-                                <option value="appointments">Agendamentos</option>
-                                <option value="users">Atividade de Usuários</option>
-                                <option value="inventory">Inventário</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="start-date">Data Inicial</label>
-                            <input type="date" id="start-date" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="end-date">Data Final</label>
-                            <input type="date" id="end-date" required>
-                        </div>
-                        <button type="submit" class="generate-btn">
-                            <i class="fas fa-chart-line"></i> Gerar Relatório
-                        </button>
-                    </form>
-                </div>
+            <div class="report-form">
+                <h2>Gerar Relatório</h2>
+                <form id="report-form">
+                    <div class="form-group">
+                        <label for="report-type">Tipo de Relatório</label>
+                        <select id="report-type" required>
+                            <option value="vendas">Vendas</option>
+                            <option value="assinantes">Assinantes</option>
+                            <option value="agendamentos">Agendamentos</option>
+                            <option value="products">Produtos</option>
+                            <option value="mensagens">Mensagens</option>
+                            <option value="users">Usuários</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="start-date">Data Inicial</label>
+                        <input type="date" id="start-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="end-date">Data Final</label>
+                        <input type="date" id="end-date" required>
+                    </div>
+                    <button type="submit" class="generate-btn">
+                        <i class="fas fa-chart-line"></i> Gerar Relatório
+                    </button>
+                </form>
+            </div>
 
                 <!-- Report Results -->
                 <div class="report-results">
@@ -151,6 +156,9 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="report-chart">
+                        <canvas id="reportChart"></canvas>
+                    </div>
                 </div>
             </div>
         </main>
@@ -169,19 +177,17 @@
         </div>
 
         <div class="notifications-dropdown" id="notificationsDropdown">
-            <div class="notification-item">
-             </div>
+            <div class="notification-item"></div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../../js/global.js"></script>
     <script src="../../js/admin/admin-reports.js"></script>
     <script src="../../apis/generalSection.js"></script>
     <script src="../../apis/users.js"></script>
-     <script src="../../js/messageModal.js"></script>
-     <script src="../../js/sessoes/logout.js"></script>
-     <script src="../../apis/notificacoes.js"></script>
-     <script src="../../js/notificacoes.js"></script>
+    <script src="../../js/messageModal.js"></script>
+    <script src="../../js/sessoes/logout.js"></script>
+    <script src="../../apis/notificacoes.js"></script>
+    <script src="../../js/notificacoes.js"></script>
 </body>
 </html>
