@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pele Douro - Gerenciar Vendas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/admin/admin-sales.css">
+</head>
+<body>
+    <div class="container">
+        <div class="overlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="../../assets/img/logo.png" alt="Logo Pele Douro">
+            </div>
+
+            <button class="close-sidebar">
+                <i class="fa-solid fa-x"></i>
+            </button>
+
+            <nav class="sidebar-nav">
+                <a href="admin-home.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Painel</span>
+                </a>
+                <a href="admin-users.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Usuários</span>
+                </a>
+                <a href="admin-services.html" class="nav-item">
+                    <i class="fas fa-concierge-bell"></i>
+                    <span>Serviços</span>
+                </a>
+                <a href="admin-plans.html" class="nav-item">
+                    <i class="fas fa-list"></i>
+                    <span>Planos</span>
+                </a>
+                <a href="admin-products.html" class="nav-item">
+                    <i class="fas fa-store"></i>
+                    <span>Produtos</span>
+                </a>
+                <a href="admin-sales.html" class="nav-item active">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Vendas</span>
+                </a>
+                <a href="admin-reports.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Relatórios</span>
+                </a>
+                <a href="admin-chat.html" class="nav-item">
+                    <i class="far fa-comments"></i>
+                    <span>Chat</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="page-title">
+                    <h1>Gerenciar Vendas</h1>
+                    <p>Administre as vendas realizadas pela clínica</p>
+                </div>
+                <div class="header-icons">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="TotalDeNotificacoes">4</span>
+                        <div id="notification-container"></div>
+                    </div>
+                    <div class="user-profile">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Admin <i class="fas fa-chevron-down"></i></span>
+                        <div class="dropdown-content">
+                            <a href="admin-settings.html">
+                                <i class="fas fa-cog"></i> Definições
+                            </a>
+                            <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Terminar sessão</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Sales Tab -->
+            <div id="sales-tab" class="tab-content active">
+                <!-- Search and Filter -->
+                <div class="search-filter-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Pesquisar vendas..." id="sale-search">
+                    </div>
+                    <div class="filter-box">
+                        <select id="sale-payment-filter">
+                            <option value="all">Todos os métodos</option>
+                            <option value="cash">Dinheiro</option>
+                            <option value="card">Cartão</option>
+                            <option value="transfer">Transferência</option>
+                        </select>
+                        <select id="sale-status-filter">
+                            <option value="all">Todos os estados</option>
+                            <option value="Confirmado">Confirmado</option>
+                            <option value="Terminado">Terminado</option>
+                            <option value="Cancelado">Cancelado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Sales Container -->
+                <div class="sales-container">
+                    <div class="sales-header">
+                        <h2>Lista de Vendas</h2>
+                        <button class="add-sale-btn" onclick="openAddSaleModal()">
+                            <i class="fas fa-plus"></i> Registrar Venda
+                        </button>
+                    </div>
+
+                    <div class="sales-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID Venda</th>
+                                    <th>ID Produto</th>
+                                    <th>Nome do Produto</th>
+                                    <th>Preço (AOA)</th>
+                                    <th>Método de Pagamento</th>
+                                    <th>Estado</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dynamic content will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add/Edit Sale Modal -->
+            <div id="sale-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('sale-modal')">×</span>
+                    <h3 id="modal-title">Registrar Venda</h3>
+                    <form id="sale-form">
+                        <div class="form-group">
+                            <label for="sale-id">ID Venda</label>
+                            <input type="number" id="sale-id" placeholder="ID gerado automaticamente" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="sale-product-id">ID Produto</label>
+                            <input type="number" id="sale-product-id" placeholder="Digite o ID do produto" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sale-product-name">Nome do Produto</label>
+                            <input type="text" id="sale-product-name" placeholder="Digite o nome do produto" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sale-price">Preço (AOA)</label>
+                            <input type="number" id="sale-price" step="0.01" min="0" placeholder="Digite o preço" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sale-payment-method">Método de Pagamento</label>
+                            <select id="sale-payment-method" required>
+                                <option value="cash">Dinheiro</option>
+                                <option value="card">Cartão</option>
+                                <option value="transfer">Transferência</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sale-status">Estado</label>
+                            <select id="sale-status" required>
+                                <option value="Confirmado">Confirmado</option>
+                                <option value="Terminado">Terminado</option>
+                                <option value="Cancelado">Cancelado</option>
+                            </select>
+                        </div>
+                        <div class="modal-buttons">
+                            <button type="button" onclick="closeModal('sale-modal')">Cancel</button>
+                            <button type="submit" class="confirm" onclick="openConfirmSaleModal()">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Confirm Sale Modal -->
+            <div id="confirm-sale-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('confirm-sale-modal')">×</span>
+                    <h3>Confirmar Venda</h3>
+                    <p id="confirm-sale-message">Deseja confirmar a venda do produto <span id="confirm-product-name"></span> por <span id="confirm-price"></span> AOA?</p>
+                    <div class="modal-buttons">
+                        <button class="cancel" onclick="closeModal('confirm-sale-modal')">Cancelar</button>
+                        <button class="confirm" id="confirm-sale-button" onclick="confirmSaleAction()">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confirmation Modal (for other actions like delete) -->
+            <div id="confirm-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('confirm-modal')">×</span>
+                    <h3>Confirmar Ação</h3>
+                    <p id="confirm-message"></p>
+                    <div class="modal-buttons">
+                        <button class="cancel" onclick="closeModal('confirm-modal')">Cancelar</button>
+                        <button class="confirm" id="confirm-button" onclick="confirmAction()">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="notifications-dropdown" id="notificationsDropdown">
+                <div class="notification-item"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/global.js"></script>
+    <script src="../../js/admin/admin-sales.js"></script>
+    <script src="../../apis/generalSection.js"></script>
+    <script src="../../apis/users.js"></script>
+    <script src="../../apis/sales.js"></script>
+    <script src="../../js/messageModal.js"></script>
+    <script src="../../apis/notificacoes.js"></script>
+    <script src="../../js/notificacoes.js"></script>
+</body>
+</html>

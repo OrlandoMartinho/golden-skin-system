@@ -2,46 +2,78 @@ document.addEventListener('DOMContentLoaded', () => {
   let chartInstance = null;
   let currentReportData = []; // Armazenar dados do relatório para exportação
 
-  // Função simulada para buscar dados (substitua pela sua função real)
-  async function fetchAllData() {
-    try {
-      const accessToken = localStorage.getItem("accessToken");
-      const result = await getAllShoppings(accessToken)
-      const result2 = await getAllSubscribers(accessToken)
-      const result3 = await getAllAppointments(accessToken)
-      const result4= await getAllProducts(accessToken)
-      const result5 = await getAllUser(accessToken)
-      const result6 = await getAlllMessages(accessToken)
-      return {
+async function fetchAllData() {
+  try {
+    const accessToken = localStorage.getItem("accessToken");
 
+    let vendas = [];
+    let assinantes = [];
+    let agendamentos = [];
+    let products = [];
+    let mensagens = [];
+    let users = [];
 
-        
-
-        vendas: [
-          { idShopping: 1, idUser: 101, status: true, createdIn: "2025-05-29T10:00:00Z", updatedIn: "2025-05-29T10:00:00Z" },
-          { idShopping: 2, idUser: 102, status: false, createdIn: "2025-05-28T12:00:00Z", updatedVehiclesIn: "2025-05-28T12:00:00Z" }
-        ],
-        assinantes: [
-          { idSubscriber: 1, subscriberName: "João Silva", idUser: 101, idPlan: 1, createdIn: "2025-05-27T08:00:00Z", updatedIn: "2025-05-27T08:00:00Z" }
-        ],
-        agendamentos: [
-          { idAppointment: 1, appointmentDate: "2025-05-28", appointmentTime: "14:00", status: true, name: "Maria Santos", email: "maria@example.com", phoneNumber: "123456789", employeeName: "Ana Costa", employeePhoneNumber: "987654321", employeeEmail: "ana@example.com", idService: 1, idUser: 101, createdIn: "2025-05-28T09:00:00Z", updatedIn: "2025-05-28T09:00:00Z" }
-        ],
-        products: [
-          { idProduct: 1, name: "Creme Hidratante", description: "Creme para pele", priceInCents: 5990, status: true, category: "Cuidados Pessoais", photo: "creme.png", createdIn: "2025-05-27T15:00:00Z", amount: 10, updatedIn: "2025-05-27T15:00:00Z" }
-        ],
-        mensagens: [
-          { idMessage: 1, idUser: 101, idChat: 1, username: "João Silva", createdIn: "2025-05-28T10:00:00Z", updatedIn: "2025-05-28T10:00:00Z" }
-        ],
-        users: [
-          { idUser: 101, name: "João Silva", password: "hashed", token: "abc123", email: "joao@example.com", photo: "user.png", phoneNumber: "123456789", role: 1, path: "/user", status: true, createdIn: "2025-05-27T08:00:00Z", updatedIn: "2025-05-27T08:00:00Z" }
-        ]
-      };
-    } catch (error) {
-      console.error('Erro ao buscar dados:', error);
-      return { vendas: [], assinantes: [], agendamentos: [], products: [], mensagens: [], users: [] };
+    // Busca vendas
+    const result = await getAllShoppings(accessToken);
+    if (result.status === 200) {
+      vendas = localStorage.getItem("shoppings");
+    } else {
+      console.warn("Ocorreu um erro ao carregar as vendas");
     }
+
+    // Busca assinantes
+    const result2 = await getAllSubscribers(accessToken);
+    if (result2.status === 200) {
+      assinantes = localStorage.getItem("subscribers");
+    } else {
+      console.warn("Ocorreu um erro ao carregar os assinantes");
+    }
+
+    // Busca agendamentos
+    const result3 = await getAllAppointments(accessToken);
+    if (result3.status === 200) {
+      agendamentos = localStorage.getItem("appointments");
+    } else {
+      console.warn("Ocorreu um erro ao carregar os agendamentos");
+    }
+
+    // Busca produtos
+    const result4 = await getAllProducts(accessToken);
+    if (result4.status === 200) {
+      products = localStorage.getItem("products");
+    } else {
+      console.warn("Ocorreu um erro ao carregar os produtos");
+    }
+
+    // Busca mensagens
+    const result5 = await getAllMessages(accessToken); // Corrigido de getAlllMessages para getAllMessages
+    if (result5.status === 200) {
+      mensagens = localStorage.getItem("messages");
+    } else {
+      console.warn("Ocorreu um erro ao carregar as mensagens");
+    }
+
+    // Busca usuários
+    const result6 = await getAllUser(accessToken);
+    if (result6.status === 200) {
+      users = localStorage.getItem("users");
+    } else {
+      console.warn("Ocorreu um erro ao carregar os usuários");
+    }
+
+    return {
+      vendas,
+      assinantes,
+      agendamentos,
+      products,
+      mensagens,
+      users
+    };
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    return { vendas: [], assinantes: [], agendamentos: [], products: [], mensagens: [], users: [] };
   }
+}
 
   // Modal control functions
   window.closeModal = function(modalId) {
