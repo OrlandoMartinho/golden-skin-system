@@ -13,7 +13,7 @@
     margin-top: 20px;
 }
 
-/* ============ HEADER ============ */
+/* ============ HEADER (SALES) ============ */
 .sales-header {
     display: flex;
     justify-content: space-between;
@@ -92,7 +92,7 @@
     outline: none;
 }
 
-/* ============ TABLE ============ */
+/* ============ TABLES (SALES) ============ */
 .sales-table {
     width: 100%;
     overflow-x: auto;
@@ -101,7 +101,7 @@
 .sales-table table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 700px; /* Ajustado para acomodar a nova coluna "Estado" */
+    min-width: 600px; /* Ensures table content doesn't collapse too much */
 }
 
 .sales-table th,
@@ -111,7 +111,7 @@
     font-size: 14px;
     color: var(--text-dark);
     border-bottom: 1px solid var(--border-lighter);
-    white-space: nowrap;
+    white-space: nowrap; /* Prevents text wrapping in table cells */
 }
 
 .sales-table th {
@@ -123,26 +123,29 @@
     background: var(--table-hover-bg);
 }
 
-.status-confirmado,
-.status-terminado,
-.status-cancelado {
+.status-completed {
     display: inline-block;
     padding: 3px 10px;
     border-radius: 20px;
     font-size: 12px;
-}
-
-.status-confirmado {
     background: var(--status-active-bg);
     color: var(--status-active-text);
 }
 
-.status-terminado {
-    background: #e6f0fa;
-    color: #2f80ed;
+.status-pending {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    background: #fff3cd;
+    color: #856404;
 }
 
-.status-cancelado {
+.status-canceled {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
     background: var(--status-inactive-bg);
     color: var(--status-inactive-text);
 }
@@ -159,6 +162,41 @@
 
 .action-btn:hover {
     color: var(--secondary-color);
+}
+
+/* ============ TAB NAVIGATION ============ */
+.tab-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-link {
+    background: var(--tab-background);
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.tab-link:hover {
+    background: var(--tab-hover);
+}
+
+.tab-link.active {
+    background: var(--primary-color);
+    color: var(--background-white);
+    font-weight: bold;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
 }
 
 /* ============ MODAL ============ */
@@ -218,13 +256,19 @@
 }
 
 .form-group input,
-.form-group select {
+.form-group select,
+.form-group textarea {
     width: 100%;
     padding: 10px 15px;
     border: 1px solid var(--border-light);
     border-radius: 5px;
     font-size: 14px;
     outline: none;
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
 }
 
 .modal-buttons {
@@ -266,19 +310,40 @@
     cursor: pointer;
 }
 
-/* ============ CONFIRM SALE MODAL SPECIFIC STYLES ============ */
-#confirm-sale-modal .modal-content {
-    max-width: 400px;
+/* ============ NOTIFICATIONS DROPDOWN ============ */
+.notifications-dropdown {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: var(--background-white);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px var(--shadow-light);
+    width: 300px;
+    display: none;
 }
 
-#confirm-sale-modal p {
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid var(--border-lighter);
+}
+
+.notification-item i {
+    font-size: 18px;
+    margin-right: 10px;
+    color: var(--accent-purple);
+}
+
+.notification-item p {
+    margin: 0;
     font-size: 14px;
     color: var(--text-dark);
-    margin-bottom: 20px;
 }
 
-#confirm-sale-modal p span {
-    font-weight: 600;
+.notification-item small {
+    font-size: 12px;
+    color: var(--text-light);
 }
 
 /* ============ RESPONSIVENESS ============ */
@@ -289,6 +354,10 @@
 
     .modal-content {
         max-width: 450px;
+    }
+
+    .notifications-dropdown {
+        width: 280px;
     }
 }
 
@@ -316,6 +385,54 @@
     .sales-table th,
     .sales-table td {
         padding: 8px;
+    }
+
+    .tab-nav {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .tab-link {
+        width: 100%;
+        text-align: center;
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .notifications-dropdown {
+        width: 90%;
+        max-width: 280px;
+        right: 5%;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 250px;
+        height: 100%;
+        background: var(--background-white);
+        transition: left 0.3s ease;
+        z-index: 1001;
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--overlay-dark);
+        z-index: 1000;
+    }
+
+    .overlay.active {
+        display: block;
     }
 }
 
@@ -360,7 +477,8 @@
     }
 
     .form-group input,
-    .form-group select {
+    .form-group select,
+    .form-group textarea {
         font-size: 12px;
         padding: 8px;
     }
@@ -374,10 +492,6 @@
     .close {
         font-size: 20px;
     }
-
-    #confirm-sale-modal .modal-content {
-        max-width: 90%;
-    }
 }
 
 @media (min-width: 1200px) {
@@ -389,7 +503,16 @@
         font-size: 24px;
     }
 
+    .tab-link {
+        font-size: 18px;
+        padding: 12px 24px;
+    }
+
     .modal-content {
         max-width: 650px;
+    }
+
+    .notifications-dropdown {
+        width: 350px;
     }
 }
