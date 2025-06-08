@@ -5,7 +5,7 @@ class ShoppingsSchemas {
   static shoppingSchema = z.object({
     idShopping: z.number(),
     idUser: z.number(),
-    status: z.boolean(),
+    status: z.string(),
     createdIn: z.string(),
     updatedIn: z.string(),
   });
@@ -18,7 +18,7 @@ class ShoppingsSchemas {
   // Schema for updating a shopping
   static UpdateShopping = z.object({
     idShopping: z.number().int().positive("ID User must be a positive integer"),
-    status: z.boolean(),
+    status: z.string(),
   });
 
   // Schema for deleting a shopping

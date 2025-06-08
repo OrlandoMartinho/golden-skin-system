@@ -124,7 +124,7 @@ model CartProducts {
 
 model Shoppings {
   idShopping Int      @id @default(autoincrement())
-  status     Boolean?
+  status     String
   idUser     Int
   createdIn  DateTime? @default(now())
   updatedIn  DateTime?

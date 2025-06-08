@@ -35,7 +35,7 @@ class ShoppingsController {
       await prisma.shoppings.create({
         data: {
           idUser,
-          status: false,
+          status: "pendente",
           createdIn: new Date().toISOString(),
           updatedIn: new Date().toISOString(),
         },
