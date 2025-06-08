@@ -6,10 +6,12 @@ import ItemNotFoundException from '../errors/ItemNotFoundException';
 import AuthorizationException from '../errors/AuthorizationException';
 import InternalServerErrorException from '../errors/InternalServerErrorException';
 import TokenService from '../services/TokensServices';
+import NotificationsController from './NotificationsController';
 
 class AppointmentsController {
   private tokenService: TokenService = new TokenService();
   private readonly responseSchema = AppointmentsSchemas.success_response;
+   private notification: NotificationsController = new NotificationsController();
 
   private async zodError(schema: z.ZodSchema, data: any): Promise<any> {
     try {
@@ -39,6 +41,12 @@ class AppointmentsController {
         throw new ItemNotFoundException('User not found');
       }
 
+      const service = await prisma.services.findUnique({where:{idService}})
+
+      if(!service){
+        throw new ItemNotFoundException("Service not found")
+      }
+
       await prisma.appointments.create({
         data: {
           appointmentDate,
@@ -57,6 +65,14 @@ class AppointmentsController {
         },
       });
 
+      await prisma.services.update({where:{idService},data:{
+        schedulingLimit:service.schedulingLimit-1
+      }})
+      const adminUser = await prisma.users.findFirst({ where: { role: 0 } });
+      if (adminUser) {
+      await this.notification.add(`O usuário ${user.name} agendou um serviço na data "${appointmentDate}" às "${appointmentTime}"`, adminUser.idUser);
+
+      }
       return { message: 'Appointment registered successfully' };
     } catch (error) {
       if (
@@ -82,6 +98,11 @@ class AppointmentsController {
         throw new AuthorizationException('Not authorized');
       }
 
+      const user = await prisma.users.findUnique({ where: { idUser:userId } });
+      if (!user) {
+        throw new ItemNotFoundException('User not found');
+      }
+
       const appointment = await prisma.appointments.findUnique({ where: { idAppointment } });
       if (!appointment) {
         throw new ItemNotFoundException('Appointment not found');
@@ -95,7 +116,11 @@ class AppointmentsController {
         where: { idAppointment },
         data: { appointmentDate, appointmentTime, status, name, email, phoneNumber, updatedIn: new Date().toISOString() },
       });
+      const adminUser = await prisma.users.findFirst({ where: { role: 0 } });
+      if (adminUser) {
+      await this.notification.add(`O usuário ${user.name} actualizou um serviço da data "${appointment.appointmentDate}" às "${appointment.appointmentTime}"`, adminUser.idUser);
 
+      }
       return { message: 'Appointment updated successfully' };
     } catch (error) {
       if (
@@ -125,13 +150,20 @@ class AppointmentsController {
       if (!appointment) {
         throw new ItemNotFoundException('Appointment not found');
       }
-
+      const user = await prisma.users.findUnique({ where: { idUser:userId } });
+      if (!user) {
+        throw new ItemNotFoundException('User not found');
+      }
       if (appointment.idUser !== userId) {
         throw new AuthorizationException('Not authorized to delete this appointment');
       }
 
       await prisma.appointments.delete({ where: { idAppointment } });
+      const adminUser = await prisma.users.findFirst({ where: { role: 0 } });
+      if (adminUser) {
+      await this.notification.add(`O usuário ${user.name} cancelou um serviço da data "${appointment.appointmentDate}" às "${appointment.appointmentTime}"`, adminUser.idUser);
 
+      }
       return { message: 'Appointment deleted successfully' };
     } catch (error) {
       if (
