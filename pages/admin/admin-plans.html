@@ -215,7 +215,9 @@
                         </div>
                         <div class="form-group">
                             <label for="plan-services">Serviços Incluídos</label>
-                            <textarea id="plan-services" placeholder="Liste os serviços incluídos no plano"></textarea>
+                            <select id="plan-services" multiple required>
+                                <!-- Dynamic service options will be populated by JavaScript -->
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="plan-description">Descrição</label>
@@ -319,7 +321,7 @@
     <script src="../../apis/generalSection.js"></script>
     <script src="../../apis/users.js"></script>
     <script src="../../apis/plans.js"></script>
-    <script src="../../apis/subscribers.js"></script>
+    <script src="../../apis/services.js"></script>
     <script src="../../js/messageModal.js"></script>
 </body>
 </html>

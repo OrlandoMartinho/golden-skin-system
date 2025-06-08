@@ -2,16 +2,39 @@ document.addEventListener('DOMContentLoaded', async () => {
     const accessToken = localStorage.getItem('accessToken');
     let plansData = [];
     let subscribersData = [];
+    let usersData = [];
+    let servicesData = [];
 
     async function initializeData() {
         try {
+            // Initialize Services
+            const servicesResult = await getAllServices(accessToken);
+            if (servicesResult === 200) {
+                const storedServices = localStorage.getItem('services');
+                servicesData = storedServices ? JSON.parse(storedServices) : [];
+                populateServicesDropdown(servicesData);
+            } else {
+                showMessageModal('error', 'Erro!', 'Falha ao carregar serviços', { buttonText: 'Entendido' });
+            }
+
+            // Initialize Users
+            const usersResult = await getAllUsers(accessToken);
+            if (usersResult === 200) {
+                const storedUsers = localStorage.getItem('users');
+                usersData = storedUsers ? JSON.parse(storedUsers) : [];
+                populateEmailDropdown(usersData);
+            } else {
+                showMessageModal('error', 'Erro!', 'Falha ao carregar usuários', { buttonText: 'Entendido' });
+            }
+
             // Initialize Plans
             const plansResult = await getAllPlans(accessToken);
             if (plansResult === 200) {
                 const storedPlans = localStorage.getItem('plans');
                 plansData = storedPlans ? JSON.parse(storedPlans) : [];
                 populatePlansTable(plansData);
-                populatePlanDropdown(plansData); // Populate plan dropdown for subscribers
+                populatePlanDropdown(plansData);
+                populateSubscriberPlanFilter(plansData);
             } else {
                 showMessageModal('error', 'Erro!', 'Falha ao carregar planos', { buttonText: 'Entendido' });
             }
@@ -36,13 +59,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         tbody.innerHTML = '';
         plans.forEach((plan) => {
+            const serviceNames = Array.isArray(plan.services)
+                ? plan.services
+                    .map(idService => {
+                        const service = servicesData.find(s => s.idService === idService);
+                        return service ? service.name : null;
+                    })
+                    .filter(name => name)
+                    .join(', ') || '-'
+                : '-';
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${plan.name || '-'}</td>
                 <td>${plan.type || '-'}</td>
                 <td>${((plan.priceInCents || 0) / 100).toFixed(2)}</td>
-                <td>${plan.discount || 0}%</td>
-                <td>${plan.services || '-'}</td>
+                <td>${serviceNames}</td>
                 <td><span class="status-${plan.status ? 'active' : 'inactive'}">${plan.status ? 'Ativo' : 'Inativo'}</span></td>
                 <td>
                     <button class="action-btn" onclick="editPlan(${plan.idPlan})">
@@ -66,7 +97,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             const plan = plansData.find(p => p.idPlan === subscriber.planId) || {};
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${subscriber.name || '-'}</td>
                 <td>${subscriber.email || '-'}</td>
                 <td>${plan.name || '-'}</td>
                 <td>${subscriber.startDate ? new Date(subscriber.startDate).toLocaleDateString('pt-BR') : '-'}</td>
@@ -84,6 +114,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    function populateServicesDropdown(services) {
+        const servicesSelect = document.getElementById('plan-services');
+        if (!servicesSelect) return;
+
+        servicesSelect.innerHTML = '';
+        services.forEach(service => {
+            const option = document.createElement('option');
+            option.value = service.idService;
+            option.textContent = service.name;
+            servicesSelect.appendChild(option);
+        });
+    }
+
+    function populateEmailDropdown(users) {
+        const emailSelect = document.getElementById('subscriber-email');
+        if (!emailSelect) return;
+
+        emailSelect.innerHTML = '<option value="">Selecione um email</option>';
+        users.forEach(user => {
+            const option = document.createElement('option');
+            option.value = user.email;
+            option.textContent = user.email;
+            emailSelect.appendChild(option);
+        });
+    }
+
     function populatePlanDropdown(plans) {
         const planSelect = document.getElementById('subscriber-plan');
         if (!planSelect) return;
@@ -94,6 +150,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             option.value = plan.idPlan;
             option.textContent = plan.name;
             planSelect.appendChild(option);
+        });
+    }
+
+    function populateSubscriberPlanFilter(plans) {
+        const planFilter = document.getElementById('subscriber-plan-filter');
+        if (!planFilter) return;
+
+        planFilter.innerHTML = '<option value="all">Todos os planos</option>';
+        plans.filter(plan => plan.status).forEach(plan => {
+            const option = document.createElement('option');
+            option.value = plan.idPlan;
+            option.textContent = plan.name;
+            planFilter.appendChild(option);
         });
     }
 
@@ -136,6 +205,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     plansData = plansData.filter(p => p.idPlan !== planId);
                     populatePlansTable(plansData);
                     populatePlanDropdown(plansData);
+                    populateSubscriberPlanFilter(plansData);
                     showMessageModal('success', 'Sucesso!', 'Plano eliminado com sucesso', { buttonText: 'Ótimo!' });
                 } else {
                     showMessageModal('error', 'Erro!', 'Falha ao excluir o plano', { buttonText: 'Entendido' });
@@ -169,6 +239,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         title.textContent = 'Adicionar Plano';
         form.reset();
+        const servicesSelect = document.getElementById('plan-services');
+        if (servicesSelect) {
+            Array.from(servicesSelect.options).forEach(option => option.selected = false);
+        }
         delete form.dataset.planId;
         modal.classList.add('active');
     };
@@ -206,10 +280,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                     document.getElementById('plan-name').value = plan.name || '';
                     document.getElementById('plan-type').value = plan.type || '';
                     document.getElementById('plan-price').value = ((plan.priceInCents || 0) / 100).toFixed(2);
-                    document.getElementById('plan-discount').value = plan.discount || 0;
-                    document.getElementById('plan-services').value = plan.services || '';
                     document.getElementById('plan-description').value = plan.description || '';
                     document.getElementById('plan-status').value = plan.status ? 'active' : 'inactive';
+                    
+                    const servicesSelect = document.getElementById('plan-services');
+                    if (servicesSelect && Array.isArray(plan.services)) {
+                        Array.from(servicesSelect.options).forEach(option => {
+                            option.selected = plan.services.includes(parseInt(option.value));
+                        });
+                    }
+                    
                     form.dataset.planId = plan.idPlan;
                     modal.classList.add('active');
                 } else {
@@ -240,7 +320,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (subscriber) {
                     localStorage.setItem('idSubscriber', subscriber.idSubscriber);
                     title.textContent = 'Editar Assinante';
-                    document.getElementById('subscriber-name').value = subscriber.name || '';
                     document.getElementById('subscriber-email').value = subscriber.email || '';
                     document.getElementById('subscriber-plan').value = subscriber.planId || '';
                     document.getElementById('subscriber-start-date').value = subscriber.startDate ? subscriber.startDate.split('T')[0] : '';
@@ -280,12 +359,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         const name = document.getElementById('plan-name').value.trim();
         const type = document.getElementById('plan-type').value.trim();
         const price = parseFloat(document.getElementById('plan-price').value);
-        const discount = parseFloat(document.getElementById('plan-discount').value) || 0;
-        const services = document.getElementById('plan-services').value.trim();
+        const servicesSelect = document.getElementById('plan-services');
+        const services = Array.from(servicesSelect.options)
+            .filter(option => option.selected)
+            .map(option => parseInt(option.value));
         const description = document.getElementById('plan-description').value.trim();
         const status = document.getElementById('plan-status').value === 'active';
 
-        if (!name || !type || isNaN(price)) {
+        if (!name || !type || isNaN(price) || services.length === 0) {
             showMessageModal('error', 'Erro!', 'Por favor, preencha todos os campos obrigatórios.', {
                 buttonText: 'Entendido',
             });
@@ -303,19 +384,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        if (discount < 0 || discount > 100) {
-            showMessageModal('error', 'Erro!', 'O desconto deve estar entre 0 e 100%.', { buttonText: 'Entendido' });
-            submitButton.innerHTML = originalButtonText;
-            submitButton.classList.remove('button-loading');
-            submitButton.disabled = false;
-            return;
-        }
-
         const planData = {
             name,
             type,
             priceInCents: Math.round(price * 100),
-            discount,
             services,
             description,
             status,
@@ -331,6 +403,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         plansData[index] = { ...plansData[index], ...planData, updatedIn: new Date().toISOString() };
                         populatePlansTable(plansData);
                         populatePlanDropdown(plansData);
+                        populateSubscriberPlanFilter(plansData);
                         showMessageModal('success', 'Sucesso!', 'Plano atualizado com sucesso', { buttonText: 'Ótimo!' });
                     }
                 } else {
@@ -343,6 +416,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     plansData = JSON.parse(localStorage.getItem('plans')) || [];
                     populatePlansTable(plansData);
                     populatePlanDropdown(plansData);
+                    populateSubscriberPlanFilter(plansData);
                     showMessageModal('success', 'Sucesso!', 'Plano criado com sucesso', { buttonText: 'Ótimo!' });
                 } else {
                     showMessageModal('error', 'Erro!', 'Falha ao criar o plano', { buttonText: 'Entendido' });
@@ -370,13 +444,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         submitButton.disabled = true;
 
         const subscriberId = parseInt(e.target.dataset.subscriberId) || null;
-        const name = document.getElementById('subscriber-name').value.trim();
-        const email = document.getElementById('subscriber-email').value.trim();
+        const email = document.getElementById('subscriber-email').value;
         const planId = parseInt(document.getElementById('subscriber-plan').value);
         const startDate = document.getElementById('subscriber-start-date').value;
         const status = document.getElementById('subscriber-status').value;
 
-        if (!name || !email || !planId || !startDate) {
+        if (!email || !planId || !startDate) {
             showMessageModal('error', 'Erro!', 'Por favor, preencha todos os campos obrigatórios.', {
                 buttonText: 'Entendido',
             });
@@ -386,16 +459,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            showMessageModal('error', 'Erro!', 'Por favor, insira um email válido.', { buttonText: 'Entendido' });
-            submitButton.innerHTML = originalButtonText;
-            submitButton.classList.remove('button-loading');
-            submitButton.disabled = false;
-            return;
-        }
-
         const subscriberData = {
-            name,
             email,
             planId,
             startDate,
@@ -478,9 +542,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const planFilterValue = subscriberPlanFilter.value;
 
         const filteredSubscribers = subscribersData.filter(subscriber => {
-            const matchesSearch =
-                (subscriber.name || '').toLowerCase().includes(search) ||
-                (subscriber.email || '').toLowerCase().includes(search);
+            const matchesSearch = (subscriber.email || '').toLowerCase().includes(search);
             const matchesStatus =
                 statusFilterValue === 'all' || subscriber.status === statusFilterValue;
             const matchesPlan =
@@ -494,20 +556,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (subscriberStatusFilter) subscriberStatusFilter.addEventListener('change', filterSubscribers);
     if (subscriberPlanFilter) subscriberPlanFilter.addEventListener('change', filterSubscribers);
 
-    // Populate subscriber plan filter dropdown
-    function populateSubscriberPlanFilter(plans) {
-        const planFilter = document.getElementById('subscriber-plan-filter');
-        if (!planFilter) return;
-
-        planFilter.innerHTML = '<option value="all">Todos os planos</option>';
-        plans.filter(plan => plan.status).forEach(plan => {
-            const option = document.createElement('option');
-            option.value = plan.idPlan;
-            option.textContent = plan.name;
-            planFilter.appendChild(option);
-        });
-    }
-
     function showConfirmModal(message, action) {
         const modal = document.getElementById('confirm-modal');
         const messageElement = document.getElementById('confirm-message');
@@ -518,7 +566,5 @@ document.addEventListener('DOMContentLoaded', async () => {
         modal.classList.add('active');
     }
 
-    // Initialize data and populate filter dropdowns
     await initializeData();
-    populateSubscriberPlanFilter(plansData);
 });
