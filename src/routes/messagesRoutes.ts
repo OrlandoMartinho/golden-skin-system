@@ -122,4 +122,26 @@ export async function messagesRoutes(app: FastifyTypedInstance) {
       return reply.status(200).send(await controller.viewA(request.params, request.headers));
     }
   );
+
+    app.get(
+    "/messages/viewAll",
+    {
+      schema: {
+        description: "View all messages in a chat",
+        tags: ["Messages"],
+        headers: tokenSchema,
+        response: {
+          200: MessagesSchemas.messagesResponseSchema,
+          400: ResponsesSchemas.error_400_response,
+          401: ResponsesSchemas.general_error_response,
+          404: ResponsesSchemas.general_error_response,
+          500: ResponsesSchemas.general_error_response,
+        },
+      },
+    },
+    async (request, reply) => {
+      return reply.status(200).send(await controller.viewAlll(request.headers));
+    }
+  );
+
 }

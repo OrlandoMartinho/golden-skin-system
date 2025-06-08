@@ -204,6 +204,39 @@ class MessagesController {
     }
   }
 
+  
+  public async viewAlll( key: any): Promise<z.infer<typeof MessagesSchemas.messagesResponseSchema>> {
+   
+    const validatedKey = await this.zodError(MessagesSchemas.tokenSchema, key);
+   
+    const { token } = validatedKey;
+
+    try {
+      const userId = await this.tokenService.userId(token);
+      const userRole = await this.tokenService.userRole(token)
+      if (!userId||userRole !== 0) {
+        throw new AuthorizationException('Not authorized');
+      }
+
+     
+
+      
+
+      const messages = await prisma.messages.findMany();
+
+      return MessagesSchemas.messagesResponseSchema.parse(messages);
+    } catch (error) {
+      if (
+        error instanceof ItemNotFoundException ||
+        error instanceof AuthorizationException ||
+        error instanceof InvalidDataException
+      ) {
+        throw error;
+      }
+      throw new InternalServerErrorException('An error occurred when trying to retrieve messages');
+    }
+  }
+
   public async viewA(data: any, key: any): Promise<z.infer<typeof MessagesSchemas.messageSchema>> {
     const validatedData = await this.zodError(MessagesSchemas.ViewMessage, data);
     const validatedKey = await this.zodError(MessagesSchemas.tokenSchema, key);
