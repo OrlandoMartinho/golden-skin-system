@@ -65,9 +65,10 @@
                     <p>Converse com clientes e gerencie mensagens</p>
                 </div>
                 <div class="header-icons">
-                    <div class="notification-icon">
+                   <div class="notification-icon">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-badge">5</span>
+                        <span class="notification-badge" id="TotalDeNotificacoes">4</span>
+                        <div id="notification-container"></div>
                     </div>
                     <div class="user-profile">
                         <i class="fa-solid fa-user"></i>
@@ -202,23 +203,11 @@
         </div>
 
         <!-- Notifications Dropdown -->
-        <div class="notifications-dropdown">
+         <!-- Notifications Dropdown -->
+        <div class="notifications-dropdown" id="notificationsDropdown">
             <div class="notification-item">
-                <i class="far fa-comments"></i>
-                <div>
-                    <p>Nova mensagem de Ana Silva</p>
-                    <small>5 minutos atrás</small>
-                </div>
-            </div>
-            <div class="notification-item">
-                <i class="fas fa-check"></i>
-                <div>
-                    <p>Chat com Carlos Mendes fechado</p>
-                    <small>Hoje, 12:00</small>
-                </div>
-            </div>
+             </div>
         </div>
-    </div>
 
     <script src="../../js/global.js"></script>
     <script src="../../js/admin/admin-chat.js"></script>
@@ -226,5 +215,7 @@
     <script src="../../apis/users.js"></script>
      <script src="../../js/messageModal.js"></script>
      <script src="../../js/sessoes/logout.js"></script>
+     <script src="../../apis/notificacoes.js"></script>
+     <script src="../../js/notificacoes.js"></script>
 </body>
 </html>

@@ -1,8 +1,8 @@
- const accessToken = localStorage.getItem("accessToken");
+
 
 document.addEventListener('DOMContentLoaded', async () => {
    
-
+ const accessToken = localStorage.getItem("accessToken");
     const container = document.getElementById('notificationsDropdown');
     container.innerHTML = ''; // Limpar antes de renderizar
 

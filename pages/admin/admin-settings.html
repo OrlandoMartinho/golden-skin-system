@@ -71,7 +71,8 @@
                 <div class="header-icons">
                     <div class="notification-icon">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
+                        <span class="notification-badge" id="TotalDeNotificacoes">4</span>
+                        <div id="notification-container"></div>
                     </div>
                     <div class="user-profile">
                         <i class="fa-solid fa-user"></i>
@@ -209,22 +210,9 @@
             </div>
         </div>
 
-        <!-- Notifications Dropdown -->
-        <div class="notifications-dropdown">
+       <div class="notifications-dropdown" id="notificationsDropdown">
             <div class="notification-item">
-                <i class="fas fa-cog"></i>
-                <div>
-                    <p>Perfil atualizado</p>
-                    <small>5 minutos atrás</small>
-                </div>
-            </div>
-            <div class="notification-item">
-                <i class="fas fa-shield-alt"></i>
-                <div>
-                    <p>Senha alterada com sucesso</p>
-                    <small>Hoje, 14:00</small>
-                </div>
-            </div>
+             </div>
         </div>
     </div>
 
@@ -234,5 +222,7 @@
     <script src="../../apis/users.js"></script>
      <script src="../../js/messageModal.js"></script>
      <script src="../../js/sessoes/logout.js"></script>
+     <script src="../../apis/notificacoes.js"></script>
+     <script src="../../js/notificacoes.js"></script>
 </body>
 </html>

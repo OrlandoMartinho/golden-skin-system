@@ -66,7 +66,8 @@
                 <div class="header-icons">
                     <div class="notification-icon">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
+                        <span class="notification-badge" id="TotalDeNotificacoes">4</span>
+                        <div id="notification-container"></div>
                     </div>
                     <div class="user-profile">
                         <i class="fa-solid fa-user"></i>
@@ -289,30 +290,10 @@
                 </div>
             </div>
 
-            <!-- Notifications Dropdown -->
-            <div class="notifications-dropdown">
-                <div class="notification-item">
-                    <i class="fas fa-list"></i>
-                    <div>
-                        <p>Novo plano adicionado</p>
-                        <small>15 minutos atrás</small>
-                    </div>
-                </div>
-                <div class="notification-item">
-                    <i class="fas fa-edit"></i>
-                    <div>
-                        <p>Plano atualizado</p>
-                        <small>Hoje, 10:00</small>
-                    </div>
-                </div>
-                <div class="notification-item">
-                    <i class="fas fa-user-plus"></i>
-                    <div>
-                        <p>Novo assinante adicionado</p>
-                        <small>Hoje, 09:30</small>
-                    </div>
-                </div>
-            </div>
+           <div class="notifications-dropdown" id="notificationsDropdown">
+            <div class="notification-item">
+             </div>
+        </div>
         </main>
     </div>
 
@@ -324,6 +305,8 @@
     <script src="../../apis/services.js"></script>
     <script src="../../apis/subscribers.js"></script>
     <script src="../../js/messageModal.js"></script>
+    <script src="../../apis/notificacoes.js"></script>
+     <script src="../../js/notificacoes.js"></script>
     
 </body>
 </html>
