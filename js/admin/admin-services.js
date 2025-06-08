@@ -281,7 +281,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             category,
             duration,
             benefits,
-            reviews,
+            schedulingLimit: reviews,
         };
 
         try {
