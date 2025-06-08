@@ -394,7 +394,7 @@ class Users {
         error instanceof ItemAlreadyExistsException ||
         error instanceof InvalidDataException
       ) {
-        console.log("Error:",error)
+       
         throw error;
       }
       throw new InternalServerErrorException('An error occurred when trying to register user');
@@ -444,7 +444,7 @@ class Users {
       ) {
         throw error;
       }
-      console.log("Error:",error)
+    
       throw new InternalServerErrorException('An error occurred when trying to update user');
     }
   }
@@ -504,7 +504,7 @@ class Users {
       ) {
         throw error;
       }
-      console.log("Error:",error)
+ 
       throw new InternalServerErrorException('An error occurred when trying to update user');
     }
   }
@@ -631,7 +631,7 @@ class Users {
       ) {
         throw error;
       }
-      console.log("error:",error)
+   
       throw new InternalServerErrorException('An error occurred when trying to retrieve users');
     }
   }
