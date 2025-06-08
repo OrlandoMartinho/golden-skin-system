@@ -13,7 +13,8 @@ class ServicesSchemas {
     duration: z.number().nullable(),
     photo: z.string().nullable(),
     updatedIn: z.date().nullable(),
-    category:z.string().nullable()
+    category:z.string().nullable(),
+    schedulingLimit:z.number().nullable()
   });
 
   // Schema for adding a service
@@ -25,6 +26,7 @@ class ServicesSchemas {
     status: z.string().min(1, "Status is required"),
     duration: z.string().min(1,"Duration must be a positive integer"),
     category:z.string(),
+    schedulingLimit:z.string(),
     file:z.any().optional()
   }).nullable();
 
@@ -43,6 +45,7 @@ class ServicesSchemas {
     status: z.string().min(1, "Status is required"),
     duration: z.string().min(1,"Duration must be a positive integer"),
     category:z.string(),
+    schedulingLimit:z.string(),
     file:z.any().optional()
   }).nullable();
 

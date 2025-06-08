@@ -46,7 +46,7 @@ class ServicesController {
     if(!validatedData){
       throw new InvalidDataException("Invalid Data received")
     }
-    const { name, description, priceInCents, benefits, category, status, duration } = validatedData;
+    const { name, description, priceInCents, benefits, category, status, duration,schedulingLimit } = validatedData;
     const { token } = validatedKey;
 
     try {
@@ -71,6 +71,7 @@ class ServicesController {
           photo: fileName,
           createdIn: new Date(),
           updatedIn: new Date(),
+          schedulingLimit:Number(schedulingLimit)
         },
       });
 
@@ -97,7 +98,7 @@ class ServicesController {
     if(!validatedData){
       throw new InvalidDataException("Invalid Data")
     }
-    const { idService, name, description, priceInCents, benefits,category, status, duration } = validatedData;
+    const { idService, name, description, priceInCents, benefits,category, status, duration ,schedulingLimit} = validatedData;
     const { token } = validatedKey;
 
     try {
@@ -127,6 +128,7 @@ class ServicesController {
           category,
           status: Boolean(status),
           duration: Number(duration),
+          schedulingLimit:Number(schedulingLimit),
           photo: fileName,
           updatedIn: new Date(),
         },

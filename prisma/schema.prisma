@@ -57,6 +57,7 @@ model Services {
   createdIn   DateTime? @default(now())
   description String?  @db.VarChar(255)
   photo       String?
+  schedulingLimit Int
 
   Appointments Appointments[]
 }
