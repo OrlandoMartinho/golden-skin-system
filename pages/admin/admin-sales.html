@@ -65,7 +65,7 @@
                 </button>
                 <div class="page-title">
                     <h1>Gerenciar Vendas</h1>
-                    <p>Administre as vendas realizadas</p>
+                    <p>Administre as vendas realizadas na loja</p>
                 </div>
                 <div class="header-icons">
                     <div class="notification-icon">
@@ -88,95 +88,117 @@
 
             <hr>
 
-            <!-- Sales Tab -->
-            <div id="sales-tab" class="tab-content active">
-                <!-- Search and Filter -->
-                <div class="search-filter-container">
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Pesquisar vendas..." id="sale-search">
-                    </div>
-                    <div class="filter-box">
-                        <select id="sale-status-filter">
-                            <option value="all">Todos os status</option>
-                            <option value="completed">Concluídas</option>
-                            <option value="pending">Pendentes</option>
-                            <option value="canceled">Canceladas</option>
-                        </select>
-                        <select id="sale-type-filter">
-                            <option value="all">Todos os tipos</option>
-                            <option value="service">Serviços</option>
-                            <option value="product">Produtos</option>
-                        </select>
-                    </div>
+            <!-- Search and Filter -->
+            <div class="search-filter-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Pesquisar vendas..." id="sales-search">
                 </div>
-
-                <!-- Sales Container -->
-                <div class="sales-container">
-                    <div class="sales-header">
-                        <h2>Lista de Vendas</h2>
-                    </div>
-
-                    <div class="sales-table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID da Venda</th>
-                                    <th>Cliente</th>
-                                    <th>Tipo</th>
-                                    <th>Valor</th>
-                                    <th>Data</th>
-                                    <th>Status</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Dynamic content will be populated by JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="filter-box">
+                    <select id="sale-status-filter">
+                        <option value="all">Todos os status</option>
+                        <option value="true">Concluída</option>
+                        <option value="false">Pendente</option>
+                    </select>
+                    <select id="payment-method-filter">
+                        <option value="all">Todos os métodos de pagamento</option>
+                        <option value="credit_card">Cartão de Crédito</option>
+                        <option value="debit_card">Cartão de Débito</option>
+                        <option value="cash">Dinheiro</option>
+                        <option value="bank_transfer">Transferência Bancária</option>
+                    </select>
                 </div>
             </div>
 
-            <!-- Approve/Invalidate Sale Modal -->
-            <div id="approve-modal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeModal('approve-modal')">×</span>
-                    <h3>Gerenciar Status da Venda</h3>
-                    <p id="approve-message"></p>
-                    <form id="approve-form">
-                        <div class="form-group">
-                            <label for="sale-status">Status</label>
-                            <select id="sale-status" required>
-                                <option value="completed">Concluída</option>
-                                <option value="canceled">Cancelada</option>
-                            </select>
-                        </div>
-                        <div class="modal-buttons">
-                            <button type="button" onclick="closeModal('approve-modal')">Cancel</button>
-                            <button type="submit" class="confirm">Confirmar</button>
-                        </div>
-                    </form>
+            <!-- Sales Container -->
+            <div class="sales-container">
+                <div class="sales-header">
+                    <h2>Lista de Vendas</h2>
                 </div>
-            </div>
 
-            <!-- Confirmation Modal -->
-            <div id="confirm-modal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeModal('confirm-modal')">×</span>
-                    <h3>Confirmar Ação</h3>
-                    <p id="confirm-message"></p>
-                    <div class="modal-buttons">
-                        <button class="cancel" onclick="closeModal('confirm-modal')">Cancel</button>
-                        <button class="confirm" id="confirm-button" onclick="confirmAction()">Confirmar</button>
-                    </div>
+                <div class="sales-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID Venda</th>
+                                <th>Usuário</th>
+                                <th>Data</th>
+                                <th>Valor Total</th>
+                                <th>Método de Pagamento</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-
-            <div class="notifications-dropdown" id="notificationsDropdown">
-                <div class="notification-item"></div>
             </div>
         </main>
+
+        <!-- View Sale Details Modal -->
+        <div id="sale-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('sale-modal')">×</span>
+                <h3 id="modal-title">Detalhes da Venda</h3>
+                <div id="sale-details">
+                    <div class="form-group">
+                        <label>ID da Venda:</label>
+                        <span id="sale-id"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Usuário:</label>
+                        <span id="sale-user"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Data:</label>
+                        <span id="sale-date"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Status:</label>
+                        <span id="sale-status"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Produtos:</label>
+                        <table class="sale-products-table">
+                            <thead>
+                                <th>Nome</th>
+                                <th>Preço Unitário (AOA)</th>
+                                <th>Método de Pagamento</th>
+                            </thead>
+                            <tbody id="sale-products"></tbody>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label>Valor Total:</label>
+                        <span id="sale-total"></span>
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="action-button confirm-sale" onclick="openConfirmModal('confirmSale', 'Tem certeza que deseja confirmar esta venda?')">Confirmar Venda</button>
+                    <button type="button" class="action-button cancel-sale" onclick="openConfirmModal('cancelSale', 'Tem certeza que deseja cancelar esta venda?')">Cancelar Venda</button>
+                    <button type="button" class="action-button export-sale" onclick="exportSale()">Exportar Venda</button>
+                    <button type="button" class="cancel" onclick="closeModal('sale-modal')">Fechar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation Modal -->
+        <div id="confirm-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('confirm-modal')">×</span>
+                <h3>Confirmar Ação</h3>
+                <p id="confirm-message">Tem certeza que deseja executar esta ação?</p>
+                <div class="modal-buttons">
+                    <button class="cancel" onclick="closeModal('confirm-modal')">Cancelar</button>
+                    <button class="confirm" onclick="confirmAction()" id="confirm-button">Confirmar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="notifications-dropdown" id="notificationsDropdown">
+            <div class="notification-item"></div>
+        </div>
     </div>
 
     <script src="../../js/global.js"></script>
@@ -185,6 +207,7 @@
     <script src="../../apis/users.js"></script>
     <script src="../../apis/sales.js"></script>
     <script src="../../js/messageModal.js"></script>
+    <script src="../../js/sessoes/logout.js"></script>
     <script src="../../apis/notificacoes.js"></script>
     <script src="../../js/notificacoes.js"></script>
 </body>

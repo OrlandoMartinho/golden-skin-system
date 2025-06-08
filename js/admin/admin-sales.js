@@ -1,190 +1,161 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const accessToken = localStorage.getItem('accessToken');
-    let salesData = [];
+    let salesData = [
+        {
+            idShopping: 1,
+            idUser: 1,
+            userName: "João Silva",
+            status: true,
+            createdIn: "2025-06-01T10:00:00Z",
+            purchaseProducts: [
+                { idPurchaseProduct: 1, productName: "Creme Hidratante", priceInCents: 500000, paymentMethod: "credit_card" },
+                { idPurchaseProduct: 2, productName: "Óleo de Massagem", priceInCents: 300000, paymentMethod: "credit_card" }
+            ]
+        },
+        {
+            idShopping: 2,
+            idUser: 2,
+            userName: "Maria Oliveira",
+            status: false,
+            createdIn: "2025-06-02T14:30:00Z",
+            purchaseProducts: [
+                { idPurchaseProduct: 3, productName: "Kit Aromaterapia", priceInCents: 750000, paymentMethod: "bank_transfer" }
+            ]
+        }
+    ];
 
+    const salesTableBody = document.querySelector('.sales-table tbody');
+    const salesSearch = document.getElementById('sales-search');
+    const saleStatusFilter = document.getElementById('sale-status-filter');
+    const paymentMethodFilter = document.getElementById('payment-method-filter');
+
+    // Initialize Sales
     async function initializeSales() {
         try {
-            const result = await getAllSales(accessToken);
-
-            if (result === 200) {
-                const storedSales = localStorage.getItem('sales');
-                salesData = storedSales ? JSON.parse(storedSales) : [];
-                populateSalesTable(salesData);
-            } else {
-                showMessageModal('error', 'Erro!', 'Falha ao carregar vendas', { buttonText: 'Entendido' });
-            }
+            // Simulate API call to fetch sales
+            // const result = await getAllSales(accessToken);
+            // if (result === 200) {
+            //     salesData = JSON.parse(localStorage.getItem('sales')) || [];
+            //     populateSalesTable(salesData);
+            // } else {
+            //     showMessageModal('error', 'Erro!', 'Falha ao carregar vendas', { buttonText: 'Entendido' });
+            // }
+            populateSalesTable(salesData);
         } catch (error) {
             showMessageModal('error', 'Erro!', 'Falha ao inicializar a aplicação', { buttonText: 'Entendido' });
         }
     }
 
+    // Populate Sales Table
     function populateSalesTable(sales) {
-        const tbody = document.querySelector('.sales-table tbody');
-        if (!tbody) return;
+        if (!salesTableBody) return;
 
-        tbody.innerHTML = '';
-        sales.forEach((sale) => {
+        salesTableBody.innerHTML = '';
+        sales.forEach(sale => {
+            const total = sale.purchaseProducts.reduce((sum, item) => sum + item.priceInCents, 0) / 100;
+            const paymentMethods = [...new Set(sale.purchaseProducts.map(item => item.paymentMethod))].join(', ');
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${sale.idSale || '-'}</td>
-                <td>${sale.client || '-'}</td>
-                <td>${sale.type || '-'}</td>
-                <td>${((sale.valueInCents || 0) / 100).toFixed(2)}</td>
-                <td>${sale.date ? new Date(sale.date).toLocaleDateString('pt-BR') : '-'}</td>
-                <td><span class="status-${sale.status.toLowerCase()}">${sale.status.charAt(0).toUpperCase() + sale.status.slice(1)}</span></td>
+                <td>${sale.idShopping}</td>
+                <td>${sale.userName}</td>
+                <td>${new Date(sale.createdIn).toLocaleDateString('pt-BR')}</td>
+                <td>AOA ${total.toFixed(2)}</td>
+                <td>${paymentMethods}</td>
+                <td><span class="status-${sale.status ? 'completed' : 'pending'}">${sale.status ? 'Concluída' : 'Pendente'}</span></td>
                 <td>
-                    <button class="action-btn" onclick="openApproveSaleModal(${sale.idSale})">
-                        <i class="fas fa-check-circle"></i>
-                    </button>
-                    <button class="action-btn" onclick="deleteSale(${sale.idSale})">
-                        <i class="fas fa-trash"></i>
+                    <button class="action-btn" onclick="viewSaleDetails(${sale.idShopping})">
+                        <i class="fas fa-eye"></i>
                     </button>
                 </td>
             `;
-            tbody.appendChild(row);
+            salesTableBody.appendChild(row);
         });
     }
 
-    window.closeModal = function (modalId) {
+    // View Sale Details
+    window.viewSaleDetails = function(id) {
+        const sale = salesData.find(s => s.idShopping === id);
+        if (!sale) {
+            showMessageModal('error', 'Erro!', 'Venda não encontrada', { buttonText: 'Entendido' });
+            return;
+        }
+
+        document.getElementById('sale-id').textContent = sale.idShopping;
+        document.getElementById('sale-user').textContent = sale.userName;
+        document.getElementById('sale-date').textContent = new Date(sale.createdIn).toLocaleString('pt-BR');
+        document.getElementById('sale-status').textContent = sale.status ? 'Concluída' : 'Pendente';
+        
+        const productsTable = document.getElementById('sale-products');
+        productsTable.innerHTML = '';
+        sale.purchaseProducts.forEach(product => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${product.productName}</td>
+                <td>AOA ${(product.priceInCents / 100).toFixed(2)}</td>
+                <td>${product.paymentMethod}</td>
+            `;
+            productsTable.appendChild(row);
+        });
+
+        const total = sale.purchaseProducts.reduce((sum, item) => sum + item.priceInCents, 0) / 100;
+        document.getElementById('sale-total').textContent = `AOA ${total.toFixed(2)}`;
+
+        const modal = document.getElementById('sale-modal');
+        if (modal) {
+            modal.classList.add('active');
+        }
+    };
+
+    // Filter Sales
+    function filterSales() {
+        if (!salesSearch || !saleStatusFilter || !paymentMethodFilter) return;
+
+        const search = salesSearch.value.toLowerCase().trim();
+        const statusFilterValue = saleStatusFilter.value;
+        const paymentFilterValue = paymentMethodFilter.value;
+
+        const filteredSales = salesData.filter(sale => {
+            const matchesSearch = sale.userName.toLowerCase().includes(search) ||
+                sale.idShopping.toString().includes(search);
+            const matchesStatus = statusFilterValue === 'all' ||
+                (statusFilterValue === 'true' && sale.status) ||
+                (statusFilterValue === 'false' && !sale.status);
+            const matchesPayment = paymentFilterValue === 'all' ||
+                sale.purchaseProducts.some(p => p.paymentMethod === paymentFilterValue);
+            return matchesSearch && matchesStatus && matchesPayment;
+        });
+
+        populateSalesTable(filteredSales);
+    }
+
+    // Event Listeners
+    if (salesSearch) {
+        salesSearch.addEventListener('input', filterSales);
+    }
+
+    if (saleStatusFilter) {
+        saleStatusFilter.addEventListener('change', filterSales);
+    }
+
+    if (paymentMethodFilter) {
+        paymentMethodFilter.addEventListener('change', filterSales);
+    }
+
+    // Modal Control
+    window.closeModal = function(modalId) {
         const modal = document.getElementById(modalId);
         if (modal) {
             modal.classList.remove('active');
         }
     };
 
-    window.openApproveSaleModal = function (saleId) {
-        const modal = document.getElementById('approve-modal');
-        const form = document.getElementById('approve-form');
-        const message = document.getElementById('approve-message');
-
-        if (!modal || !form || !message) return;
-
-        message.textContent = `Gerenciar o status da venda ${saleId}`;
-        form.dataset.saleId = saleId;
-        const sale = salesData.find(s => s.idSale === saleId);
-        if (sale) {
-            document.getElementById('sale-status').value = sale.status.toLowerCase() === 'pending' ? 'completed' : sale.status.toLowerCase();
-        }
-        modal.classList.add('active');
-    };
-
-    window.confirmAction = async function () {
+    window.confirmAction = function() {
         const modal = document.getElementById('confirm-modal');
-        const messageElement = document.getElementById('confirm-message');
-        const action = messageElement.dataset.action;
-        const confirmButton = document.getElementById('confirm-button');
-
-        const originalConfirmText = confirmButton.innerHTML;
-        confirmButton.innerHTML = `<span class="button-loader"></span>Processando...`;
-        confirmButton.disabled = true;
-
-        if (action.startsWith('deleteSale-')) {
-            const saleId = parseInt(action.split('-')[1]);
-            try {
-                const result = await deleteAnySale(accessToken, saleId);
-                if (result === 200) {
-                    salesData = salesData.filter((s) => s.idSale !== saleId);
-                    populateSalesTable(salesData);
-                    showMessageModal('success', 'Sucesso!', 'Venda eliminada com sucesso', { buttonText: 'Ótimo!' });
-                } else {
-                    showMessageModal('error', 'Erro!', 'Falha ao excluir a venda', { buttonText: 'Entendido' });
-                }
-            } catch (error) {
-                showMessageModal('error', 'Erro!', 'Ocorreu um erro ao excluir a venda', { buttonText: 'Entendido' });
-            }
+        if (modal) {
+            modal.classList.remove('active');
         }
-
-        confirmButton.innerHTML = originalConfirmText;
-        confirmButton.disabled = false;
-        modal.classList.remove('active');
     };
 
-    window.deleteSale = function (saleId) {
-        showConfirmModal(`Tem certeza que deseja excluir a venda ${saleId}?`, `deleteSale-${saleId}`);
-    };
-
-    document.getElementById('approve-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const submitButton = e.target.querySelector('button[type="submit"]');
-        const originalButtonText = submitButton.innerHTML;
-
-        submitButton.innerHTML = `<span class="button-loader"></span>Processando...`;
-        submitButton.classList.add('button-loading');
-        submitButton.disabled = true;
-
-        const saleId = parseInt(e.target.dataset.saleId);
-        const status = document.getElementById('sale-status').value;
-
-        if (!saleId || !status) {
-            showMessageModal('error', 'Erro!', 'Dados inválidos para atualizar o status.', { buttonText: 'Entendido' });
-            submitButton.innerHTML = originalButtonText;
-            submitButton.classList.remove('button-loading');
-            submitButton.disabled = false;
-            return;
-        }
-
-        try {
-            const saleData = { idSale: saleId, status };
-            const response = await editAnySale(accessToken, saleData);
-            if (response === 200) {
-                const index = salesData.findIndex((s) => s.idSale === saleId);
-                if (index !== -1) {
-                    salesData[index].status = status;
-                    populateSalesTable(salesData);
-                    showMessageModal('success', 'Sucesso!', `Venda ${status === 'completed' ? 'aprovada' : 'invalidada'} com sucesso`, { buttonText: 'Ótimo!' });
-                }
-            } else {
-                showMessageModal('error', 'Erro!', 'Falha ao atualizar o status da venda', { buttonText: 'Entendido' });
-            }
-            closeModal('approve-modal');
-            e.target.dataset.saleId = '';
-        } catch (error) {
-            showMessageModal('error', 'Erro!', 'Ocorreu um erro ao processar o status da venda', { buttonText: 'Entendido' });
-        } finally {
-            submitButton.innerHTML = originalButtonText;
-            submitButton.classList.remove('button-loading');
-            submitButton.disabled = false;
-        }
-    });
-
-    const searchInput = document.getElementById('sale-search');
-    const statusFilter = document.getElementById('sale-status-filter');
-    const typeFilter = document.getElementById('sale-type-filter');
-
-    function filterSales() {
-        if (!searchInput || !statusFilter || !typeFilter) return;
-
-        const search = searchInput.value.toLowerCase().trim();
-        const statusFilterValue = statusFilter.value;
-        const typeFilterValue = typeFilter.value;
-
-        const filteredSales = salesData.filter((sale) => {
-            const matchesSearch = (sale.client || '').toLowerCase().includes(search) || 
-                                 (sale.item || '').toLowerCase().includes(search);
-            const matchesStatus =
-                statusFilterValue === 'all' ||
-                (sale.status.toLowerCase() === statusFilterValue.toLowerCase());
-            const matchesType =
-                typeFilterValue === 'all' || (sale.type || '').toLowerCase() === typeFilterValue.toLowerCase();
-            return matchesSearch && matchesStatus && matchesType;
-        });
-        populateSalesTable(filteredSales);
-    }
-
-    if (searchInput) searchInput.addEventListener('input', filterSales);
-    if (statusFilter) statusFilter.addEventListener('change', filterSales);
-    if (typeFilter) typeFilter.addEventListener('change', filterSales);
-
-    function showConfirmModal(message, action) {
-        const modal = document.getElementById('confirm-modal');
-        const messageElement = document.getElementById('confirm-message');
-        if (!modal || !messageElement) return;
-
-        messageElement.textContent = message;
-        messageElement.dataset.action = action;
-        modal.classList.add('active');
-    }
-
+    // Initialize
     await initializeSales();
 });
