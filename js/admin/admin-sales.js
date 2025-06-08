@@ -1,56 +1,3 @@
-async function urlToFile(photo) {
-    try {
-        console.log('Starting urlToFile function with photo URL:', photo);
-
-        // Extrai o nome do arquivo do URL
-        const filename = photo.split('/').pop();
-        console.log('Extracted filename:', filename);
-
-        // Extrai a extensão do arquivo do URL
-        const extension = filename.split('.').pop().toLowerCase();
-        console.log('Extracted extension:', extension);
-
-        // Mapeia a extensão para o tipo MIME
-        const mimeTypes = {
-            'jpg': 'image/jpeg',
-            'jpeg': 'image/jpeg',
-            'png': 'image/png',
-            'gif': 'image/gif',
-            'webp': 'image/webp',
-        };
-
-        const mimeType = mimeTypes[extension] || 'application/octet-stream';
-        console.log('Determined mimeType:', mimeType);
-
-        // Faz o fetch da imagem
-        console.log('Fetching image from URL...');
-        const response = await fetch(photo);
-        if (!response.ok) {
-            console.error('Fetch failed with status:', response.status);
-            throw new Error('Falha ao carregar a imagem');
-        }
-
-        // Converte a resposta em um blob
-        console.log('Converting response to blob...');
-        const blob = await response.blob();
-        console.log('Blob created with size:', blob.size, 'bytes and type:', blob.type);
-
-        // Cria um objeto File a partir do blob
-        const file = new File([blob], filename, { type: mimeType });
-        console.log('File created:', {
-            name: file.name,
-            size: file.size,
-            type: file.type,
-            lastModified: file.lastModified
-        });
-
-        return file;
-    } catch (error) {
-        console.error('Error in urlToFile:', error);
-        return null;
-    }
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
     const accessToken = localStorage.getItem('accessToken');
     let salesData = [];
@@ -86,8 +33,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <td>${sale.date ? new Date(sale.date).toLocaleDateString('pt-BR') : '-'}</td>
                 <td><span class="status-${sale.status.toLowerCase()}">${sale.status.charAt(0).toUpperCase() + sale.status.slice(1)}</span></td>
                 <td>
-                    <button class="action-btn" onclick="editSale(${sale.idSale})">
-                        <i class="fas fa-edit"></i>
+                    <button class="action-btn" onclick="openApproveSaleModal(${sale.idSale})">
+                        <i class="fas fa-check-circle"></i>
                     </button>
                     <button class="action-btn" onclick="deleteSale(${sale.idSale})">
                         <i class="fas fa-trash"></i>
@@ -103,6 +50,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (modal) {
             modal.classList.remove('active');
         }
+    };
+
+    window.openApproveSaleModal = function (saleId) {
+        const modal = document.getElementById('approve-modal');
+        const form = document.getElementById('approve-form');
+        const message = document.getElementById('approve-message');
+
+        if (!modal || !form || !message) return;
+
+        message.textContent = `Gerenciar o status da venda ${saleId}`;
+        form.dataset.saleId = saleId;
+        const sale = salesData.find(s => s.idSale === saleId);
+        if (sale) {
+            document.getElementById('sale-status').value = sale.status.toLowerCase() === 'pending' ? 'completed' : sale.status.toLowerCase();
+        }
+        modal.classList.add('active');
     };
 
     window.confirmAction = async function () {
@@ -136,61 +99,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         modal.classList.remove('active');
     };
 
-    window.openAddSaleModal = function () {
-        const modal = document.getElementById('sale-modal');
-        const form = document.getElementById('sale-form');
-        const title = document.getElementById('modal-title');
-
-        if (!modal || !form || !title) return;
-
-        title.textContent = 'Adicionar Venda';
-        form.reset();
-        modal.classList.add('active');
-    };
-
-    window.editSale = async function (saleId) {
-        const modal = document.getElementById('sale-modal');
-        const form = document.getElementById('sale-form');
-        const title = document.getElementById('modal-title');
-
-        if (!modal || !form || !title || !saleId) {
-            showMessageModal('error', 'Erro!', 'Venda não encontrada', { buttonText: 'Entendido' });
-            return;
-        }
-
-        try {
-            const result = await getSale(accessToken, saleId);
-            if (result === 200) {
-                const sale = JSON.parse(localStorage.getItem('sale'));
-                console.log('Sale data loaded:', sale);
-                if (sale) {
-                    localStorage.setItem("idSale", sale.idSale);
-                    title.textContent = 'Editar Venda';
-                    document.getElementById('sale-client').value = sale.client || '';
-                    document.getElementById('sale-type').value = sale.type || '';
-                    document.getElementById('sale-item').value = sale.item || '';
-                    document.getElementById('sale-value').value = ((sale.valueInCents || 0) / 100).toFixed(2);
-                    document.getElementById('sale-date').value = sale.date ? new Date(sale.date).toISOString().split('T')[0] : '';
-                    document.getElementById('sale-status').value = sale.status.toLowerCase() || 'pending';
-                    form.dataset.saleId = sale.idSale;
-                    console.log('Form populated with sale ID:', sale.idSale);
-                    modal.classList.add('active');
-                } else {
-                    showMessageModal('error', 'Erro!', 'Venda não encontrada', { buttonText:'Entendido' });
-                }
-            } else {
-                showMessageModal('error', 'Erro!', 'Falha ao carregar a venda', { buttonText: 'Entendido' });
-            }
-        } catch (error) {
-            showMessageModal('error', 'Erro!', 'Ocorreu um erro ao carregar a venda', { buttonText: 'Entendido' });
-        }
-    };
-
     window.deleteSale = function (saleId) {
         showConfirmModal(`Tem certeza que deseja excluir a venda ${saleId}?`, `deleteSale-${saleId}`);
     };
 
-    document.getElementById('sale-form').addEventListener('submit', async (e) => {
+    document.getElementById('approve-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const submitButton = e.target.querySelector('button[type="submit"]');
@@ -200,75 +113,34 @@ document.addEventListener('DOMContentLoaded', async () => {
         submitButton.classList.add('button-loading');
         submitButton.disabled = true;
 
-        const saleId = parseInt(e.target.dataset.saleId) || null;
-        const client = document.getElementById('sale-client').value.trim();
-        const type = document.getElementById('sale-type').value.trim();
-        const item = document.getElementById('sale-item').value.trim();
-        const value = parseFloat(document.getElementById('sale-value').value);
-        const date = document.getElementById('sale-date').value;
+        const saleId = parseInt(e.target.dataset.saleId);
         const status = document.getElementById('sale-status').value;
 
-        if (!client || !type || !item || isNaN(value) || !date) {
-            showMessageModal('error', 'Erro!', 'Por favor, preencha todos os campos obrigatórios.', {
-                buttonText: 'Entendido',
-            });
+        if (!saleId || !status) {
+            showMessageModal('error', 'Erro!', 'Dados inválidos para atualizar o status.', { buttonText: 'Entendido' });
             submitButton.innerHTML = originalButtonText;
             submitButton.classList.remove('button-loading');
             submitButton.disabled = false;
             return;
         }
-
-        if (value < 0) {
-            showMessageModal('error', 'Erro!', 'O valor não pode ser negativo.', { buttonText: 'Entendido' });
-            submitButton.innerHTML = originalButtonText;
-            submitButton.classList.remove('button-loading');
-            submitButton.disabled = false;
-            return;
-        }
-
-        const saleData = {
-            client,
-            type,
-            item,
-            valueInCents: Math.round(value * 100),
-            date,
-            status,
-        };
 
         try {
-            if (saleId) {
-                saleData.idSale = saleId;
-                const response = await editAnySale(accessToken, saleData);
-                console.log('Edit sale response:', response);
-                if (response === 200) {
-                    const index = salesData.findIndex((s) => s.idSale === saleId);
-                    if (index !== -1) {
-                        salesData[index] = {
-                            ...salesData[index],
-                            ...saleData,
-                            updatedIn: new Date().toISOString(),
-                        };
-                        populateSalesTable(salesData);
-                        showMessageModal('success', 'Sucesso!', 'Venda atualizada com sucesso', { buttonText: 'Ótimo!' });
-                    }
-                } else {
-                    showMessageModal('error', 'Erro!', 'Falha ao atualizar a venda', { buttonText: 'Entendido' });
+            const saleData = { idSale: saleId, status };
+            const response = await editAnySale(accessToken, saleData);
+            if (response === 200) {
+                const index = salesData.findIndex((s) => s.idSale === saleId);
+                if (index !== -1) {
+                    salesData[index].status = status;
+                    populateSalesTable(salesData);
+                    showMessageModal('success', 'Sucesso!', `Venda ${status === 'completed' ? 'aprovada' : 'invalidada'} com sucesso`, { buttonText: 'Ótimo!' });
                 }
             } else {
-                const response = await addSale(accessToken, saleData);
-                if (response === 200) {
-                    await getAllSales(accessToken);
-                    salesData = JSON.parse(localStorage.getItem('sales')) || [];
-                    populateSalesTable(salesData);
-                    showMessageModal('success', 'Sucesso!', 'Venda criada com sucesso', { buttonText: 'Ótimo!' });
-                } else {
-                    showMessageModal('error', 'Erro!', 'Falha ao criar a venda', { buttonText: 'Entendido' });
-                }
+                showMessageModal('error', 'Erro!', 'Falha ao atualizar o status da venda', { buttonText: 'Entendido' });
             }
-            closeModal('sale-modal');
+            closeModal('approve-modal');
             e.target.dataset.saleId = '';
         } catch (error) {
-            showMessageModal('error', 'Erro!', 'Ocorreu um erro ao processar a venda', { buttonText: 'Entendido' });
+            showMessageModal('error', 'Erro!', 'Ocorreu um erro ao processar o status da venda', { buttonText: 'Entendido' });
         } finally {
             submitButton.innerHTML = originalButtonText;
             submitButton.classList.remove('button-loading');
@@ -316,18 +188,3 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await initializeSales();
 });
-
-function openTab(tabName) {
-    const tabContents = document.querySelectorAll('.tab-content');
-    tabContents.forEach(content => {
-        content.classList.remove('active');
-    });
-
-    const tabLinks = document.querySelectorAll('.tab-link');
-    tabLinks.forEach(link => {
-        link.classList.remove('active');
-    });
-
-    document.getElementById(tabName).classList.add('active');
-    event.currentTarget.classList.add('active');
-}
