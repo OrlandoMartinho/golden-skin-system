@@ -7,6 +7,7 @@ class MessagesSchemas {
     idUser: z.number(),
     idChat: z.number(),
     username: z.string(),
+    description:z.string().nullable(),
     createdIn: z.string(),
     updatedIn: z.string(),
   });
@@ -14,7 +15,7 @@ class MessagesSchemas {
   // Schema for registering a message
   static RegisterMessage = z.object({
     idChat: z.number().int().positive("ID Chat must be a positive integer"),
-    username: z.string().min(1, "Username is required"),
+    description: z.string().min(1, "Description is required"),
   });
 
   // Schema for deleting a message
@@ -25,7 +26,7 @@ class MessagesSchemas {
   // Schema for updating a message
   static UpdateMessage = z.object({
     idMessage: z.number().int().positive("ID Message must be a positive integer"),
-    username: z.string().min(1, "Username is required"),
+    description: z.string().min(1, "Description is required"),
   });
 
   // Schema for viewing all messages in a chat

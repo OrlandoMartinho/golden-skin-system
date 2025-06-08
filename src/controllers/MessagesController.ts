@@ -25,7 +25,7 @@ class MessagesController {
   public async register(data: any, key: any): Promise<z.infer<typeof this.responseSchema>> {
     const validatedData = await this.zodError(MessagesSchemas.RegisterMessage, data);
     const validatedKey = await this.zodError(MessagesSchemas.tokenSchema, key);
-    const { idChat, username } = validatedData;
+    const { idChat, description } = validatedData;
     const { token } = validatedKey;
 
     try {
@@ -52,7 +52,8 @@ class MessagesController {
         data: {
           idUser: userId,
           idChat,
-          username,
+          username:user.name,
+          description,
           createdIn: new Date().toISOString(),
           updatedIn: new Date().toISOString(),
         },
@@ -115,13 +116,20 @@ class MessagesController {
   public async update(data: any, key: any): Promise<z.infer<typeof this.responseSchema>> {
     const validatedData = await this.zodError(MessagesSchemas.UpdateMessage, data);
     const validatedKey = await this.zodError(MessagesSchemas.tokenSchema, key);
-    const { idMessage, username } = validatedData;
+    const { idMessage, description } = validatedData;
     const { token } = validatedKey;
 
     try {
       const userId = await this.tokenService.userId(token);
       if (!userId) {
         throw new AuthorizationException('Not authorized');
+      }
+
+      const user = await prisma.users.findUnique({where:{idUser:userId}})
+
+
+      if(!user){
+        throw new ItemNotFoundException("User not found")
       }
 
       const message = await prisma.messages.findUnique({ where: { idMessage } });
@@ -144,7 +152,7 @@ class MessagesController {
 
       await prisma.messages.update({
         where: { idMessage },
-        data: { username, updatedIn: new Date().toISOString() },
+        data: { username:user.name, updatedIn: new Date().toISOString(),description },
       });
 
       return { message: 'Message updated successfully' };
