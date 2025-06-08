@@ -3,7 +3,7 @@ async function addAnyPlan(accessToken, planData) {
 
   try {
 
-    console.log("fetch plan for data:",planData)
+ 
     const url = `${api_host}/api/plans/register`;
 
     const response = await fetch(url, {
@@ -16,7 +16,7 @@ async function addAnyPlan(accessToken, planData) {
     });
 
     const result = await response.json();
-    console.log(result)
+   
     if (response.ok) {
       return { status: response.status, data: result };
     } else {
@@ -29,7 +29,7 @@ async function addAnyPlan(accessToken, planData) {
   }
 }
 
-async function editPlan(accessToken, planData) {
+async function editAnyPlan(accessToken, planData) {
   try {
     const url = `${api_host}/api/plans`;
 
@@ -55,7 +55,7 @@ async function editPlan(accessToken, planData) {
   }
 }
 
-async function deletePlan(accessToken, idPlan) {
+async function deleteAnyPlan(accessToken, idPlan) {
   try {
     const url = `${api_host}/api/plans`;
 
@@ -94,7 +94,7 @@ async function getAllPlanss(accessToken) {
     });
 
     const result = await response.json();
-    console.log("Result:",result)
+   
     if (response.ok) {
       localStorage.setItem("plans", JSON.stringify(result));
       return { status: response.status, data: result };
@@ -108,9 +108,11 @@ async function getAllPlanss(accessToken) {
   }
 }
 
-async function getPlan(accessToken, idPlan) {
+async function getAnyPlan(accessToken, idPlan) {
   try {
-    const url = `${api_host}/api/plans/view?idPlan=${Number(idPlan)}`;
+
+    console.log("Fetching witch idPlan:",idPlan)
+    const url = `${api_host}/api/plans/view/${Number(idPlan)}`;
 
     const response = await fetch(url, {
       method: 'GET',

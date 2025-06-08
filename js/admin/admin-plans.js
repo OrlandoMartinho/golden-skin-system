@@ -209,7 +209,7 @@ async function initializeData() {
             if (action.startsWith('deletePlan-')) {
                 const planId = parseInt(action.split('-')[1]);
                 const result = await deleteAnyPlan(accessToken, planId);
-                if (result === 200) {
+                if (result.status === 200) {
                     plansData = plansData.filter(p => p.idPlan !== planId);
                     populatePlansTable(plansData);
                     populatePlanDropdown(plansData);
@@ -279,8 +279,8 @@ async function initializeData() {
         }
 
         try {
-            const result = await getPlan(accessToken, planId);
-            if (result === 200) {
+            const result = await getAnyPlan(accessToken, planId);
+            if (result.status === 200) {
                 const plan = JSON.parse(localStorage.getItem('plan'));
                 if (plan) {
                     localStorage.setItem('idPlan', plan.idPlan);
@@ -294,7 +294,7 @@ async function initializeData() {
                     const servicesSelect = document.getElementById('plan-services');
                     if (servicesSelect && Array.isArray(plan.services)) {
                         Array.from(servicesSelect.options).forEach(option => {
-                            option.selected = plan.services.includes(parseInt(option.value));
+                            option.selected = plan.services.includes(option.value);
                         });
                     }
                     
@@ -408,7 +408,7 @@ async function initializeData() {
                 planData.idPlan = planId;
                 
                 const response = await editAnyPlan(accessToken, planData);
-                if (response === 200) {
+                if (response.status === 200) {
                     const index = plansData.findIndex(p => p.idPlan === planId);
                     if (index !== -1) {
                         plansData[index] = { ...plansData[index], ...planData, updatedIn: new Date().toISOString() };
