@@ -5,8 +5,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Função simulada para buscar dados (substitua pela sua função real)
   async function fetchAllData() {
     try {
-      // Exemplo de retorno com as estruturas fornecidas
+      const accessToken = localStorage.getItem("accessToken");
+      const result = await getAllShoppings(accessToken)
+      const result2 = await getAllSubscribers(accessToken)
+      const result3 = await getAllAppointments(accessToken)
+      const result4= await getAllProducts(accessToken)
+      const result5 = await getAllUser(accessToken)
+      const result6 = await getAlllMessages(accessToken)
       return {
+
+
+        
+
         vendas: [
           { idShopping: 1, idUser: 101, status: true, createdIn: "2025-05-29T10:00:00Z", updatedIn: "2025-05-29T10:00:00Z" },
           { idShopping: 2, idUser: 102, status: false, createdIn: "2025-05-28T12:00:00Z", updatedVehiclesIn: "2025-05-28T12:00:00Z" }
