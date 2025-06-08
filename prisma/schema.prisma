@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql" // ou "postgresql" ou outro, conforme seu banco
+  provider = "postgresql" // ou "postgresql" ou outro, conforme seu banco
   url      = env("DATABASE_URL")
 }
 
@@ -174,8 +174,8 @@ model Messages {
 
 model VerificationCodes {
   id_verification_code Int     @id @default(autoincrement())
-  email                String  @db.LongText
-  code                 String  @db.LongText
+  email                String  @db.Text
+  code                 String  @db.Text
   used                 Boolean
 }
 

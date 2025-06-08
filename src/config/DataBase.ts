@@ -2,18 +2,17 @@ import { prisma } from './PrismaClient';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { config } from 'dotenv';
-import path, { resolve } from 'path';
+import path from 'path';
 import { execSync } from 'child_process';
 import fs from 'fs';
 import mysql from 'mysql2/promise';
 import { Client as PostgreSQLClient } from 'pg';
 
-
-// Configure environment
-const envPath = resolve(__dirname, '../.env');
+// Carregar variáveis de ambiente
+const envPath = path.resolve(__dirname, '../.env');
 config({ path: envPath });
 
-// Verifica se todas as variáveis de ambiente necessárias estão definidas
+// Verificação das variáveis obrigatórias
 const requiredEnvVars = [
   'DATABASE_HOST',
   'DATABASE_USER',
@@ -21,55 +20,48 @@ const requiredEnvVars = [
   'DATABASE_NAME',
   'DATABASE_PORT',
   'DATABASE_URL',
-  'SQLITE_URL',
-  'MONGO_URL',
   'SECRET_KEY',
   'ADMIN_EMAIL',
   'ADMIN_PASSWORD',
   'ADMIN_NAME',
-  'ADMIN_PHONE_NUMBER'
+  'ADMIN_PHONE_NUMBER',
 ];
 
+for (const varName of requiredEnvVars) {
+  if (!process.env[varName]) {
+    throw new Error(`Missing environment variable: ${varName}`);
+  }
+}
 
-
-// Storage setup
+// Caminho dos uploads
 const uploadsPath = path.resolve(__dirname, '../../storage');
 
-// Database configuration
+// Configurações do banco de dados
 const databaseConfig = {
-  host: process.env.DATABASE_HOST || 'localhost',
-  user: process.env.DATABASE_USER || 'root',
-  password: process.env.DATABASE_PASSWORD || '',
-  name: process.env.DATABASE_NAME || 'golden_skin_system_bd',
-  port: Number(process.env.DATABASE_PORT || 3306), // Default MySQL port
-  url: process.env.DATABASE_URL || 'mysql://root:@localhost:3306/golden_skin_system_bd', // Default MySQL URL
-sqliteUrl: process.env.SQLITE_URL || 'file:./mydatabase.sqlite', // Default SQLite URL
-  mongoUrl: process.env.MONGO_URL || 'mongodb://localhost:27017/mydatabase', // Default MongoDB URL
+  host: process.env.DATABASE_HOST!,
+  user: process.env.DATABASE_USER!,
+  password: process.env.DATABASE_PASSWORD!,
+  name: process.env.DATABASE_NAME!,
+  port: Number(process.env.DATABASE_PORT!),
+  url: process.env.DATABASE_URL!,
 };
 
-// Security configuration
+// Segurança
 const securityConfig = {
-  secretKey: process.env.SECRET_KEY,
-  saltRounds: 10
+  secretKey: process.env.SECRET_KEY!,
+  saltRounds: 10,
 };
 
-// Admin configuration
+// Configurações do Admin
 const adminConfig = {
-  email: process.env.ADMIN_EMAIL,
-  password: process.env.ADMIN_PASSWORD,
-  name: process.env.ADMIN_NAME,
-  phone: process.env.ADMIN_PHONE_NUMBER 
+  email: process.env.ADMIN_EMAIL!,
+  password: process.env.ADMIN_PASSWORD!,
+  name: process.env.ADMIN_NAME!,
+  phone: process.env.ADMIN_PHONE_NUMBER!,
 };
 
 class DatabaseService {
   async initializeAdmin() {
-    if (!adminConfig.email || !adminConfig.password || !adminConfig.name || !adminConfig.phone) {
-      throw new Error('Admin configuration is incomplete. Please check your environment variables.');
-    }
-
-    if (!securityConfig.secretKey) {
-      throw new Error('Security configuration is incomplete. Please check your environment variables.');
-    }
     try {
       const salt = bcrypt.genSaltSync(securityConfig.saltRounds);
       const encryptedPassword = bcrypt.hashSync(adminConfig.password, salt);
@@ -84,7 +76,7 @@ class DatabaseService {
             email: adminConfig.email,
             password: encryptedPassword,
             name: adminConfig.name,
-            role: 0, // 0 for admin
+            role: 0,
             status: true,
             phoneNumber: adminConfig.phone,
             token: null,
@@ -95,24 +87,23 @@ class DatabaseService {
           {
             idUser: newUser.idUser,
             email: adminConfig.email,
-            role: 0, // admin
+            role: 0,
           },
           securityConfig.secretKey
         );
 
         const path_name = Date.now() + '' + newUser.idUser;
         const newFolderPath = path.join(uploadsPath, path_name);
-         fs.mkdirSync(newFolderPath, { recursive: true });
+        fs.mkdirSync(newFolderPath, { recursive: true });
 
         await prisma.users.update({
           where: { idUser: newUser.idUser },
-          data: { token: accessToken,path:path_name }
+          data: { token: accessToken, path: path_name },
         });
 
-        
         console.log(`Admin user ${adminConfig.name} created successfully.`);
       } else {
-        console.log(`Admin user ${adminConfig.name} updated successfully.`);
+        console.log(`Admin user ${adminConfig.name} already exists.`);
       }
     } catch (error) {
       console.error('Error initializing admin user:', error);
@@ -121,19 +112,13 @@ class DatabaseService {
   }
 
   async verifyDatabase() {
-
-    if(!databaseConfig.url) {
-        throw new Error('Database configuration is incomplete. Please check your environment variables.');
-      }
     try {
       if (databaseConfig.url.startsWith('mysql')) {
         await this.verifyMySQLDatabase();
       } else if (databaseConfig.url.startsWith('postgresql')) {
         await this.verifyPostgresDatabase();
-      } else if (databaseConfig.url.startsWith('sqlite')) {
-        console.log('SQLite database requires no manual setup.');
-      } else if (databaseConfig.url.startsWith('mongodb')) {
-        console.log('MongoDB database requires no manual setup.');
+      } else {
+        console.warn('Unsupported or skipped DB type.');
       }
     } catch (error) {
       console.error('Database verification error:', error);
@@ -157,19 +142,11 @@ class DatabaseService {
       if (Array.isArray(databases) && databases.length === 0) {
         console.log(`Creating database "${databaseConfig.name}"...`);
         await connection.query(`CREATE DATABASE ${databaseConfig.name}`);
-        console.log(`Database "${databaseConfig.name}" created successfully.`);
-        execSync('npx prisma migrate dev --name init\n', { stdio: 'inherit' });
-
       } else {
         console.log(`Database "${databaseConfig.name}" already exists.`);
       }
 
-      // Run migrations
-      try {
-        execSync('npx prisma migrate deploy', { stdio: 'inherit' });
-      } catch (migrationError) {
-        console.error('Migration error:', migrationError);
-      }
+      execSync('npx prisma migrate deploy', { stdio: 'inherit' });
     } finally {
       await connection.end();
     }
@@ -179,12 +156,14 @@ class DatabaseService {
     const client = new PostgreSQLClient({
       host: databaseConfig.host,
       user: databaseConfig.user,
-      password: databaseConfig.password,
+      password: String(databaseConfig.password), // Evita erro se for undefined ou não string
       port: databaseConfig.port,
+      database: 'postgres', // Conecta ao banco padrão para criar outro
     });
 
     try {
       await client.connect();
+
       const res = await client.query(
         `SELECT 1 FROM pg_database WHERE datname = '${databaseConfig.name}'`
       );
@@ -192,17 +171,13 @@ class DatabaseService {
       if (res.rowCount === 0) {
         console.log(`Creating database "${databaseConfig.name}"...`);
         await client.query(`CREATE DATABASE ${databaseConfig.name}`);
-        console.log(`Database "${databaseConfig.name}" created successfully.`);
+        execSync('npx prisma migrate dev --name init', { stdio: 'inherit' });
       } else {
         console.log(`Database "${databaseConfig.name}" already exists.`);
       }
 
-      // Run migrations
-      try {
-        execSync('npx prisma migrate deploy', { stdio: 'inherit' });
-      } catch (migrationError) {
-        console.error('Migration error:', migrationError);
-      }
+     
+
     } finally {
       await client.end();
     }
@@ -210,9 +185,6 @@ class DatabaseService {
 
   async initialize() {
     try {
-
-      
-
       await this.verifyDatabase();
       await this.initializeAdmin();
     } catch (error) {
