@@ -164,7 +164,7 @@ class PlansController {
       }
 
       const plans = await prisma.plans.findMany();
-
+  
       return PlansSchemas.plansResponseSchema.parse(plans);
     } catch (error) {
       if (
@@ -173,6 +173,7 @@ class PlansController {
         error instanceof InvalidDataException
       ) {
         throw error;
+       
       }
       throw new InternalServerErrorException('An error occurred when trying to retrieve plans');
     }

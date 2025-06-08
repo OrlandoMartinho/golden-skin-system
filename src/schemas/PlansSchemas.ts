@@ -5,16 +5,18 @@ class PlansSchemas {
   static planSchema = z.object({
     idPlan: z.number(),
     description: z.string(),
-    servicesText: z.string(),
+    services: z.string(),
     priceInCents: z.number(),
-    createdIn: z.string(),
-    updatedIn: z.string(),
+    createdIn: z.date(),
+    updatedIn: z.date().nullable(),
   });
+
+   
 
   // Schema for registering a plan
   static RegisterPlan = z.object({
     description: z.string().min(1, "Description is required"),
-    servicesText: z.string().min(1, "Services text is required"),
+    services: z.string().min(1, "Services text is required"),
     priceInCents: z.number().int().positive("Price in cents must be a positive integer"),
   });
 
@@ -27,7 +29,7 @@ class PlansSchemas {
   static UpdatePlan = z.object({
     idPlan: z.number().int().positive("Plan ID must be a positive integer"),
     description: z.string().min(1, "Description is required"),
-    servicesText: z.string().min(1, "Services text is required"),
+    services: z.string().min(1, "Services text is required"),
     priceInCents: z.number().int().positive("Price in cents must be a positive integer"),
   });
 

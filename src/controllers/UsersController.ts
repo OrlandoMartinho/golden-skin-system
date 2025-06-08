@@ -285,7 +285,7 @@ class Users {
           name,
           email,
           status: true,
-          role: 5,
+          role: 2,
           password: hashedPassword,
           createdIn: new Date(),
         },
@@ -621,7 +621,14 @@ class Users {
         throw new AuthorizationException('Not authorized');
       }
 
-      const users = await prisma.users.findMany();
+      const users = await prisma.users.findMany({
+          where: {
+            role: {
+              not: 0
+            }
+          }
+        });
+
 
       return userSchema.usersResponseSchema.parse(users);
     } catch (error) {
