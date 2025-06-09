@@ -2,84 +2,100 @@ document.addEventListener('DOMContentLoaded', () => {
   let chartInstance = null;
   let currentReportData = []; // Armazenar dados do relatório para exportação
 
-async function fetchAllData() {
-  try {
-    const accessToken = localStorage.getItem("accessToken");
+  async function fetchAllData() {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      console.log('Access Token:', accessToken ? 'Present' : 'Missing');
 
-    let vendas = [];
-    let assinantes = [];
-    let agendamentos = [];
-    let products = [];
-    let mensagens = [];
-    let users = [];
+      let vendas = [];
+      let assinantes = [];
+      let agendamentos = [];
+      let products = [];
+      let mensagens = [];
+      let users = [];
 
-    // Busca vendas
-    const result = await getAllShoppings(accessToken);
-    if (result.status === 200) {
-      vendas = localStorage.getItem("shoppings");
-    } else {
-      console.warn("Ocorreu um erro ao carregar as vendas");
+      // Busca vendas
+      const result = await getAllShoppings(accessToken);
+      console.log('Vendas Result:', result);
+      if (result.status === 200) {
+        vendas = result.data || [];
+        console.log('Vendas Data:', vendas);
+      } else {
+        console.warn("Ocorreu um erro ao carregar as vendas:", result.status, result.message);
+      }
+
+      // Busca assinantes
+      const result2 = await getAllSubscribers(accessToken);
+      console.log('Assinantes Result:', result2);
+      if (result2.status === 200) {
+        assinantes = result2.data || [];
+        console.log('Assinantes Data:', assinantes);
+      } else {
+        console.warn("Ocorreu um erro ao carregar os assinantes:", result2.status, result2.message);
+      }
+
+      // Busca agendamentos
+      const result3 = await getAllAppointments(accessToken);
+      console.log('Agendamentos Result:', result3);
+      if (result3.status === 200) {
+        agendamentos = result3.data || [];
+        console.log('Agendamentos Data:', agendamentos);
+      } else {
+        console.warn("Ocorreu um erro ao carregar os agendamentos:", result3.status, result3.message);
+      }
+
+      // Busca produtos
+      const result4 = await getAllProducts(accessToken);
+      console.log('Produtos Result:', result4);
+      if (result4.status === 200) {
+        products = result4.data || [];
+        console.log('Produtos Data:', products);
+      } else {
+        console.warn("Ocorreu um erro ao carregar os produtos:", result4.status, result4.message);
+      }
+
+      // Busca mensagens
+      const result5 = await getAllMessages(accessToken);
+      console.log('Mensagens Result:', result5);
+      if (result5.status === 200) {
+        mensagens = result5.data || [];
+        console.log('Mensagens Data:', mensagens);
+      } else {
+        console.warn("Ocorreu um erro ao carregar as mensagens:", result5.status, result5.message);
+      }
+
+      // Busca usuários
+      const result6 = await getAllUser(accessToken);
+      console.log('Usuários Result:', result6);
+      if (result6.status === 200) {
+        users = result6.data || [];
+        console.log('Usuários Data:', users);
+      } else {
+        console.warn("Ocorreu um erro ao carregar os usuários:", result6.status, result6.message);
+      }
+
+      return {
+        vendas,
+        assinantes,
+        agendamentos,
+        products,
+        mensagens,
+        users
+      };
+    } catch (error) {
+      console.error('Erro ao buscar dados:', error);
+      return { vendas: [], assinantes: [], agendamentos: [], products: [], mensagens: [], users: [] };
     }
-
-    // Busca assinantes
-    const result2 = await getAllSubscribers(accessToken);
-    if (result2.status === 200) {
-      assinantes = localStorage.getItem("subscribers");
-    } else {
-      console.warn("Ocorreu um erro ao carregar os assinantes");
-    }
-
-    // Busca agendamentos
-    const result3 = await getAllAppointments(accessToken);
-    if (result3.status === 200) {
-      agendamentos = localStorage.getItem("appointments");
-    } else {
-      console.warn("Ocorreu um erro ao carregar os agendamentos");
-    }
-
-    // Busca produtos
-    const result4 = await getAllProducts(accessToken);
-    if (result4.status === 200) {
-      products = localStorage.getItem("products");
-    } else {
-      console.warn("Ocorreu um erro ao carregar os produtos");
-    }
-
-    // Busca mensagens
-    const result5 = await getAllMessages(accessToken); // Corrigido de getAlllMessages para getAllMessages
-    if (result5.status === 200) {
-      mensagens = localStorage.getItem("messages");
-    } else {
-      console.warn("Ocorreu um erro ao carregar as mensagens");
-    }
-
-    // Busca usuários
-    const result6 = await getAllUser(accessToken);
-    if (result6.status === 200) {
-      users = localStorage.getItem("users");
-    } else {
-      console.warn("Ocorreu um erro ao carregar os usuários");
-    }
-
-    return {
-      vendas,
-      assinantes,
-      agendamentos,
-      products,
-      mensagens,
-      users
-    };
-  } catch (error) {
-    console.error('Erro ao buscar dados:', error);
-    return { vendas: [], assinantes: [], agendamentos: [], products: [], mensagens: [], users: [] };
   }
-}
 
   // Modal control functions
   window.closeModal = function(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
       modal.classList.remove('active');
+      console.log(`Modal ${modalId} fechado`);
+    } else {
+      console.error(`Modal ${modalId} não encontrado`);
     }
   };
 
@@ -88,12 +104,15 @@ async function fetchAllData() {
     const messageElement = document.getElementById('confirm-message');
     const action = messageElement.dataset.action;
 
+    console.log('Confirm Action:', action);
+
     if (action === 'exportReport') {
       generatePDF();
     }
 
     if (modal) {
       modal.classList.remove('active');
+      console.log('Modal de confirmação fechado');
     }
     alert('Ação realizada com sucesso!');
   };
@@ -106,26 +125,35 @@ async function fetchAllData() {
     const startDate = document.getElementById('start-date').value;
     const endDate = document.getElementById('end-date').value;
 
+    console.log('Form Submitted:', { reportType, startDate, endDate });
+
     if (!startDate || !endDate) {
       alert('Por favor, selecione as datas inicial e final.');
+      console.warn('Datas não selecionadas');
       return;
     }
 
     if (new Date(endDate) < new Date(startDate)) {
       alert('A data final deve ser posterior à data inicial.');
+      console.warn('Data final anterior à inicial');
       return;
     }
 
     // Buscar dados dinamicamente
     const allData = await fetchAllData();
+    console.log('All Data Fetched:', allData);
     
     // Filtrar dados por tipo de relatório e intervalo de datas
     currentReportData = allData[reportType].filter(item => {
       const itemDate = new Date(item.createdIn || item.appointmentDate);
       const start = new Date(startDate);
       const end = new Date(endDate);
-      return itemDate >= start && itemDate <= end;
+      const isWithinRange = itemDate >= start && itemDate <= end;
+      console.log(`Filtering ${reportType} item:`, { itemDate, isWithinRange });
+      return isWithinRange;
     });
+
+    console.log('Filtered Report Data:', currentReportData);
 
     updateReportTable(currentReportData, reportType);
     updateReportChart(currentReportData, reportType);
@@ -139,10 +167,13 @@ async function fetchAllData() {
       return;
     }
 
+    console.log(`Updating table for ${reportType} with ${data.length} items`);
+
     tbody.innerHTML = '';
 
     if (data.length === 0) {
       tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #888;">Nenhum dado encontrado.</td></tr>';
+      console.log('No data found for table');
       return;
     }
 
@@ -168,7 +199,7 @@ async function fetchAllData() {
           break;
         case 'products':
           date = new Date(item.createdIn).toLocaleDateString('pt-BR');
-          description = `${item.name} (${item.category})`;
+          description = `${item.name} (${item.category}, Estoque: ${item.amount})`;
           value = `AOA ${(item.priceInCents / 100).toFixed(2)}`;
           break;
         case 'mensagens':
@@ -191,6 +222,7 @@ async function fetchAllData() {
         <td>${value}</td>
       `;
       tbody.appendChild(row);
+      console.log(`Table row added:`, { date, description, value });
     });
   }
 
@@ -202,57 +234,60 @@ async function fetchAllData() {
       return;
     }
 
-    const ctx = canvas.getContext('2d');
-
-    if (chartInstance) {
-      chartInstance.destroy();
-    }
+    console.log(`Updating chart for ${reportType} with ${data.length} items`);
 
     const labels = data.map(item => new Date(item.createdIn || item.appointmentDate).toLocaleDateString('pt-BR'));
     const values = reportType === 'products'
       ? data.map(item => item.priceInCents / 100)
       : data.map(() => 1); // Contagem para outros tipos
 
-    chartInstance = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: reportType.charAt(0).toUpperCase() + reportType.slice(1),
-          data: values,
-          backgroundColor: '#8B4513',
-          borderColor: '#8B4513',
-          borderWidth: 1
+    console.log('Chart Data:', { labels, values, reportType });
+
+    ```chartjs
+    {
+      "type": "bar",
+      "data": {
+        "labels": ${JSON.stringify(labels)},
+        "datasets": [{
+          "label": "${reportType.charAt(0).toUpperCase() + reportType.slice(1)}",
+          "data": ${JSON.stringify(values)},
+          "backgroundColor": "#8B4513",
+          "borderColor": "#8B4513",
+          "borderWidth": 1
         }]
       },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: reportType === 'products' ? 'Valor (AOA)' : 'Contagem'
+      "options": {
+        "scales": {
+          "y": {
+            "beginAtZero": true,
+            "title": {
+              "display": true,
+              "text": "${reportType === 'products' ? 'Valor (AOA)' : 'Contagem'}"
             }
           },
-          x: {
-            title: {
-              display: true,
-              text: 'Data'
+          "x": {
+            "title": {
+              "display": true,
+              "text": "Data"
             }
           }
         },
-        plugins: {
-          legend: {
-            display: true
+        "plugins": {
+          "legend": {
+            "display": true
           }
         }
       }
-    });
+    }
+    ```
+
+    console.log('Chart updated for', reportType);
   }
 
   // Export report to PDF
   window.exportReport = function() {
     showConfirmModal('Deseja exportar o relatório atual?', 'exportReport');
+    console.log('Export report initiated');
   };
 
   // Generate PDF
@@ -266,6 +301,8 @@ async function fetchAllData() {
     const reportType = document.getElementById('report-type').value;
     const startDate = document.getElementById('start-date').value;
     const endDate = document.getElementById('end-date').value;
+
+    console.log('Generating PDF for:', { reportType, startDate, endDate });
 
     // Definir logoY e logoHeight fora do try para evitar ReferenceError
     let logoY = 10; // Margem superior padrão
@@ -286,10 +323,10 @@ async function fetchAllData() {
       const logoX = 10; // Margem esquerda
       logoY = 10; // Margem superior
 
-      // Adicionar o logotipo sem fundo ou borda
       doc.addImage(logo, 'PNG', logoX, logoY, logoWidth, logoHeight);
+      console.log('Logo added to PDF');
     } catch (error) {
-      console.error(error.message);
+      console.error('Erro ao carregar logotipo:', error.message);
     }
 
     // Título do relatório (ajustado para não sobrepor o logotipo)
@@ -299,11 +336,13 @@ async function fetchAllData() {
     doc.text(`Relatório de ${reportType.charAt(0).toUpperCase() + reportType.slice(1)}`, 10, titleY);
     doc.setFontSize(12);
     doc.text(`Período: ${startDate} a ${endDate}`, 10, titleY + 10);
+    console.log('PDF title and period added');
 
     // Linha divisória
     doc.setLineWidth(0.5);
     doc.setDrawColor(139, 69, 19); // Cor marrom (#8B4513)
     doc.line(10, titleY + 15, 200, titleY + 15);
+    console.log('Divider line added');
 
     // Dados da tabela para o PDF
     const headers = ['Data', 'Descrição', 'Valor'];
@@ -327,7 +366,7 @@ async function fetchAllData() {
           break;
         case 'products':
           date = new Date(item.createdIn).toLocaleDateString('pt-BR');
-          description = `${item.name} (${item.category})`;
+          description = `${item.name} (${item.category}, Estoque: ${item.amount})`;
           value = `AOA ${(item.priceInCents / 100).toFixed(2)}`;
           break;
         case 'mensagens':
@@ -343,6 +382,7 @@ async function fetchAllData() {
         default:
           date = description = value = 'N/A';
       }
+      console.log('PDF row data:', { date, description, value });
       return [date, description, value];
     });
 
@@ -371,6 +411,7 @@ async function fetchAllData() {
           2: { cellWidth: 50 } 
         }
       });
+      console.log('PDF table generated with', rows.length, 'rows');
     } catch (error) {
       console.error('Erro ao gerar a tabela no PDF:', error);
       doc.text('Erro ao gerar a tabela.', 10, titleY + 20);
@@ -384,11 +425,13 @@ async function fetchAllData() {
       doc.setTextColor(124, 93, 39); 
       doc.text(`Página ${i} de ${pageCount}`, 190, 290, { align: 'right' });
       doc.text('Pele Douro - Relatórios', 10, 290);
+      console.log(`Footer added to page ${i}`);
     }
 
     // Salvar o PDF
     try {
       doc.save(`Relatorio_${reportType}_${startDate}_${endDate}.pdf`);
+      console.log('PDF saved successfully');
     } catch (error) {
       console.error('Erro ao salvar o PDF:', error);
       alert('Falha ao salvar o PDF. Tente novamente.');
@@ -404,6 +447,7 @@ async function fetchAllData() {
       messageElement.textContent = message;
       messageElement.dataset.action = action;
       modal.classList.add('active');
+      console.log('Confirm modal shown:', { message, action });
     } else {
       console.error('Elementos do modal não encontrados.');
     }
