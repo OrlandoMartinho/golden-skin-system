@@ -102,82 +102,62 @@
                 </select>
             </div>
 
-            <!-- Chat Container -->
-            <div class="dashboard-container">
-                <!-- Chat List Section -->
-                <section class="overview-section">
-                    <h2>Conversas</h2>
-                    <div class="overview-cards">
-                        <div class="chat-item active" onclick="selectChat(1)" data-chat-id="1">
-                            <i class="far fa-comments"></i>
-                            <div>
-                                <h3>Ana Silva</h3>
-                                <p>Última mensagem: Olá, gostaria de saber sobre...</p>
-                                <small>Hoje, 14:30</small>
-                                <span class="unread-count">2</span>
-                            </div>
-                        </div>
-                        <div class="chat-item" onclick="selectChat(2)" data-chat-id="2">
-                            <i class="far fa-comments"></i>
-                            <div>
-                                <h3>Carlos Mendes</h3>
-                                <p>Última mensagem: Qual o prazo de entrega do...</p>
-                                <small>Ontem, 10:15</small>
-                            </div>
-                        </div>
-                        <div class="chat-item" onclick="selectChat(3)" data-chat-id="3">
-                            <i class="far fa-comments"></i>
-                            <div>
-                                <h3>Maria Costa</h3>
-                                <p>Última mensagem: Preciso reagendar meu...</p>
-                                <small>2025-05-28, 16:00</small>
-                                <span class="unread-count">1</span>
-                            </div>
-                        </div>
+                <!-- Chat Container -->
+        <div class="dashboard-container">
+            <!-- Chat List Section -->
+            <section class="overview-section">
+                <h2>Conversas</h2>
+                <div class="overview-cards chat-list">
+                    <!-- Chats serão inseridos dinamicamente aqui -->
+                </div>
+            </section>
+
+            <!-- Chat Content -->
+            <div class="chat-content">
+                <!-- Chat Window Section -->
+                <section class="recent-activity-section">
+                    <h2 id="chat-user-name">Nenhum chat selecionado</h2>
+                    <div class="activity-list" id="chat-messages">
+                        <!-- Mensagens serão inseridas dinamicamente aqui -->
+                    </div>
+                    <div class="chat-input">
+                        <textarea id="chat-message-input" placeholder="Digite sua mensagem..."></textarea>
+                        <button onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i> Enviar
+                        </button>
                     </div>
                 </section>
 
-                <!-- Chat Content -->
-                <div class="chat-content">
-                    <!-- Chat Window Section -->
-                    <section class="recent-activity-section">
-                        <h2 id="chat-user-name">Ana Silva</h2>
-                        <div class="activity-list" id="chat-messages">
-                            <div class="message received">
-                                <p>Olá, gostaria de saber sobre a disponibilidade de massagem relaxante.</p>
-                                <small>14:25</small>
-                            </div>
-                            <div class="message sent">
-                                <p>Olá, Ana! Temos horários disponíveis amanhã às 10h e 14h. Qual prefere?</p>
-                                <small>14:28</small>
-                            </div>
-                            <div class="message received">
-                                <p>14h seria ótimo! Como faço para reservar?</p>
-                                <small>14:30</small>
-                            </div>
-                        </div>
-                        <div class="chat-input">
-                            <textarea id="chat-message-input" placeholder="Digite sua mensagem..."></textarea>
-                            <button onclick="sendMessage()">
-                                <i class="fas fa-paper-plane"></i> Enviar
-                            </button>
-                        </div>
-                    </section>
+                <!-- Quick Actions Section -->
+                <section class="quick-actions-section">
+                    <h2>Ações Rápidas</h2>
+                    <div class="quick-actions">
+                        <button class="action-btn" onclick="closeChat()">
+                            <i class="fas fa-check"></i> Fechar Chat
+                        </button>
+                        <button class="action-btn" onclick="deleteChat()">
+                            <i class="fas fa-trash"></i> Excluir
+                        </button>
+                    </div>
+                </section>
+            </div>
 
-                    <!-- Quick Actions Section -->
-                    <section class="quick-actions-section">
-                        <h2>Ações Rápidas</h2>
-                        <div class="quick-actions">
-                            <button class="action-btn" onclick="closeChat()">
-                                <i class="fas fa-check"></i> Fechar Chat
-                            </button>
-                            <button class="action-btn" onclick="deleteChat()">
-                                <i class="fas fa-trash"></i> Excluir
-                            </button>
-                        </div>
-                    </section>
+            <!-- Modals for Close and Delete -->
+            <div id="close-chat-modal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <p id="close-chat-message"></p>
+                    <button onclick="confirmCloseChat()">Confirmar</button>
+                    <button onclick="closeModal('close-chat-modal')">Cancelar</button>
                 </div>
             </div>
+            <div id="delete-chat-modal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <p id="delete-chat-message"></p>
+                    <button onclick="confirmDeleteChat()">Confirmar</button>
+                    <button onclick="closeModal('delete-chat-modal')">Cancelar</button>
+                </div>
+            </div>
+        </div>
         </main>
 
         <!-- Close Chat Modal -->
@@ -220,6 +200,7 @@
      <script src="../../js/messageModal.js"></script>
      <script src="../../js/sessoes/logout.js"></script>
      <script src="../../apis/notificacoes.js"></script>
+     <script src="../../apis/chats.js"></script>
      <script src="../../js/notificacoes.js"></script>
 </body>
 </html>

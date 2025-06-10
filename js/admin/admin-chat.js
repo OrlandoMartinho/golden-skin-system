@@ -1,201 +1,226 @@
-let currentChatId = 1; // Track the currently selected chat
+let currentChatId = null; // Track the currently selected chat
+let accessToken = localStorage.getItem('accessToken') || ''; // Assumes token is stored in localStorage
 
-// Mock chat data
-const chatData = {
-  1: {
-    name: 'Ana Silva',
-    messages: [
-      { type: 'received', text: 'Olá, gostaria de saber sobre a disponibilidade de massagem relaxante.', time: '14:25' },
-      { type: 'sent', text: 'Olá, Ana! Temos horários disponíveis amanhã às 10h e 14h. Qual prefere?', time: '14:28' },
-      { type: 'received', text: '14h seria ótimo! Como faço para reservar?', time: '14:30' }
-    ],
-    status: 'open',
-    unread: 2
-  },
-  2: {
-    name: 'Carlos Mendes',
-    messages: [
-      { type: 'received', text: 'Qual o prazo de entrega do produto X?', time: '10:15' },
-      { type: 'sent', text: 'O prazo de entrega é de 3 a 5 dias úteis.', time: '10:20' }
-    ],
-    status: 'open',
-    unread: 0
-  },
-  3: {
-    name: 'Maria Costa',
-    messages: [
-      { type: 'received', text: 'Preciso reagendar meu horário.', time: '16:00' },
-      { type: 'sent', text: 'Claro, Maria! Qual horário seria mais conveniente?', time: '16:05' }
-    ],
-    status: 'open',
-    unread: 1
+// Initialize chats from localStorage or API
+async function initializeChats() {
+  console.log("Initializing chats");
+  try {
+    const status = await getAllChats(accessToken);
+    if (status === 200) {
+      const chats = JSON.parse(localStorage.getItem('chats') || '[]');
+      if (chats.length > 0) {
+        // Render chats in UI
+        const chatList = document.querySelector('.chat-list'); // Assumes a container for chat items
+        chatList.innerHTML = '';
+        chats.forEach(chat => {
+          const chatItem = document.createElement('div');
+          chatItem.className = `chat-item ${chat.status === 'closed' ? 'closed' : ''}`;
+          chatItem.setAttribute('data-chat-id', chat.idChat);
+          chatItem.innerHTML = `
+            <div>
+              <p>${chat.idUser2}</p> <!-- Adjust to display user name if available -->
+              <small>Última mensagem: ${chat.createdIn}</small>
+              ${chat.unread > 0 ? `<span class="unread-count">${chat.unread}</span>` : ''}
+            </div>
+          `;
+          chatItem.addEventListener('click', () => selectChat(chat.idChat));
+          chatList.appendChild(chatItem);
+        });
+        // Select the first chat by default
+        if (chats.length > 0) {
+          selectChat(chats[0].idChat);
+        } else {
+          document.getElementById('chat-user-name').textContent = 'Nenhum chat selecionado';
+          document.getElementById('chat-messages').innerHTML = '<p>Nenhum chat disponível.</p>';
+        }
+      }
+    } else {
+      console.warn("Failed to fetch chats, status:", status);
+      document.getElementById('chat-messages').innerHTML = '<p>Erro ao carregar chats.</p>';
+    }
+  } catch (error) {
+    console.error("Error initializing chats:", error.message, error.stack);
+    document.getElementById('chat-messages').innerHTML = '<p>Erro ao carregar chats.</p>';
   }
-};
+}
 
-function selectChat(chatId) {
-  // Update current chat ID
+async function selectChat(chatId) {
+  console.log("Selecting chat:", chatId);
   currentChatId = chatId;
 
-  // Remove active class from all chat items
+  // Update UI
   document.querySelectorAll('.chat-item').forEach(item => {
     item.classList.remove('active');
   });
-
-  // Add active class to selected chat item
   const chatItem = document.querySelector(`.chat-item[data-chat-id="${chatId}"]`);
   if (chatItem) {
     chatItem.classList.add('active');
   }
 
-  // Update chat window header and messages
-  const userName = chatData[chatId]?.name || 'Nenhum chat selecionado';
-  document.getElementById('chat-user-name').textContent = userName;
+  // Fetch chat details
+  try {
+    const status = await getChat(accessToken, chatId);
+    if (status === 200) {
+      const chat = JSON.parse(localStorage.getItem('chat') || '{}');
+      document.getElementById('chat-user-name').textContent = chat.idUser2 || 'Chat sem nome';
 
-  const chatMessages = document.getElementById('chat-messages');
-  chatMessages.innerHTML = ''; // Clear existing messages
+      // Fetch messages for the chat
+      const messagesStatus = await getAllMessages(accessToken, chatId);
+      if (messagesStatus === 200) {
+        const messages = JSON.parse(localStorage.getItem('messages') || '[]');
+        const chatMessages = document.getElementById('chat-messages');
+        chatMessages.innerHTML = ''; // Clear existing messages
 
-  if (chatData[chatId]) {
-    chatData[chatId].messages.forEach(msg => {
-      const messageDiv = document.createElement('div');
-      messageDiv.className = `message ${msg.type}`;
-      messageDiv.innerHTML = `<p>${msg.text}</p><small>${msg.time}</small>`;
-      chatMessages.appendChild(messageDiv);
-    });
+        messages.forEach(msg => {
+          const messageDiv = document.createElement('div');
+          messageDiv.className = `message ${msg.idUser === chat.idUser ? 'received' : 'sent'}`; // Assumes idUser determines sender
+          messageDiv.innerHTML = `<p>${msg.description}</p><small>${new Date(msg.createdIn).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</small>`;
+          chatMessages.appendChild(messageDiv);
+        });
 
-    // Scroll to the bottom of the chat
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  } else {
-    chatMessages.innerHTML = '<p>Nenhum chat disponível.</p>';
+        // Scroll to the bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      } else {
+        document.getElementById('chat-messages').innerHTML = '<p>Erro ao carregar mensagens.</p>';
+      }
+    } else {
+      document.getElementById('chat-user-name').textContent = 'Nenhum chat selecionado';
+      document.getElementById('chat-messages').innerHTML = '<p>Chat não encontrado.</p>';
+    }
+  } catch (error) {
+    console.error("Error selecting chat:", error.message, error.stack);
+    document.getElementById('chat-messages').innerHTML = '<p>Erro ao carregar chat.</p>';
   }
 }
 
-function sendMessage() {
+async function sendMessage() {
   const input = document.getElementById('chat-message-input');
   const messageText = input.value.trim();
 
-  if (messageText && chatData[currentChatId]) {
-    const chatMessages = document.getElementById('chat-messages');
-    const newMessage = {
-      type: 'sent',
-      text: messageText,
-      time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
-    };
-
-    // Add message to chat data
-    chatData[currentChatId].messages.push(newMessage);
-
-    // Append message to UI
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'message sent';
-    messageDiv.innerHTML = `<p>${messageText}</p><small>${newMessage.time}</small>`;
-    chatMessages.appendChild(messageDiv);
-
-    // Clear input
-    input.value = '';
-
-    // Scroll to the bottom
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-
-    // Update notifications
-    updateNotifications(`Nova mensagem enviada para ${chatData[currentChatId].name}`);
-  }
+  if (messageText && currentChatId) {
+    try {
+      const messageData = {
+        idChat: currentChatId,
+        description: messageText
+      };
+        const status = await registerMessage(accessToken, messageData);
+        if (status === 200) {
+          // Refresh messages
+          const messagesStatus = await getAllMessages(accessToken, currentChatId);
+          if (messagesStatus === 200) {
+            const messages = JSON.parse(localStorage.getItem('messages') || '[]');
+            const chatMessages = document.getElementById('chat-messages');
+            chatMessages.innerHTML = '';
+  
+            messages.forEach(msg => {
+              const messageDiv = document.createElement('div');
+              messageDiv.className = `message ${msg.idUser === JSON.parse(localStorage.getItem('chat')).idUser ? 'received' : 'sent'}`;
+              messageDiv.innerHTML = `<p píxel><small>${new Date(msg.createdIn).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</small>`;
+              chatMessages.appendChild(messageDiv);
+            });
+  
+            // Clear input
+            input.value = '';
+  
+            // Scroll to the bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+  
+            // Update notifications
+            updateNotifications(`Nova mensagem enviada no chat ${currentChatId}`);
+          } else {
+            console.warn("Failed to send message, status:", status);
+          }
+        }
+      } catch (error) {
+        console.error("Error sending message:", error.message, error.stack);
+      }
+    }
 }
 
-function closeChat() {
-  if (chatData[currentChatId]) {
-    document.getElementById('close-chat-message').textContent = `Tem certeza que deseja fechar o chat com ${chatData[currentChatId].name}?`;
+async function closeChat() {
+  if (currentChatId) {
+    const chat = JSON.parse(localStorage.getItem('chat') || '{}');
+    document.getElementById('close-chat-message').textContent = `Tem certeza que deseja fechar o chat com ${chat.idUser2}?`;
     openModal('close-chat-modal');
   }
 }
 
-function confirmCloseChat() {
-  if (chatData[currentChatId]) {
-    // Mark chat as closed
-    chatData[currentChatId].status = 'closed';
-    chatData[currentChatId].unread = 0; // Clear unread count
+async function confirmCloseChat() {
+  if (currentChatId) {
+    try {
+      // Assuming closing a chat means updating its status via API
+      const chatData = {
+        idChat: currentChatId,
+        status: 'closed' // Assuming the API accepts a status field
+      };
+      const status = await updateChat(accessToken, chatData);
+      if (status === 200) {
+        // Update UI
+        const chatItem = document.querySelector(`.chat-item[data-chat-id="${currentChatId}"]`);
+        if (chatItem) {
+          chatItem.classList.add('closed');
+          const unreadSpan = chatItem.querySelector('.unread-count');
+          if (unreadSpan) {
+            unreadSpan.remove();
+          }
+        }
 
-    // Update UI
-    const chatItem = document.querySelector(`.chat-item[data-chat-id="${currentChatId}"]`);
-    if (chatItem) {
-      chatItem.classList.add('closed');
-      const unreadSpan = chatItem.querySelector('.unread-count');
-      if (unreadSpan) {
-        unreadSpan.remove();
+        // Update notifications
+        updateNotifications(`Chat com ${chat.idUser2} fechado`);
+
+        // Refresh chat list
+        await initializeChats();
+      } else {
+        console.warn("Failed to close chat, status:", status);
       }
+    } catch (error) {
+      console.error("Error closing chat:", error.message, error.stack);
     }
-
-    // Update notifications
-    updateNotifications(`Chat com ${chatData[currentChatId].name} fechado`);
-
-    // Close modal
     closeModal('close-chat-modal');
   }
 }
 
-function deleteChat() {
-  if (chatData[currentChatId]) {
-    document.getElementById('delete-chat-message').textContent = `Tem certeza que deseja excluir o chat com ${chatData[currentChatId].name}? Esta ação é irreversível.`;
+async function deleteChat() {
+  if (currentChatId) {
+    const chat = JSON.parse(localStorage.getItem('chat') || '{}');
+    document.getElementById('delete-chat-message').textContent = `Tem certeza que deseja excluir o chat com ${chat.idUser2}? Esta ação é irreversível.`;
     openModal('delete-chat-modal');
   }
 }
 
-function confirmDeleteChat() {
-  if (chatData[currentChatId]) {
-    // Remove chat from UI
-    const chatItem = document.querySelector(`.chat-item[data-chat-id="${currentChatId}"]`);
-    if (chatItem) {
-      chatItem.remove();
+async function confirmDeleteChat() {
+  if (currentChatId) {
+    try {
+      const status = await deleteChat(accessToken, currentChatId);
+      if (status === 200) {
+        // Remove chat from UI
+        const chatItem = document.querySelector(`.chat-item[data-chat-id="${currentChatId}"]`);
+        if (chatItem) {
+          chatItem.remove();
+        }
+
+        // Update notifications
+        updateNotifications(`Chat com ${JSON.parse(localStorage.getItem('chat')).idUser2} excluído`);
+
+        // Select another chat or clear window
+        const remainingChats = JSON.parse(localStorage.getItem('chats') || '[]');
+        if (remainingChats.length > 0) {
+          const newChatId = remainingChats[0].idChat;
+          selectChat(newChatId);
+        } else {
+          currentChatId = null;
+          document.getElementById('chat-user-name').textContent = 'Nenhum chat selecionado';
+          document.getElementById('chat-messages').innerHTML = '<p>Nenhum chat disponível.</p>';
+        }
+      } else {
+        console.warn("Failed to delete chat, status:", status);
+      }
+    } catch (error) {
+      console.error("Error deleting chat:", error.message, error.stack);
     }
-
-    // Update notifications
-    updateNotifications(`Chat com ${chatData[currentChatId].name} excluído`);
-
-    // Remove chat from data
-    delete chatData[currentChatId];
-
-    // Select another chat or clear window
-    const remainingChats = document.querySelectorAll('.chat-item');
-    if (remainingChats.length > 0) {
-      const newChatId = remainingChats[0].getAttribute('data-chat-id');
-      selectChat(newChatId);
-    } else {
-      currentChatId = null;
-      document.getElementById('chat-user-name').textContent = 'Nenhum chat selecionado';
-      document.getElementById('chat-messages').innerHTML = '<p>Nenhum chat disponível.</p>';
-    }
-
-    // Close modal
     closeModal('delete-chat-modal');
   }
 }
 
-function openModal(modalId) {
-  document.getElementById(modalId).style.display = 'block';
-}
-
-function closeModal(modalId) {
-  document.getElementById(modalId).style.display = 'none';
-}
-
-function updateNotifications(message) {
-  const notifications = document.querySelector('.notifications-dropdown');
-  const notificationItem = document.createElement('div');
-  notificationItem.className = 'notification-item';
-  notificationItem.innerHTML = `
-    <i class="far fa-comments"></i>
-    <div>
-      <p>${message}</p>
-      <small>${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</small>
-    </div>
-  `;
-  notifications.prepend(notificationItem);
-
-  // Update notification badge
-  const badge = document.querySelector('.notification-badge');
-  badge.textContent = parseInt(badge.textContent) + 1;
-}
-
-// Initialize first chat
-document.addEventListener('DOMContentLoaded', () => {
-  selectChat(1);
-});
+// Initialize chats on page load
+document.addEventListener('DOMContentLoaded', initializeChats);
