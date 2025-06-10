@@ -87,3 +87,24 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Fechar menu quando clicar em um link (já tratado no smooth scrolling)
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const videoBtn = document.getElementById('video-btn');
+    const modal = document.getElementById('video-modal');
+    const closeBtn = document.querySelector('.close');
+    
+    videoBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        modal.style.display = 'block';
+    });
+    
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+    
+    window.addEventListener('click', function(e) {
+        if (e.target == modal) {
+            modal.style.display = 'none';
+        }
+    });
+});
