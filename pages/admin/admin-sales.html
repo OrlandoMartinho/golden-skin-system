@@ -6,6 +6,7 @@
     <title>Pele Douro - Gerenciar Vendas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/admin/admin-sales.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -97,8 +98,8 @@
                 <div class="filter-box">
                     <select id="sale-status-filter">
                         <option value="all">Todos os status</option>
-                        <option value="true">Concluída</option>
-                        <option value="false">Pendente</option>
+                        <option value="completed">Concluída</option>
+                        <option value="pending">Pendente</option>
                     </select>
                     <select id="payment-method-filter">
                         <option value="all">Todos os métodos de pagamento</option>
@@ -162,9 +163,14 @@
                         <label>Produtos:</label>
                         <table class="sale-products-table">
                             <thead>
-                                <th>Nome</th>
-                                <th>Preço Unitário (AOA)</th>
-                                <th>Método de Pagamento</th>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Preço Unitário (AOA)</th>
+                                    <th>Método de Pagamento</th>
+                                    <th>Data de Criação</th>
+                                    <th>Data de Atualização</th>
+                                </tr>
                             </thead>
                             <tbody id="sale-products"></tbody>
                         </table>
@@ -192,6 +198,19 @@
                 <div class="modal-buttons">
                     <button class="cancel" onclick="closeModal('confirm-modal')">Cancelar</button>
                     <button class="confirm" onclick="confirmAction()" id="confirm-button">Confirmar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Message Modal -->
+        <div id="message-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('message-modal')">×</span>
+                <div id="message-modal-icon"></div>
+                <h3 id="message-modal-title"></h3>
+                <p id="message-modal-text"></p>
+                <div class="modal-buttons">
+                    <button id="message-modal-button" class="confirm">OK</button>
                 </div>
             </div>
         </div>
