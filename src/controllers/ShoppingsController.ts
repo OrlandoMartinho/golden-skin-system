@@ -36,6 +36,7 @@ class ShoppingsController {
         data: {
           idUser,
           status: "pendente",
+          name:user.name,
           createdIn: new Date().toISOString(),
           updatedIn: new Date().toISOString(),
         },
@@ -139,7 +140,9 @@ class ShoppingsController {
         throw new AuthorizationException('Not authorized');
       }
 
-      const shopping = await prisma.shoppings.findUnique({ where: { idShopping } });
+      const shopping = await prisma.shoppings.findUnique({ where: { idShopping } ,include:{
+        PurchaseProducts: true,
+      }});
       if (!shopping) {
         throw new ItemNotFoundException('Shopping not found');
       }
@@ -171,9 +174,19 @@ class ShoppingsController {
         throw new AuthorizationException('Not authorized');
       }
 
-      const shoppings = await prisma.shoppings.findMany({ where: { idUser :userId } });
+      const userRole = await this.tokenService.userRole(token)
 
-      return ShoppingsSchemas.shoppingsResponseSchema.parse(shoppings);
+      
+
+     const shoppings = await prisma.shoppings.findMany({
+      where: userRole !== 0 ? { idUser: userId } : undefined,
+      include: {
+        PurchaseProducts: true,
+      },
+    });
+     console.log(shoppings)
+    return ShoppingsSchemas.shoppingsResponseSchema.parse(shoppings);
+
     } catch (error) {
       if (
         error instanceof AuthorizationException ||
@@ -181,6 +194,7 @@ class ShoppingsController {
       ) {
         throw error;
       }
+      console.log("Error:",error)
       throw new InternalServerErrorException('An error occurred when trying to retrieve shoppings');
     }
   }

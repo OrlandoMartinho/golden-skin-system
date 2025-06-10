@@ -1,13 +1,16 @@
 import { z } from 'zod';
+import PurchaseProductsSchemas from './PurchaseProductsSchemas';
 
 class ShoppingsSchemas {
   // Schema for a single shopping
   static shoppingSchema = z.object({
     idShopping: z.number(),
+    name:z.string(),
     idUser: z.number(),
     status: z.string(),
     createdIn: z.string(),
     updatedIn: z.string(),
+    PurchaseProducts:z.array(PurchaseProductsSchemas.purchaseProductSchema)
   });
 
   // Schema for registering a shopping
