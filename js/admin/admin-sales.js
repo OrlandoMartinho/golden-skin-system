@@ -240,10 +240,13 @@ async function approveSale() {
     
     try {
         // Simulação de chamada à API - substitua pelo código real
-        // const result = await updateSaleStatus(accessToken, saleId, 'completed');
-        // if (result !== 200) throw new Error();
-        
-        // Atualiza localmente para demonstração
+        const shoppingData = {
+            idShopping:saleId,
+            status:"completed"
+        }
+        const result = await editAnyShopping(accessToken,shoppingData)
+        if(result.status == 200){
+            // Atualiza localmente para demonstração
         const saleIndex = salesData.findIndex(s => s.idShopping == saleId);
         if (saleIndex !== -1) {
             salesData[saleIndex].status = 'completed';
@@ -257,8 +260,14 @@ async function approveSale() {
                 document.getElementById('sale-status').textContent = 'Completed';
             }
             
-            showMessageModal('success', 'Sucesso!', 'Venda aprovada com sucesso.', { buttonText: 'OK' });
+            
         }
+            showMessageModal('success', 'Sucesso!', 'Venda aprovada com sucesso.', { buttonText: 'OK' });
+        }else{
+            showMessageModal('error', 'Erro!', 'Falha ao aprovar a venda.', { buttonText: 'Entendido' });
+        }
+        
+        
     } catch (error) {
         showMessageModal('error', 'Erro!', 'Falha ao aprovar a venda.', { buttonText: 'Entendido' });
     }
@@ -268,14 +277,17 @@ async function approveSale() {
 async function cancelSale() {
     const accessToken = localStorage.getItem('accessToken');
     const saleId = document.getElementById('sale-id').textContent;
-    
+
     try {
         // Simulação de chamada à API - substitua pelo código real
-        // const result = await updateSaleStatus(accessToken, saleId, 'cancelled');
-        // if (result !== 200) throw new Error();
+          const shoppingData = {
+            idShopping:saleId,
+            status:"cancelled"
+        }
+        const result = await editAnyShopping(accessToken,shoppingData)
         
-        // Atualiza localmente para demonstração
-        const saleIndex = salesData.findIndex(s => s.idShopping == saleId);
+        if(result.status == 200){
+             const saleIndex = salesData.findIndex(s => s.idShopping == saleId);
         if (saleIndex !== -1) {
             salesData[saleIndex].status = 'cancelled';
             salesData[saleIndex].updatedIn = new Date().toISOString();
@@ -290,6 +302,11 @@ async function cancelSale() {
             
             showMessageModal('success', 'Sucesso!', 'Venda cancelada com sucesso.', { buttonText: 'OK' });
         }
+        }else{
+          showMessageModal('error', 'Erro!', 'Falha ao cancelar a venda.', { buttonText: 'Entendido' });  
+        }
+        // Atualiza localmente para demonstração
+       
     } catch (error) {
         showMessageModal('error', 'Erro!', 'Falha ao cancelar a venda.', { buttonText: 'Entendido' });
     }
