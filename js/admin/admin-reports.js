@@ -67,11 +67,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // Busca usuários
       const result6 = await getAllUser(accessToken);
       console.log('Usuários Result:', result6);
-      if (result6.status === 200) {
-        users = result6.data || [];
+      if (result6 === 200) {
+        users = localStorage.getItem("users") || []
         console.log('Usuários Data:', users);
       } else {
-        console.warn("Ocorreu um erro ao carregar os usuários:", result6.status, result6.message);
+        console.warn("Ocorreu um erro ao carregar os usuários:", result6, result6.message);
       }
 
       return {
