@@ -282,8 +282,6 @@ async function cancelSale() {
         showMessageModal('error', 'Erro!', 'Falha ao cancelar a venda.', { buttonText: 'Entendido' });
     }
 }
-
-// Função para exportar venda em PDF
 window.exportSale = function() {
     const saleId = document.getElementById('sale-id').textContent;
     const sale = salesData.find(s => s.idShopping == saleId);
@@ -300,41 +298,51 @@ window.exportSale = function() {
     // Configurações do PDF
     doc.setFont('helvetica');
     doc.setFontSize(18);
-    doc.setTextColor(40);
+    doc.setTextColor(139, 69, 19); // Marrom escuro (#8B4513) para alinhar com a família marrom
+    
+    // Adiciona o logo
+    const logoUrl = '../../assets/img/logo.png'; // Substitua pelo caminho real do seu logo
+    try {
+        doc.addImage(logoUrl, 'PNG', 95, 10, 20, 20); // Logo centrado (x=95 para A4 de 210mm)
+    } catch (error) {
+        console.error('Erro ao carregar o logo:', error);
+        // Caso o logo não carregue, continua sem interromper
+    }
     
     // Cabeçalho
-    doc.text('Comprovante de Venda - Pele Douro', 105, 20, { align: 'center' });
+    doc.text('Comprovante de Venda - Pele Douro', 105, 40, { align: 'center' }); // Ajustado para baixo devido ao logo
     doc.setFontSize(12);
-    doc.text(`Nº da Venda: ${sale.idShopping}`, 14, 30);
-    doc.text(`Data: ${new Date(sale.createdIn).toLocaleDateString('pt-BR')}`, 14, 36);
-    doc.text(`Cliente: ${sale.name}`, 14, 42);
-    doc.text(`Status: ${sale.status.charAt(0).toUpperCase() + sale.status.slice(1)}`, 14, 48);
+    doc.text(`Nº da Venda: ${sale.idShopping}`, 14, 50);
+    doc.text(`Data: ${new Date(sale.createdIn).toLocaleDateString('pt-BR')}`, 14, 56);
+    doc.text(`Cliente: ${sale.name}`, 14, 62);
+    doc.text(`Status: ${sale.status.charAt(0).toUpperCase() + sale.status.slice(1)}`, 14, 68);
     
     // Linha divisória
-    doc.setDrawColor(200);
-    doc.line(14, 52, 196, 52);
+    doc.setDrawColor(139, 69, 19); // Marrom escuro para a linha
+    doc.line(14, 72, 196, 72); // Ajustado para baixo
     
     // Título da tabela de produtos
     doc.setFontSize(14);
-    doc.text('Produtos Adquiridos', 14, 60);
+    doc.text('Produtos Adquiridos', 14, 80);
     
     // Cabeçalho da tabela
     doc.setFontSize(10);
-    doc.setFillColor(240);
-    doc.rect(14, 64, 182, 8, 'F');
-    doc.text('Produto', 16, 68);
-    doc.text('Preço Unitário', 100, 68);
-    doc.text('Pagamento', 150, 68);
-    doc.text('Quantia', 180, 68, { align: 'right' });
+    doc.setFillColor(222, 184, 135); // Marrom claro (#DEB887) para o fundo da tabela
+    doc.rect(12, 82, 180, 8, 'F');
+    doc.setTextColor(139, 69, 19); // Marrom escuro para o texto
+    doc.text('Produto', 16, 88);
+    doc.text('Preço Unitário', 100, 88);
+    doc.text('Método de Pagamento', 150, 88);
+   
     
     // Linhas dos produtos
-    let y = 74;
+    let y = 94; // Ajustado para baixo
     const total = sale.PurchaseProducts.reduce((sum, item) => sum + item.priceInCents, 0) / 100;
     
     sale.PurchaseProducts.forEach((product, index) => {
         if (y > 260 && index < sale.PurchaseProducts.length - 1) {
             doc.addPage();
-            y = 20;
+            y = 40;
         }
         
         doc.text(product.productName, 16, y);
@@ -346,14 +354,14 @@ window.exportSale = function() {
     
     // Total
     doc.setFontSize(12);
-    doc.setDrawColor(200);
+    doc.setDrawColor(139, 69, 19); // Marrom escuro para a linha
     doc.line(140, y + 4, 196, y + 4);
     doc.text('Total:', 140, y + 10);
     doc.text(`AOA ${total.toFixed(2)}`, 180, y + 10, { align: 'right' });
     
     // Rodapé
     doc.setFontSize(10);
-    doc.setTextColor(100);
+    doc.setTextColor(139, 69, 19); // Marrom escuro para o texto do rodapé
     doc.text('Obrigado por escolher Pele Douro!', 105, 285, { align: 'center' });
     doc.text('Em caso de dúvidas, entre em contato com nosso suporte.', 105, 290, { align: 'center' });
     
