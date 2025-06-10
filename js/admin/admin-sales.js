@@ -60,20 +60,32 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initialize Sales
     async function initializeSales() {
-        try {
-            // Simulate API call to fetch sales
-            // const result = await getAllSales(accessToken);
-            // if (result === 200) {
-            //     salesData = JSON.parse(localStorage.getItem('sales')) || [];
-            //     populateSalesTable(salesData);
-            // } else {
-            //     showMessageModal('error', 'Erro!', 'Falha ao carregar vendas', { buttonText: 'Entendido' });
-            // }
+    try {
+        console.log('Iniciando a função initializeSales...');
+        
+        const result = await getAllShoppings(accessToken);
+        console.log('Resultado da requisição getAllShoppings:', result);
+
+        if (result.status === 200) {
+            salesData = JSON.parse(localStorage.getItem('sales')) || [];
+            console.log('Dados de vendas carregados do localStorage:', salesData);
+            
             populateSalesTable(salesData);
-        } catch (error) {
-            showMessageModal('error', 'Erro!', 'Falha ao inicializar a aplicação', { buttonText: 'Entendido' });
+            console.log('Tabela de vendas populada com sucesso.');
+        } else {
+            console.error('Erro ao carregar vendas - Status diferente de 200:', result.status);
+            showMessageModal('error', 'Erro!', 'Falha ao carregar vendas', { buttonText: 'Entendido' });
         }
+
+        // Este `populateSalesTable` pode ser redundante, já que ele é chamado dentro do if acima
+        console.log('Populando tabela novamente com salesData (pode ser redundante):', salesData);
+        populateSalesTable(salesData);
+
+    } catch (error) {
+        console.error('Erro no bloco try/catch da função initializeSales:', error);
+        showMessageModal('error', 'Erro!', 'Falha ao inicializar a aplicação', { buttonText: 'Entendido' });
     }
+}
 
     // Populate Sales Table
     function populateSalesTable(sales) {
