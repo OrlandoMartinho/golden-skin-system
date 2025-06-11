@@ -449,6 +449,96 @@ class Users {
     }
   }
 
+public async updateAdmin(data: any, key: any): Promise<z.infer<typeof this.responseSquema>> {
+
+    const validatedData = userSchema.UsersAdminUpdate.parse(data);
+
+    
+    const validatedKey = await this.zodError(userSchema.tokenSchema, key);
+    console.log('Validated key:', validatedKey);
+    const { token } = validatedKey;
+
+    try {
+     
+        const isTokenValid = await this.tokenService.checkTokenUser(token);
+        const userRole = await this.tokenService.userRole(token);
+       
+        
+        if (!isTokenValid || userRole !== 0) {
+       
+            throw new AuthorizationException('Not authorized');
+        }
+
+        const userId = await this.tokenService.userId(token);
+        
+        if (!userId) {
+            console.log('Invalid user ID');
+            throw new AuthorizationException('Invalid user ID');
+        }
+
+       
+        const user = await prisma.users.findUnique({ where: { idUser: userId as number } });
+       
+        if (!user) {
+           
+            throw new ItemNotFoundException('User not found');
+        }
+
+        const { name, phoneNumber, oldPassword, newPassword, email, password } = validatedData;
+       
+        if (oldPassword) {
+          
+            const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+            
+            if (!isPasswordValid) {
+               
+                throw new AuthorizationException('Incorrect password');
+            }
+        }
+
+        if (email) {
+     
+            const existingUser = await prisma.users.findMany({ where: { email } });
+           
+            if (existingUser.length > 1) {
+               
+                throw new ItemAlreadyExistsException('User already exists');
+            }
+        }
+
+      
+        const updateData = {
+            name: name || user.name,
+            updatedIn: new Date(),
+            phoneNumber: phoneNumber || user.phoneNumber,
+            email: email || user.email,
+            password: newPassword ? await bcrypt.hash(newPassword, saltRounds) : user.password,
+        };
+      
+
+        await prisma.users.update({
+            where: { idUser: user.idUser },
+            data: updateData,
+        });
+       
+
+        return { message: 'User updated successfully' };
+    } catch (error) {
+        
+        if (
+            error instanceof AuthorizationException ||
+            error instanceof ItemNotFoundException ||
+            error instanceof InvalidDataException
+        ) {
+           
+            throw error;
+        }
+        
+      
+        throw new InternalServerErrorException('An error occurred when trying to update user');
+    }
+}
+
 
   
   public async updateWorker(data: any, key: any): Promise<z.infer<typeof this.responseSquema>> {

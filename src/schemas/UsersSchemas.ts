@@ -67,6 +67,15 @@ static userSchema = z.object({
     phoneNumber: z.string().optional(),
   });
 
+  static UsersAdminUpdate = z.object({
+    name: z.string().optional(),
+    email: z.string().optional(),
+    password: z.string().optional(),
+    phoneNumber: z.string().optional(),
+    oldPassword: z.string().optional(),
+    newPassword: z.string().optional(),
+  });
+
   static UsersWorkerUpdate = z.object({
     name: z.string(),
     status: z.boolean(),
