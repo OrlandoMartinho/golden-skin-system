@@ -1,4 +1,5 @@
 
+
 const api_host = "http://localhost:3000";
 
 // Get single user information
@@ -93,6 +94,49 @@ async function registerUser(userData,accessToken) {
       const result = await response.json();
      
    
+      
+      return response.status;
+    } else {
+
+      return response.status;
+    }
+  } catch (error) {
+   
+    return 500;
+  }
+}
+
+
+// Register a new user
+async function registerUserNormal(userData) {
+ 
+  try {
+    const url = `${api_host}/api/users/register`;
+
+    const data = {
+      "name": userData.nome,
+      "email": userData.email,
+      "password": userData.senha,
+      "phoneNumber": "Not provider",
+      "code": userData.codigo
+    }
+
+  
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    });
+
+
+    if (response.ok) {
+      const result = await response.json();
+     
+      localStorage.setItem("accessToken", result.accessToken);
+      localStorage.setItem("userRole", result.userRole);
+      localStorage.setItem("idUser", result.idUser);
       
       return response.status;
     } else {
