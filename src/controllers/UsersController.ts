@@ -328,8 +328,8 @@ class Users {
         data: {
           idUser: newUser.idUser,
           idUser2: adminUser ? adminUser.idUser : null,
-          username1: newUser.name,
-          username2: adminUser ? adminUser.name + "(admin)" : 'Admin',
+          userName1: newUser.name,
+          userName2: adminUser?.name || null,
           userPhoto1: newUser.photo || null,
           userPhoto2: adminUser ? adminUser.photo || null : null,
       }}
@@ -338,10 +338,11 @@ class Users {
     const message = await prisma.messages.create({
       data:{
         idChat: chat.idChat,
-        idUser: newUser.idUser,
+        idUser: adminUser?.idUser as number,
         description: "Olá, seja bem-vindo(a) ao nosso sistema! Estamos aqui para ajudar você a começar. Se precisar de assistência, não hesite em entrar em contato.",
         createdIn: new Date(),
         updatedIn: new Date(),
+        username:newUser.name
       }
     })
 
@@ -661,7 +662,10 @@ public async updateAdmin(data: any, key: any): Promise<z.infer<typeof this.respo
 
       }
 
+      await prisma.messages.deleteMany({ where: { idUser: idUser as number } });
+      await prisma.chats.deleteMany({ where: { idUser: idUser as number } });
       await prisma.users.delete({ where: { idUser: idUser as number } });
+
 
       return { message: 'User deleted successfully' };
     } catch (error) {

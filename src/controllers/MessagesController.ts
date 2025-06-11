@@ -223,7 +223,7 @@ class MessagesController {
       
 
       const messages = await prisma.messages.findMany();
-
+    
       return MessagesSchemas.messagesResponseSchema.parse(messages);
     } catch (error) {
       if (
@@ -233,6 +233,13 @@ class MessagesController {
       ) {
         throw error;
       }
+        if (error instanceof z.ZodError) {
+              error.errors.forEach((err) => {
+              console.log('Campo inválido:', err.path.join('.'));
+              console.log('Mensagem:', err.message);
+            })
+        }
+      console.log("Error:",error)
       throw new InternalServerErrorException('An error occurred when trying to retrieve messages');
     }
   }

@@ -78,7 +78,7 @@ export async function chatsRoutes(app: FastifyTypedInstance) {
 
   // View a single chat
   app.get(
-    "/chats/view-a",
+    "/chats/view-a/:idChat",
     {
       schema: {
         description: "View a single chat",

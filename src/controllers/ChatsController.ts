@@ -142,7 +142,7 @@ class ChatsController {
         throw new AuthorizationException('Not authorized');
       }
 
-      const chat = await prisma.chats.findUnique({ where: { idChat } });
+      const chat = await prisma.chats.findUnique({ where: { idChat:Number(idChat) },include: { Messages: true } });
       if (!chat) {
         throw new ItemNotFoundException('Chat not found');
       }
@@ -160,37 +160,102 @@ class ChatsController {
       ) {
         throw error;
       }
+      console.error('Error in viewA:', error);
+      if (error instanceof z.ZodError) {
+        error.errors.forEach((err) => {
+        console.log('Campo inválido:', err.path.join('.'));
+        console.log('Mensagem:', err.message);
+      })
+      }
       throw new InternalServerErrorException('An error occurred when trying to retrieve chat');
     }
   }
-
-  public async viewAll(key: any): Promise<z.infer<typeof ChatsSchemas.chatsResponseSchema>> {
+public async viewAll(key: any): Promise<z.infer<typeof ChatsSchemas.chatsResponseSchema>> {
     const validatedKey = await this.zodError(ChatsSchemas.tokenSchema, key);
     const { token } = validatedKey;
 
     try {
-      const userId = await this.tokenService.userId(token);
-      if (!userId) {
-        throw new AuthorizationException('Not authorized');
-      }
+        const userId = await this.tokenService.userId(token);
+        if (!userId) {
+            throw new AuthorizationException('Not authorized');
+        }
 
-      const chats = await prisma.chats.findMany({
-        where: {
-          OR: [{ idUser: userId }, { idUser2: userId }],
-        },
-      });
+        // Fetch chats with all messages
+        const chats = await prisma.chats.findMany({
+            where: {
+                OR: [{ idUser: userId }, { idUser2: userId }],
+            },
+            include: {
+                Messages: {
+                    orderBy: {
+                        createdIn: 'asc' // Or 'desc' depending on your needs
+                    }
+                }
+            }
+        });
 
-      return ChatsSchemas.chatsResponseSchema.parse(chats);
+        // Get all unique user IDs involved in chats
+        const userIds = new Set<number>();
+        chats.forEach(chat => {
+            userIds.add(chat.idUser as number);
+            userIds.add(chat.idUser2 as number);
+        });
+
+        // Fetch all users data in a single query
+        const users = await prisma.users.findMany({
+            where: {
+                idUser: { in: Array.from(userIds) }
+            },
+            select: {
+                idUser: true,
+                name: true,
+                photo: true
+            }
+        });
+
+        // Create a map for quick user lookup
+        const usersMap = new Map<number, { name: string; photo: string }>();
+        users.forEach(user => {
+            usersMap.set(user.idUser, { name: user.name, photo: user.photo || '' });
+        });
+
+        // Process chats while keeping messages
+        const processedChats = chats.map(chat => {
+            const user1 = usersMap.get(chat.idUser as number);
+            const user2 = usersMap.get(chat.idUser2 as number);
+            const messages = chat.Messages.map(message => ({
+                ...message,
+                createdIn: message.createdIn  // Format dates if needed
+            }));
+
+            const lastMessage = chat.Messages.length > 0 
+                ? chat.Messages[chat.Messages.length - 1] 
+                : null;
+
+            return {
+                ...chat,
+                userName1: user1?.name,
+                userPhoto1: user1?.photo,
+                user2Name: user2?.name,
+                userPhoto2: user2?.photo,
+                lastMessage: lastMessage?.description,
+                lastMessageDate: lastMessage?.createdIn,
+                createdIn:chat.createdIn ,
+                Messages: messages 
+            };
+        });
+        console.log(processedChats);
+        return ChatsSchemas.chatsResponseSchema.parse(processedChats);
     } catch (error) {
-      if (
-        error instanceof AuthorizationException ||
-        error instanceof InvalidDataException
-      ) {
-        throw error;
-      }
-      throw new InternalServerErrorException('An error occurred when trying to retrieve chats');
+        if (error instanceof AuthorizationException || error instanceof InvalidDataException) {
+          console.error('Authorization or validation error in viewAll:', error);  
+          throw error;
+
+        }
+        console.error('Error in viewAll:', error);
+        throw new InternalServerErrorException('An error occurred when trying to retrieve chats');
     }
-  }
+}
 }
 
 export default ChatsController;

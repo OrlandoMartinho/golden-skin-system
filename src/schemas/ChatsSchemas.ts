@@ -1,19 +1,19 @@
 import { z } from 'zod';
-
+import MessagesSchemas from './MessagesSchemas';
 class ChatsSchemas {
   // Schema for a single chat
   static chatSchema = z.object({
     idChat: z.number(),
     idUser: z.number(),
     idUser2: z.number(),
-    user2Name: z.string(),
-    userName1 :z.string(),
-    userName2: z.string(),
-    userPhoto2: z.string(),
-    userPhoto1: z.string(),
-    lastMessageDate: z.string().optional(),
-    lastMessage: z.string().optional(),
-    createdIn: z.string(),
+    userName1 :z.string().nullable(),
+    userName2: z.string().nullable(),
+    userPhoto2: z.string().nullable(),
+    userPhoto1: z.string().nullable(),
+    lastMessageDate: z.date().nullable(),
+    lastMessage: z.string().nullable(),
+    createdIn: z.date().nullable(),
+    Messages: z.array(MessagesSchemas.messageSchema).optional(),
   });
 
   // Schema for adding a chat
@@ -35,7 +35,7 @@ class ChatsSchemas {
 
   // Schema for viewing a single chat
   static ViewChat = z.object({
-    idChat: z.number().int().positive("ID Chat must be a positive integer"),
+    idChat: z.string().min(1, "ID Chat is required"),
   });
 
   // Schema for token validation

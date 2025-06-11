@@ -4,12 +4,12 @@ class MessagesSchemas {
   // Schema for a single message
   static messageSchema = z.object({
     idMessage: z.number().optional(),
-    idUser: z.number(),
+    idUser: z.number().nullable(),
     idChat: z.number(),
-    username: z.string(),
+    username: z.string().nullable(),
     description:z.string().nullable(),
-    createdIn: z.string(),
-    updatedIn: z.string(),
+    createdIn: z.date(),
+    updatedIn: z.date().nullable(),
   });
 
   // Schema for registering a message
