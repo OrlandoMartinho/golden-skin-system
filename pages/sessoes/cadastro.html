@@ -21,7 +21,7 @@
                         
                         <div class="input-with-icon">
                             <i class="fas fa-user"></i>
-                            <input type="text" placeholder="Digite o seu nome" required>
+                            <input type="text" placeholder="Digite o seu nome" name="nome" id="nome" required>
                         </div>
                     </div>
                     
@@ -29,7 +29,7 @@
                        
                         <div class="input-with-icon">
                             <i class="fas fa-envelope"></i>
-                            <input type="email" placeholder="Digite o seu email" required>
+                            <input type="email" placeholder="Digite o seu email" name="email" id="email" required>
                         </div>
                     </div>
                     
@@ -37,7 +37,7 @@
                      
                         <div class="input-with-icon">
                             <i class="fas fa-lock"></i>
-                            <input type="password" placeholder="Criar uma Senha" required>
+                            <input type="password" placeholder="Criar uma Senha" name="senha" id="senha" required>
                         </div>
                     </div>
                     
@@ -45,7 +45,7 @@
                       
                         <div class="input-with-icon">
                             <i class="fas fa-lock"></i>
-                            <input type="password" placeholder="Confirmar Senha" required>
+                            <input type="password" placeholder="Confirmar Senha" name="confirmarSenha" id="confirmarSenha" required>
                         </div>
                     </div>
                     
@@ -54,7 +54,7 @@
                     </div>
                     
                     <div class="btn-form">
-                        <button type="submit">Criar Conta</button>
+                        <button type="submit" id="cadastrar">Criar Conta</button>
                     </div>
                     
                     <p class="login-link">Já tem uma conta? <a href="login.html">Fazer Login</a></p>
@@ -67,4 +67,8 @@
         </div>
     </main>
 </body>
+   <script src="../../js/messageModal.js"></script>
+    <script src="../../apis/sectionLogin.js"></script>
+    <script src="../../apis/users.js"></script>
+    <script src="../../js/sessoes/register.js"></script>
 </html>
