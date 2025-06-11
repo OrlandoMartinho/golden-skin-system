@@ -30,8 +30,8 @@ async function verifyUserData(){
         // Cria dinamicamente a imagem ou ícone e o nome
         const iconOrImage = document.createElement(user.photo ? 'img' : 'i');
 
-        if (user.image) {
-            iconOrImage.src = user.image;
+        if (user.photo) {
+            iconOrImage.src = user.photo;
             iconOrImage.alt = 'User Image';
             iconOrImage.style.width = '30px';
             iconOrImage.style.height = '30px';

@@ -7,6 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.remove('active');
     };
 
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    document.getElementById('admin-name').value = user.name || '';
+    document.getElementById('admin-phone').value = user.phoneNumber || '';
+
+
     window.confirmAction = function () {
         const modal = document.getElementById('confirm-modal');
         const messageElement = document.getElementById('confirm-message');
@@ -98,12 +103,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Save phone
     window.savePhone = function () {
         const phone = document.getElementById('admin-phone').value.trim();
-        if (!phone.match(/^\+\d{2}\s\d{2}\s\d{5}-\d{4}$/)) {
-            showMessageModal('error', 'Errp!', 'Por favor, digite um número de telefone válido (ex: +55 11 98765-4321).', {
+       if (!phone.match(/^\+244\s\d{3}\s\d{3}\s\d{3}$/)) {
+            showMessageModal('error', 'Erro!', 'Por favor, digite um número de telefone válido (ex: +244 923 456 789).', {
                 buttonText: 'Entendido',
             });
             return;
         }
+
         showConfirmModal('Deseja salvar o novo número de telefone?', 'savePhone');
     };
 
@@ -125,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then((data) => {
                 console.log('Dados recebidos da atualização de telefone:', data);
-                if (data.success) {
+                if (data.message) {
                     showMessageModal('sucess', 'Sucesso!', 'Número de telefone atualizado com sucesso!', {
                         buttonText: 'Entendido',
                     });
@@ -163,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Iniciando requisição para upload de foto:', { fileName: file.name });
         
         fetch(`${api_host}/api/users/upload-photo`, {
-            method: 'POST',
+            method: 'PATCH',
             headers: {
                 token: accessToken,
             },
@@ -175,9 +181,11 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then((data) => {
                 console.log('Dados recebidos do upload de foto:', data);
-                if (data.success) {
-                    alert('Foto de perfil atualizada com sucesso!');
-                    document.getElementById('profile-photo-preview').src = data.data.url;
+                if (data.url) {
+                    
+                    showMessageModal('success', 'Sucesso!', 'Foto de perfil atualizada com sucesso!', {
+                        buttonText: 'Ótimo!'});
+                    document.getElementById('profile-photo-preview').src = data.url;
                 } else {
                     showMessageModal('error', 'Erro!', 'Erro ao atualizar a foto de perfil.', {
                         buttonText: 'Entendido',
@@ -222,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then((data) => {
                 console.log('Dados recebidos da atualização de email:', data);
-                if (data.success) {
+                if (data.message) {
                     showMessageModal('success', 'Sucesso!', 'E-mail atualizado com sucesso!', { buttonText: 'Ótimo!' });
                 } else {
                     showMessageModal('error', 'Erro!', 'Erro ao atualizar o e-mail.', {
@@ -283,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then((data) => {
                 console.log('Dados recebidos da atualização de senha:', data);
-                if (data.success) {
+                if (data.message) {
                     showMessageModal('success', 'Sucesso!', 'Senha atualizada com sucesso!', { buttonText: 'Ótimo!' });
                     document.getElementById('current-password').value = '';
                     document.getElementById('new-password').value = '';
@@ -330,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then((data) => {
                 console.log('Dados recebidos da atualização de nome da clínica:', data);
-                if (data.success) {
+                if (data.message) {
                     showMessageModal('success', 'Sucesso!', 'Nome da clínica atualizado com sucesso!', { buttonText: 'Ótimo!' });
                 } else {
                     showMessageModal('error', 'Erro!', 'Erro ao atualizar o nome da clínica.', {
