@@ -334,6 +334,6 @@ export async function userRoutes(app: FastifyTypedInstance) {
     },
     async (request, reply) => {
     
-      return reply.status(200).send(await controller.uploadPhoto(request.headers,request.file(), request)); 
+      return reply.status(200).send(await controller.uploadPhoto(request.headers,await request.file(), request)); 
  } );
 }

@@ -338,6 +338,7 @@ class Users {
       ) {
         throw error;
       }
+      console.log('Error in register:', error);
       throw new InternalServerErrorException('An error occurred when trying to register user');
     }
   }
