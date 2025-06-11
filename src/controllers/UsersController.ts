@@ -324,6 +324,27 @@ class Users {
         data: { path: path_name, token },
       });
 
+      const chat = await prisma.chats.create({
+        data: {
+          idUser: newUser.idUser,
+          idUser2: adminUser ? adminUser.idUser : null,
+          username1: newUser.name,
+          username2: adminUser ? adminUser.name + "(admin)" : 'Admin',
+          userPhoto1: newUser.photo || null,
+          userPhoto2: adminUser ? adminUser.photo || null : null,
+      }}
+    )
+
+    const message = await prisma.messages.create({
+      data:{
+        idChat: chat.idChat,
+        idUser: newUser.idUser,
+        description: "Olá, seja bem-vindo(a) ao nosso sistema! Estamos aqui para ajudar você a começar. Se precisar de assistência, não hesite em entrar em contato.",
+        createdIn: new Date(),
+        updatedIn: new Date(),
+      }
+    })
+
       return {
         message: 'User registered successfully',
         accessToken: token,

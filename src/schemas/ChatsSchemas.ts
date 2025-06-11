@@ -6,6 +6,13 @@ class ChatsSchemas {
     idChat: z.number(),
     idUser: z.number(),
     idUser2: z.number(),
+    user2Name: z.string(),
+    userName1 :z.string(),
+    userName2: z.string(),
+    userPhoto2: z.string(),
+    userPhoto1: z.string(),
+    lastMessageDate: z.string().optional(),
+    lastMessage: z.string().optional(),
     createdIn: z.string(),
   });
 

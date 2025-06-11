@@ -153,7 +153,13 @@ model Chats {
   idChat    Int      @id @default(autoincrement())
   idUser    Int?
   idUser2   Int?
+  userName1 String?  @db.VarChar(255)
+  userName2 String?  @db.VarChar(255)
+  userPhoto1 String?  @db.Text
+  userPhoto2 String?  @db.Text
   createdIn DateTime? @default(now())
+  lastMessageDate String?  @db.VarChar(45)
+  lastMessage  String?  @db.Text
 
   user1 Users? @relation("ChatUser1", fields: [idUser], references: [idUser])
   user2 Users? @relation("ChatUser2", fields: [idUser2], references: [idUser])
