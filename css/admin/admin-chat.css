@@ -136,6 +136,33 @@
   max-width: 70%;
 }
 
+.message p {
+  max-width: 80%;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  margin: 4px 0;
+  padding: 8px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+
+.last-message p{
+  max-width: 80%;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  margin: 4px 0;
+  padding: 8px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  box-sizing: border-box;
+
+}
+
+
 .message.received {
   background: var(--chat-closed);
   margin-right: auto;
@@ -364,9 +391,250 @@
     width: 100%;
   }
 
+
+  /* Estiliza o container do chat-item */
+.chat-item {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.chat-item.active {
+  background-color: #f0f0f0;
+}
+
+.chat-item.closed {
+  opacity: 0.6;
+}
+
+/* Estiliza o container de visualização da mensagem */
+.chat-preview {
+  width: 100%;
+  max-width: 200px; /* Ajuste conforme o design */
+}
+
+/* Trunca a última mensagem se for muito longa */
+.last-message {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Estiliza o avatar */
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover; /* Para imagens */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px; /* Para ícones FontAwesome */
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  margin: 10px;
+}
+
+.message.sent {
+  justify-content: flex-end;
+}
+
+.message.received {
+  justify-content: flex-start;
+}
+
+.message-content {
+  max-width: 70%;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f0f0f0; /* Cor para mensagens recebidas */
+}
+
+.message.sent .message-content {
+  background-color: #007bff; /* Cor para mensagens enviadas */
+  color: white;
+}
+
+.message-actions {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.message-action-icon {
+  cursor: pointer;
+  font-size: 16px;
+  margin: 5px 0;
+  color: #555;
+}
+
+.message-action-icon:hover {
+  color: #000;
+}
+
+.fa-edit {
+  color: #007bff; /* Cor para o ícone de edição */
+}
+
+.fa-edit:hover {
+  color: #0056b3;
+}
+
+.fa-trash-alt {
+  color: #ff4d4d; /* Cor para o ícone de exclusão */
+}
+
+.fa-trash-alt:hover {
+  color: #cc0000;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.message-actions {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.message-action-icon {
+  cursor: pointer;
+  font-size: 16px;
+  margin: 5px 0;
+  color: #555;
+}
+
+.message-action-icon:hover {
+  color: #000;
+}
+
+.fa-edit {
+  color: #007bff; /* Cor para o ícone de edição */
+}
+
+.fa-edit:hover {
+  color: #0056b3;
+}
+
+.fa-trash-alt {
+  color: #ff4d4d; /* Cor para o ícone de exclusão */
+}
+
+.fa-trash-alt:hover {
+  color: #cc0000;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  width: 300px;
+}
+
+.modal-content .close {
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal-content textarea {
+  margin: 10px 0;
+  padding: 5px;
+  font-size: 14px;
+}
+
+.modal-content button {
+  margin: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  width: 300px;
+}
+
+.modal-content .close {
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal-content textarea {
+  margin: 10px 0;
+  padding: 5px;
+  font-size: 14px;
+}
+
+.modal-content button {
+  margin: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+/* Estiliza o nome do usuário */
+.chat-user-name {
+  font-weight: bold;
+  margin: 0 10px;
+}
+
+/* Estiliza o container de metadados */
+.chat-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.last-time {
+  font-size: 12px;
+  color: #999;
+}
+
+.unread-count {
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
   .chat-item {
     flex-direction: column;
     align-items: flex-start;
+    width: 80%;
   }
 
   .unread-count {

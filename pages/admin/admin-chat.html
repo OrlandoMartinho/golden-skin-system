@@ -160,18 +160,7 @@
         </div>
         </main>
 
-        <!-- Close Chat Modal -->
-        <div id="close-chat-modal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal('close-chat-modal')">×</span>
-                <h3>Fechar Chat</h3>
-                <p id="close-chat-message">Tem certeza que deseja fechar este chat?</p>
-                <div class="modal-buttons">
-                    <button class="cancel" onclick="closeModal('close-chat-modal')">Cancelar</button>
-                    <button class="confirm" onclick="confirmCloseChat()">Confirmar</button>
-                </div>
-            </div>
-        </div>
+
 
         <!-- Delete Chat Modal -->
         <div id="delete-chat-modal" class="modal">
@@ -183,6 +172,16 @@
                     <button class="cancel" onclick="closeModal('delete-chat-modal')">Cancelar</button>
                     <button class="confirm" onclick="confirmDeleteChat()">Confirmar</button>
                 </div>
+            </div>
+        </div>
+
+        <div id="edit-message-modal" class="modal">
+            <div class="modal-content">
+            <span class="close" onclick="closeModal('edit-message-modal')">×</span>
+            <p>Editar Mensagem</p>
+            <textarea id="edit-message-input" rows="4" style="width: 100%;"></textarea>
+            <button id="confirm-edit-message-btn">Salvar</button>
+            <button onclick="closeModal('edit-message-modal')">Cancelar</button>
             </div>
         </div>
 

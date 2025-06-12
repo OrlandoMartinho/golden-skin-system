@@ -123,7 +123,7 @@ async function getAllChats(accessToken) {
 async function getChat(accessToken, idChat) {
   console.log("getChat called with accessToken:", accessToken, "idChat:", idChat);
   try {
-    const url = `${api_host}/api/chats/view-a?idChat=${Number(idChat)}`;
+    const url = `${api_host}/api/chats/view-a/${Number(idChat)}`;
     console.log("Fetching chat from URL:", url);
     const response = await fetch(url, {
       method: 'GET',
@@ -137,6 +137,7 @@ async function getChat(accessToken, idChat) {
     if (response.ok) {
       const result = await response.json();
       console.log("getChat response data:", result);
+      console.log("Chat retrieved successfully:", result);
       localStorage.setItem("chat", JSON.stringify(result));
       console.log("Stored chat in localStorage:", result);
       return response.status;
@@ -242,33 +243,19 @@ async function deleteMessage(accessToken, idMessage) {
 
 // Get all messages in a chat
 async function getAllMessages(accessToken, idChat) {
-  console.log("getAllMessages called with accessToken:", accessToken, "idChat:", idChat);
-  try {
-    const url = `${api_host}/api/messages?idChat=${Number(idChat)}`;
-    console.log("Fetching all messages from URL:", url);
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        token: accessToken
-      }
-    });
-
-    console.log("getAllMessages response status:", response.status);
-    if (response.ok) {
-      const result = await response.json();
+   const chats = JSON.parse(localStorage.getItem("chat"));
+    if (chats) {
+      const result = chats.Messages;
+      console.log("chats retrieved from localStorage:", result);
       console.log("getAllMessages response data:", result);
       localStorage.setItem("messages", JSON.stringify(result));
       console.log("Stored messages in localStorage:", result);
-      return response.status;
+      return 200;
     } else {
       console.warn("getAllMessages failed with status:", response.status);
-      return response.status;
+      return 500;
     }
-  } catch (error) {
-    console.error("Error in getAllMessages:", error.message, error.stack);
-    return 500;
-  }
+  
 }
 
 

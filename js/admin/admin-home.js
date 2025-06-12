@@ -273,38 +273,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Função para atualizar notificações
-  async function updateNotifications() {
-    try {
-      const accessToken = localStorage.getItem('accessToken');
-      const notifications = await getNotifications(accessToken);;
-      console.log('Notifications Result:', notifications);
+  // // Função para atualizar notificações
+  // async function updateNotifications() {
+  //   try {
+  //     const accessToken = localStorage.getItem('accessToken');
+  //     const notifications = await getNotifications(accessToken);;
+  //     console.log('Notifications Result:', notifications);
 
-      if (notifications && Array.isArray(notifications)) {
-        const notificationBadge = document.getElementById('TotalDeNotificacoes');
-        notificationBadge.textContent = notifications.length;
+  //     if (notifications && Array.isArray(notifications)) {
+  //       const notificationBadge = document.getElementById('TotalDeNotificacoes');
+  //       notificationBadge.textContent = notifications.length;
 
-        const notificationContainer = document.getElementById('notification-container');
-        notificationContainer.innerHTML = '';
+  //       const notificationContainer = document.getElementById('notification-container');
+  //       notificationContainer.innerHTML = '';
 
-        notifications.forEach(notification => {
-          const div = document.createElement('div');
-          div.classList.add('notification-item');
-          div.innerHTML = `
-            <p>${notification.message}</p>
-            <small>${formatTimestamp(new Date(notification.createdAt))}</small>
-          `;
-          notificationContainer.appendChild(div);
-        });
+  //       notifications.forEach(notification => {
+  //         const div = document.createElement('div');
+  //         div.classList.add('notification-item');
+  //         div.innerHTML = `
+  //           <p>${notification.message}</p>
+  //           <small>${formatTimestamp(new Date(notification.createdAt))}</small>
+  //         `;
+  //         notificationContainer.appendChild(div);
+  //       });
 
-        console.log('Notifications updated:', notifications.data);
-      } else {
-        console.warn('Erro ao carregar notificações:', notifications.status, notifications.message);
-      }
-    } catch (error) {
-      console.error('Erro ao buscar notificações:', error);
-    }
-  }
+  //       console.log('Notifications updated:', notifications.data);
+  //     } else {
+  //       console.warn('Erro ao carregar notificações:', notifications.status, notifications.message);
+  //     }
+  //   } catch (error) {
+  //     console.error('Erro ao buscar notificações:', error);
+  //   }
+  // }
 
   // Função para gerenciar o menu lateral
   function toggleSidebar() {
@@ -325,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = await fetchAllData();
     updateOverviewCards(data);
     updateRecentActivities(data);
-    await updateNotifications();
+    
     console.log('Dashboard initialized');
   }
 

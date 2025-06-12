@@ -1,38 +1,130 @@
 let currentChatId = null; // Track the currently selected chat
 let accessToken = localStorage.getItem('accessToken') || ''; // Assumes token is stored in localStorage
 
-// Initialize chats from localStorage or API
+/**
+ * Formata uma data/timestamp para exibição no chat
+ * @param {string|Date} date - Data a ser formatada (pode ser string ISO ou objeto Date)
+ * @returns {string} Data formatada em formato amigável
+ */
+function formatDate(date) {
+  // Se for string, converte para objeto Date
+  const messageDate = typeof date === 'string' ? new Date(date) : date;
+  if (isNaN(messageDate)) return 'Data inválida';
+  const now = new Date();
+
+  // Diferença em milissegundos
+  const diff = now - messageDate;
+
+  // Se for hoje, mostra apenas a hora
+  if (isSameDay(messageDate, now)) {
+    return messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  // Se for ontem
+  const yesterday = new Date(now);
+  yesterday.setDate(yesterday.getDate() - 1);
+  if (isSameDay(messageDate, yesterday)) {
+    return 'Ontem';
+  }
+
+  // Se for na mesma semana (últimos 7 dias)
+  const oneWeekAgo = new Date(now);
+  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+  if (messageDate > oneWeekAgo) {
+    return messageDate.toLocaleDateString([], { weekday: 'long' });
+  }
+
+  // Mais de uma semana atrás - mostra data completa
+  return messageDate.toLocaleDateString([], { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+/**
+ * Verifica se duas datas são no mesmo dia
+ * @param {Date} date1 
+ * @param {Date} date2 
+ * @returns {boolean}
+ */
+function isSameDay(date1, date2) {
+  return date1.getDate() === date2.getDate() &&
+         date1.getMonth() === date2.getMonth() &&
+         date1.getFullYear() === date2.getFullYear();
+}
+
+// Funções de modal (placeholders, substitua pelas suas implementações reais)
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.style.display = 'block';
+}
+
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.style.display = 'none';
+}
+
+function updateNotifications(message) {
+  console.log('Notificação:', message); // Substitua por sua lógica de notificações
+}
+
 async function initializeChats() {
-  console.log("Initializing chats");
+
   try {
     const status = await getAllChats(accessToken);
     if (status === 200) {
-      const chats = JSON.parse(localStorage.getItem('chats') || '[]');
-      if (chats.length > 0) {
-        // Render chats in UI
-        const chatList = document.querySelector('.chat-list'); // Assumes a container for chat items
-        chatList.innerHTML = '';
-        chats.forEach(chat => {
-          const chatItem = document.createElement('div');
-          chatItem.className = `chat-item ${chat.status === 'closed' ? 'closed' : ''}`;
-          chatItem.setAttribute('data-chat-id', chat.idChat);
-          chatItem.innerHTML = `
-            <div>
-              <p>${chat.idUser2}</p> <!-- Adjust to display user name if available -->
-              <small>Última mensagem: ${chat.createdIn}</small>
-              ${chat.unread > 0 ? `<span class="unread-count">${chat.unread}</span>` : ''}
+      let chats = JSON.parse(localStorage.getItem('chats') || '[]');
+      
+ 
+
+      const sortedChats = chats.sort((a, b) => {
+        return new Date(b.lastMessageDate) - new Date(a.lastMessageDate);
+      });
+    
+      const chatList = document.querySelector('.chat-list');
+      if (!chatList) throw new Error('Elemento .chat-list não encontrado');
+
+      chatList.innerHTML = '';
+      sortedChats.forEach(chat => {
+        const chatItem = document.createElement('div');
+        chatItem.className = `chat-item ${chat.status === 'closed' ? 'closed' : ''}`;
+        chatItem.setAttribute('data-chat-id', chat.idChat);
+
+        // Determina o avatar (imagem ou ícone FontAwesome)
+        const avatar = chat.userImage1 
+          ? `<img src="${chat.userImage1}" alt="Avatar" class="user-avatar">`
+          : `<i class="fas fa-user user-avatar"></i>`; // Usa FontAwesome se não houver imagem
+
+        // Sanitiza a última mensagem para evitar XSS
+        const lastMessage = chat.lastMessage && chat.lastMessage.length > 0
+          ? chat.lastMessage
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .slice(0, 25) + '...'
+          : 'Nenhuma mensagem ainda';
+
+        chatItem.innerHTML = `
+          <div class="chat-item-info">
+            <div class="chat-user-header">
+              ${avatar}
+              <p class="chat-user-name">${chat.userName1 || 'Usuário'}</p>
             </div>
-          `;
-          chatItem.addEventListener('click', () => selectChat(chat.idChat));
-          chatList.appendChild(chatItem);
-        });
-        // Select the first chat by default
-        if (chats.length > 0) {
-          selectChat(chats[0].idChat);
-        } else {
-          document.getElementById('chat-user-name').textContent = 'Nenhum chat selecionado';
-          document.getElementById('chat-messages').innerHTML = '<p>Nenhum chat disponível.</p>';
-        }
+            <div class="chat-preview">
+              <p class="last-message">${lastMessage}</p>
+              <div class="chat-meta">
+                <small class="last-time">${formatDate(chat.lastMessageTime || chat.createdIn)}</small>
+                ${chat.unread > 0 ? `<span class="unread-count">${chat.unread}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+        chatItem.addEventListener('click', () => selectChat(chat.idChat));
+        chatList.appendChild(chatItem);
+      });
+
+      // Select the first chat by default (que agora será o mais recente)
+      if (sortedChats.length > 0) {
+        selectChat(chats[0].idChat);
+      } else {
+        document.getElementById('chat-user-name').textContent = 'Nenhum chat selecionado';
+        document.getElementById('chat-messages').innerHTML = '<p>Nenhum chat disponível.</p>';
       }
     } else {
       console.warn("Failed to fetch chats, status:", status);
@@ -62,7 +154,12 @@ async function selectChat(chatId) {
     const status = await getChat(accessToken, chatId);
     if (status === 200) {
       const chat = JSON.parse(localStorage.getItem('chat') || '{}');
-      document.getElementById('chat-user-name').textContent = chat.idUser2 || 'Chat sem nome';
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const idUser = user.idUser || 0;
+
+      // Determina o nome do usuário do chat (idUser2 é o destinatário)
+      const chatUserName = chat.userName2 || chat.idUser2 || 'Chat sem nome';
+      document.getElementById('chat-user-name').textContent = chatUserName;
 
       // Fetch messages for the chat
       const messagesStatus = await getAllMessages(accessToken, chatId);
@@ -73,7 +170,8 @@ async function selectChat(chatId) {
 
         messages.forEach(msg => {
           const messageDiv = document.createElement('div');
-          messageDiv.className = `message ${msg.idUser === chat.idUser ? 'received' : 'sent'}`; // Assumes idUser determines sender
+          // Compara o idUser da mensagem com o idUser do usuário logado
+          messageDiv.className = `message ${msg.idUser === idUser ? 'sent' : 'received'}`;
           messageDiv.innerHTML = `<p>${msg.description}</p><small>${new Date(msg.createdIn).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</small>`;
           chatMessages.appendChild(messageDiv);
         });
@@ -84,7 +182,7 @@ async function selectChat(chatId) {
         document.getElementById('chat-messages').innerHTML = '<p>Erro ao carregar mensagens.</p>';
       }
     } else {
-      document.getElementById('chat-user-name').textContent = 'Nenhum chat selecionado';
+      document.getElementById('chat-user-name').textContent = 'Novidades';
       document.getElementById('chat-messages').innerHTML = '<p>Chat não encontrado.</p>';
     }
   } catch (error) {
@@ -103,44 +201,51 @@ async function sendMessage() {
         idChat: currentChatId,
         description: messageText
       };
-        const status = await registerMessage(accessToken, messageData);
-        if (status === 200) {
-          // Refresh messages
-          const messagesStatus = await getAllMessages(accessToken, currentChatId);
-          if (messagesStatus === 200) {
-            const messages = JSON.parse(localStorage.getItem('messages') || '[]');
-            const chatMessages = document.getElementById('chat-messages');
-            chatMessages.innerHTML = '';
-  
-            messages.forEach(msg => {
-              const messageDiv = document.createElement('div');
-              messageDiv.className = `message ${msg.idUser === JSON.parse(localStorage.getItem('chat')).idUser ? 'received' : 'sent'}`;
-              messageDiv.innerHTML = `<p píxel><small>${new Date(msg.createdIn).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</small>`;
-              chatMessages.appendChild(messageDiv);
-            });
-  
-            // Clear input
-            input.value = '';
-  
-            // Scroll to the bottom
+
+      const status = await registerMessage(accessToken, messageData);
+      if (status === 200) {
+        // Refresh messages
+        const messagesStatus = await getAllMessages(accessToken, currentChatId);
+        if (messagesStatus === 200) {
+          const messages = JSON.parse(localStorage.getItem('messages') || '[]');
+          const chatMessages = document.getElementById('chat-messages');
+          const user = JSON.parse(localStorage.getItem('user') || '{}');
+          const idUser = user.idUser || 0;
+
+          // Preserve scroll position
+          const wasScrolledToBottom = chatMessages.scrollHeight - chatMessages.clientHeight <= chatMessages.scrollTop + 1;
+
+          // Clear and recreate messages
+          chatMessages.innerHTML = '';
+          messages.forEach(msg => {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${msg.idUser === idUser ? 'sent' : 'received'}`;
+            messageDiv.innerHTML = `<p>${msg.description}</p><small>${new Date(msg.createdIn).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</small>`;
+            chatMessages.appendChild(messageDiv);
+          });
+
+          // Clear input
+          input.value = '';
+
+          // Scroll to bottom if it was already at bottom
+          if (wasScrolledToBottom) {
             chatMessages.scrollTop = chatMessages.scrollHeight;
-  
-            // Update notifications
-            updateNotifications(`Nova mensagem enviada no chat ${currentChatId}`);
-          } else {
-            console.warn("Failed to send message, status:", status);
           }
         }
-      } catch (error) {
-        console.error("Error sending message:", error.message, error.stack);
+        await initializeChats(); // Refresh chat list
+      } else {
+        console.warn("Failed to send message, status:", status);
       }
+    } catch (error) {
+      console.error("Error sending message:", error.message, error.stack);
     }
+  }
 }
 
 async function closeChat() {
   if (currentChatId) {
     const chat = JSON.parse(localStorage.getItem('chat') || '{}');
-    document.getElementById('close-chat-message').textContent = `Tem certeza que deseja fechar o chat com ${chat.idUser2}?`;
+    document.getElementById('close-chat-message').textContent = `Tem certeza que deseja fechar o chat com ${chat.userName2 || chat.idUser2 || 'Usuário'}?`;
     openModal('close-chat-modal');
   }
 }
@@ -148,10 +253,9 @@ async function closeChat() {
 async function confirmCloseChat() {
   if (currentChatId) {
     try {
-      // Assuming closing a chat means updating its status via API
       const chatData = {
         idChat: currentChatId,
-        status: 'closed' // Assuming the API accepts a status field
+        status: 'closed'
       };
       const status = await updateChat(accessToken, chatData);
       if (status === 200) {
@@ -160,15 +264,11 @@ async function confirmCloseChat() {
         if (chatItem) {
           chatItem.classList.add('closed');
           const unreadSpan = chatItem.querySelector('.unread-count');
-          if (unreadSpan) {
-            unreadSpan.remove();
-          }
+          if (unreadSpan) unreadSpan.remove();
         }
 
-        // Update notifications
-        updateNotifications(`Chat com ${chat.idUser2} fechado`);
-
-        // Refresh chat list
+        const chat = JSON.parse(localStorage.getItem('chat') || '{}');
+        updateNotifications(`Chat com ${chat.userName2 || chat.idUser2 || 'Usuário'} fechado`);
         await initializeChats();
       } else {
         console.warn("Failed to close chat, status:", status);
@@ -183,7 +283,7 @@ async function confirmCloseChat() {
 async function deleteChat() {
   if (currentChatId) {
     const chat = JSON.parse(localStorage.getItem('chat') || '{}');
-    document.getElementById('delete-chat-message').textContent = `Tem certeza que deseja excluir o chat com ${chat.idUser2}? Esta ação é irreversível.`;
+    document.getElementById('delete-chat-message').textContent = `Tem certeza que deseja excluir o chat com ${chat.userName2 || chat.idUser2 || 'Usuário'}? Esta ação é irreversível.`;
     openModal('delete-chat-modal');
   }
 }
@@ -193,20 +293,21 @@ async function confirmDeleteChat() {
     try {
       const status = await deleteChat(accessToken, currentChatId);
       if (status === 200) {
+        // Remove chat from localStorage
+        let chats = JSON.parse(localStorage.getItem('chats') || '[]');
+        chats = chats.filter(chat => chat.idChat !== currentChatId);
+        localStorage.setItem('chats', JSON.stringify(chats));
+
         // Remove chat from UI
         const chatItem = document.querySelector(`.chat-item[data-chat-id="${currentChatId}"]`);
-        if (chatItem) {
-          chatItem.remove();
-        }
+        if (chatItem) chatItem.remove();
 
-        // Update notifications
-        updateNotifications(`Chat com ${JSON.parse(localStorage.getItem('chat')).idUser2} excluído`);
+        const chat = JSON.parse(localStorage.getItem('chat') || '{}');
+        updateNotifications(`Chat com ${chat.userName2 || chat.idUser2 || 'Usuário'} excluído`);
 
         // Select another chat or clear window
-        const remainingChats = JSON.parse(localStorage.getItem('chats') || '[]');
-        if (remainingChats.length > 0) {
-          const newChatId = remainingChats[0].idChat;
-          selectChat(newChatId);
+        if (chats.length > 0) {
+          selectChat(chats[0].idChat);
         } else {
           currentChatId = null;
           document.getElementById('chat-user-name').textContent = 'Nenhum chat selecionado';
