@@ -234,17 +234,17 @@ public async viewAll(key: any): Promise<z.infer<typeof ChatsSchemas.chatsRespons
 
             return {
                 ...chat,
-                userName1: user1 && user1.name ? user1.name : 'User 1',
-                userPhoto1: user1 && user1.photo ? user1.photo : 'User 1',
-                userName2: user2 && user2.name ? user2.name : 'User 2',
-                userPhoto2: user2 && user2.photo ? user2.photo : 'User 2',
+                userName1: user1?.name,
+                userPhoto1: user1?.photo,
+                user2Name: user2?.name,
+                userPhoto2: user2?.photo,
                 lastMessage: lastMessage?.description,
                 lastMessageDate: lastMessage?.createdIn,
                 createdIn:chat.createdIn ,
                 Messages: messages 
             };
         });
-        console.log(processedChats);
+        
         return ChatsSchemas.chatsResponseSchema.parse(processedChats);
     } catch (error) {
         if (error instanceof AuthorizationException || error instanceof InvalidDataException) {
