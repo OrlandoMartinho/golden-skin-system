@@ -5,23 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pele Douro - Gerenciar Chats</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <link rel="stylesheet" href="../../css/admin/admin-chat.css">
 </head>
-<body>
+<body class="desktop-mode">
     <div class="container">
+        <!-- Overlay para sidebar em dispositivos móveis -->
         <div class="overlay"></div>
 
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" role="navigation">
             <div class="logo">
                 <img src="../../assets/img/logo.png" alt="Logo Pele Douro">
             </div>
-
-            <button class="close-sidebar">
+            <button class="close-sidebar" aria-label="Fechar sidebar">
                 <i class="fa-solid fa-x"></i>
             </button>
-
             <nav class="sidebar-nav">
                 <a href="admin-home.html" class="nav-item">
                     <i class="fas fa-home"></i>
@@ -43,7 +41,7 @@
                     <i class="fas fa-store"></i>
                     <span>Produtos</span>
                 </a>
-                 <a href="admin-sales.html" class="nav-item">
+                <a href="admin-sales.html" class="nav-item">
                     <i class="fas fa-shopping-cart"></i>
                     <span>Vendas</span>
                 </a>
@@ -58,10 +56,11 @@
             </nav>
         </aside>
 
-        <!-- Main Content -->
+        <!-- Conteúdo Principal -->
         <main class="main-content">
-            <div class="header">
-                <button class="menu-toggle">
+            <!-- Cabeçalho -->
+            <header class="header">
+                <button class="menu-toggle" aria-label="Abrir sidebar">
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="page-title">
@@ -69,10 +68,10 @@
                     <p>Converse com clientes e gerencie mensagens</p>
                 </div>
                 <div class="header-icons">
-                   <div class="notification-icon">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge" id="TotalDeNotificacoes">4</span>
-                        <div id="notification-container"></div>
+                    <div class="notification-icon">
+                        <i class="fas fa-bell" aria-label="Notificações"></i>
+                        <span class="notification-badge" id="TotalDeNotificacoes">0</span>
+                        <div id="notification-container" class="notifications-dropdown" aria-live="polite"></div>
                     </div>
                     <div class="user-profile">
                         <i class="fa-solid fa-user"></i>
@@ -81,125 +80,98 @@
                             <a href="admin-settings.html">
                                 <i class="fas fa-cog"></i> Definições
                             </a>
-                            <a href="#"  id="logout"><i class="fas fa-sign-out-alt" id="logout"></i> Terminar sessão</a>
+                            <a href="#" id="logout">
+                                <i class="fas fa-sign-out-alt"></i> Terminar sessão
+                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
+            </header>
 
-            <hr>
+            <hr class="header-divider">
 
-            <!-- Search Bar -->
+            <!-- Filtro e Pesquisa -->
             <div class="search-filter-container">
                 <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Pesquisar conversas..." id="chat-search">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input type="text" id="chat-search" placeholder="Pesquisar conversas..." aria-label="Pesquisar conversas">
                 </div>
-                <select id="chat-status-filter">
+                <select id="chat-status-filter" aria-label="Filtrar por status do chat">
                     <option value="all">Todos os status</option>
                     <option value="open">Abertos</option>
                     <option value="closed">Fechados</option>
                 </select>
             </div>
 
-                <!-- Chat Container -->
-        <div class="dashboard-container">
-            <!-- Chat List Section -->
-            <section class="overview-section">
-                <h2>Conversas</h2>
-                <div class="overview-cards chat-list">
-                    <!-- Chats serão inseridos dinamicamente aqui -->
+            <!-- Container do Chat -->
+            <div class="dashboard-container">
+                <!-- Lista de Chats -->
+                <section class="overview-section" aria-label="Lista de conversas">
+                    <h2>Conversas</h2>
+                    <div class="overview-cards chat-list"></div>
+                </section>
+
+                <!-- Conteúdo do Chat -->
+                <div class="chat-content">
+                    <!-- Janela de Mensagens -->
+                    <section class="recent-activity-section" aria-label="Janela de mensagens">
+                        <h2 id="chat-user-name">Nenhum chat selecionado</h2>
+                        <div class="activity-list" id="chat-messages" aria-live="polite"></div>
+                        <div class="chat-input">
+                            <textarea id="chat-message-input" placeholder="Digite sua mensagem..." aria-label="Digite sua mensagem"></textarea>
+                            <button id="send-message-btn" aria-label="Enviar mensagem">
+                                <i class="fas fa-paper-plane"></i> Enviar
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- Ações Rápidas -->
+                    <section class="quick-actions-section" aria-label="Ações rápidas">
+                        <h2>Ações Rápidas</h2>
+                        <div class="quick-actions">
+                            <button class="action-btn" id="close-chat-btn" aria-label="Fechar chat">
+                                <i class="fas fa-check"></i> Fechar Chat
+                            </button>
+                            <button class="action-btn" id="delete-chat-btn" aria-label="Excluir chat">
+                                <i class="fas fa-trash"></i> Excluir
+                            </button>
+                        </div>
+                    </section>
                 </div>
-            </section>
-
-            <!-- Chat Content -->
-            <div class="chat-content">
-                <!-- Chat Window Section -->
-                <section class="recent-activity-section">
-                    <h2 id="chat-user-name">Nenhum chat selecionado</h2>
-                    <div class="activity-list" id="chat-messages">
-                        <!-- Mensagens serão inseridas dinamicamente aqui -->
-                    </div>
-                    <div class="chat-input">
-                        <textarea id="chat-message-input" placeholder="Digite sua mensagem..."></textarea>
-                        <button onclick="sendMessage()">
-                            <i class="fas fa-paper-plane"></i> Enviar
-                        </button>
-                    </div>
-                </section>
-
-                <!-- Quick Actions Section -->
-                <section class="quick-actions-section">
-                    <h2>Ações Rápidas</h2>
-                    <div class="quick-actions">
-                        <button class="action-btn" onclick="closeChat()">
-                            <i class="fas fa-check"></i> Fechar Chat
-                        </button>
-                        <button class="action-btn" onclick="deleteChat()">
-                            <i class="fas fa-trash"></i> Excluir
-                        </button>
-                    </div>
-                </section>
             </div>
 
-            <!-- Modals for Close and Delete -->
-            <div id="close-chat-modal" class="modal" style="display: none;">
+            <!-- Modais -->
+            <div id="close-chat-modal" class="modal">
                 <div class="modal-content">
+                    <span class="close" aria-label="Fechar modal">×</span>
+                    <h3>Fechar Chat</h3>
                     <p id="close-chat-message"></p>
-                    <button onclick="confirmCloseChat()">Confirmar</button>
-                    <button onclick="closeModal('close-chat-modal')">Cancelar</button>
+                    <div class="modal-buttons">
+                        <button class="cancel" aria-label="Cancelar">Cancelar</button>
+                        <button class="confirm" id="confirm-close-chat-btn" aria-label="Confirmar fechamento">Confirmar</button>
+                    </div>
                 </div>
             </div>
-            <div id="delete-chat-modal" class="modal" style="display: none;">
+            <div id="delete-chat-modal" class="modal">
                 <div class="modal-content">
+                    <span class="close" aria-label="Fechar modal">×</span>
+                    <h3>Excluir Chat</h3>
                     <p id="delete-chat-message"></p>
-                    <button onclick="confirmDeleteChat()">Confirmar</button>
-                    <button onclick="closeModal('delete-chat-modal')">Cancelar</button>
+                    <div class="modal-buttons">
+                        <button class="cancel" aria-label="Cancelar">Cancelar</button>
+                        <button class="confirm" id="confirm-delete-chat-btn" aria-label="Confirmar exclusão">Confirmar</button>
+                    </div>
                 </div>
             </div>
-        </div>
         </main>
+    </div>
 
-
-
-        <!-- Delete Chat Modal -->
-        <div id="delete-chat-modal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal('delete-chat-modal')">×</span>
-                <h3>Excluir Chat</h3>
-                <p id="delete-chat-message">Tem certeza que deseja excluir este chat? Esta ação é irreversível.</p>
-                <div class="modal-buttons">
-                    <button class="cancel" onclick="closeModal('delete-chat-modal')">Cancelar</button>
-                    <button class="confirm" onclick="confirmDeleteChat()">Confirmar</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="edit-message-modal" class="modal">
-            <div class="modal-content">
-            <span class="close" onclick="closeModal('edit-message-modal')">×</span>
-            <p>Editar Mensagem</p>
-            <textarea id="edit-message-input" rows="4" style="width: 100%;"></textarea>
-            <button id="confirm-edit-message-btn">Salvar</button>
-            <button onclick="closeModal('edit-message-modal')">Cancelar</button>
-            </div>
-        </div>
-
-        <!-- Notifications Dropdown -->
-         <!-- Notifications Dropdown -->
-        <div class="notifications-dropdown" id="notificationsDropdown">
-            <div class="notification-item">
-             </div>
-        </div>
-
+    <!-- Scripts -->
     <script src="../../js/global.js"></script>
-    <script src="../../js/admin/admin-chat.js"></script>
     <script src="../../apis/generalSection.js"></script>
     <script src="../../apis/users.js"></script>
-     <script src="../../js/messageModal.js"></script>
-     <script src="../../js/sessoes/logout.js"></script>
-     <script src="../../apis/notificacoes.js"></script>
-     <script src="../../apis/chats.js"></script>
-     <script src="../../js/notificacoes.js"></script>
-</body>
-</html>
+    <script src="../../apis/chats.js"></script>
+    <script src="../../apis/notificacoes.js"></script>
+    <script src="../../js/sessoes/logout.js"></script>
+    <script src="../../js/notificacoes.js"></script>
+    <script src="../../js/admin/admin-chat.js"></script>
