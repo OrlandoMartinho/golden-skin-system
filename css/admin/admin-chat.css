@@ -2,18 +2,13 @@
 
 /* === General Layout === */
 .search-filter-container {
-      display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
+  display: flex;
   gap: 1rem;
   margin: 2vh 0 1.25rem;
 }
 
 .dashboard-container {
-
-      display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
+  display: flex;
   gap: 1.25rem;
   padding: 1.25rem;
   height: calc(100vh - 200px);
@@ -21,9 +16,6 @@
 
 /* === Sidebar (Chat List) === */
 .overview-section {
-      display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
   background: var(--background-white);
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px var(--shadow-light);
