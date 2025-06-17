@@ -12,7 +12,7 @@ async function addAnyAppointment(accessToken, appointmentData) {
     });
 
     const result = await response.json();
-   
+
     if (response.ok) {
       return { status: response.status, data: result };
     } else {
@@ -20,7 +20,7 @@ async function addAnyAppointment(accessToken, appointmentData) {
       return { status: response.status, error: result };
     }
   } catch (error) {
-    console.error("Error in addAppointment:", error.message, error.stack);
+    console.error("Error in addAnyAppointment:", error.message, error.stack);
     return { status: 500, error: { message: "Internal server error" } };
   }
 }
@@ -39,6 +39,7 @@ async function editAnyAppointment(accessToken, appointmentData) {
     });
 
     const result = await response.json();
+
     if (response.ok) {
       return { status: response.status, data: result };
     } else {
@@ -46,7 +47,7 @@ async function editAnyAppointment(accessToken, appointmentData) {
       return { status: response.status, error: result };
     }
   } catch (error) {
-    console.error("Error in editAppointment:", error.message, error.stack);
+    console.error("Error in editAnyAppointment:", error.message, error.stack);
     return { status: 500, error: { message: "Internal server error" } };
   }
 }
@@ -65,6 +66,7 @@ async function deleteAnyAppointment(accessToken, idAppointment) {
     });
 
     const result = await response.json();
+
     if (response.ok) {
       return { status: response.status, data: result };
     } else {
@@ -72,7 +74,7 @@ async function deleteAnyAppointment(accessToken, idAppointment) {
       return { status: response.status, error: result };
     }
   } catch (error) {
-    console.error("Error in deleteAppointment:", error.message, error.stack);
+    console.error("Error in deleteAnyAppointment:", error.message, error.stack);
     return { status: 500, error: { message: "Internal server error" } };
   }
 }
@@ -80,6 +82,8 @@ async function deleteAnyAppointment(accessToken, idAppointment) {
 async function getAllAppointments(accessToken) {
   try {
     const url = `${api_host}/api/appointments`;
+    console.log("Requesting appointments from:", url);
+    console.log("Access token:", accessToken);
 
     const response = await fetch(url, {
       method: 'GET',
@@ -89,22 +93,27 @@ async function getAllAppointments(accessToken) {
       }
     });
 
+    console.log("Response status:", response.status);
+
     const result = await response.json();
-   
+    console.log("Response data:", result);
+
     if (response.ok) {
       localStorage.setItem("appointments", JSON.stringify(result));
+      console.log("Appointments saved to localStorage.");
       return { status: response.status, data: result };
     } else {
       console.warn("Error getting all appointments:", response.status, result.message);
       return { status: response.status, error: result };
     }
   } catch (error) {
-    console.error("Error in getAllAppointments:", error.message, error.stack);
+    console.error("Error in getAllAppointments:", error.message);
+    console.error(error.stack);
     return { status: 500, error: { message: "Internal server error" } };
   }
 }
 
-async function getEmployeeAppointment(accessToken, idAppointment) {
+async function getAnyAppointment(accessToken, idAppointment) {
   try {
     console.log("Fetching with idAppointment:", idAppointment);
     const url = `${api_host}/api/appointments/employee/${Number(idAppointment)}`;
@@ -118,15 +127,16 @@ async function getEmployeeAppointment(accessToken, idAppointment) {
     });
 
     const result = await response.json();
+
     if (response.ok) {
       localStorage.setItem("appointment", JSON.stringify(result));
       return { status: response.status, data: result };
     } else {
-      console.warn("Error getting employee appointment:", response.status, result.message);
+      console.warn("Error getting appointment:", response.status, result.message);
       return { status: response.status, error: result };
     }
   } catch (error) {
-    console.error("Error in getEmployeeAppointment:", error.message, error.stack);
+    console.error("Error in getAnyAppointment:", error.message, error.stack);
     return { status: 500, error: { message: "Internal server error" } };
   }
 }
@@ -145,7 +155,7 @@ async function addEmployeeToAppointment(accessToken, employeeData) {
     });
 
     const result = await response.json();
-   
+
     if (response.ok) {
       return { status: response.status, data: result };
     } else {

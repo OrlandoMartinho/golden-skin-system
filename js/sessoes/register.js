@@ -1,6 +1,6 @@
 document.getElementById("cadastrar").addEventListener("click", async function (event) {
     event.preventDefault(); // Impede o comportamento padrão do botão
-    alert("Cadastro iniciado!"); // Exibe alerta de início do cadastro
+
     const btnCadastrar = this; // Referência ao botão
     const btnOriginalText = btnCadastrar.innerHTML; // Salva o texto original
     

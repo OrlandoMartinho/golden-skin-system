@@ -13,8 +13,8 @@ function formatDateTime(isoString) {
 // Function to get role text based on role value
 function getRoleText(role) {
     const roles = {
-        1: 'Cliente',
-        2: 'Funcionário'
+        2: 'Cliente',
+        1: 'Funcionário'
     };
     return roles[role] || 'Desconhecido';
 }
