@@ -81,7 +81,7 @@ model Products {
 model Appointments {
   idAppointment       Int      @id @default(autoincrement())
   appointmentTime     String?  @db.VarChar(45)
-  appointmentDate     DateTime?
+  appointmentDate     String?
   status              Boolean?
   employeeName        String?  @db.VarChar(255)
   name                String?  @db.VarChar(255)
@@ -92,7 +92,7 @@ model Appointments {
   idService           Int?
   idUser              Int?
   idEmployee          Int?
-  createdIn           DateTime? @default(now())
+  createdIn           DateTime @default(now())
   updatedIn           DateTime?
 
   Services Services? @relation(fields: [idService], references: [idService])

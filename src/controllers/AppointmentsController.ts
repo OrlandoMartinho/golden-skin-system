@@ -40,12 +40,50 @@ class AppointmentsController {
       if (!user) {
         throw new ItemNotFoundException('User not found');
       }
-
-      const service = await prisma.services.findUnique({where:{idService}})
+       const service = await prisma.services.findUnique({where:{idService}})
 
       if(!service){
         throw new ItemNotFoundException("Service not found")
       }
+
+      if (service.schedulingLimit <= 0) {
+        throw new InvalidDataException('Scheduling limit for this service has been reached');
+      }
+
+      if(user.role === 0) {
+      
+        const clientUser = await prisma.users.findUnique({ where: { email } });
+        if (!clientUser) {
+          throw new ItemNotFoundException('User not found');
+        }
+
+          await prisma.appointments.create({
+        data: {
+          appointmentDate,
+          appointmentTime,
+          status,
+          name,
+          email,
+          phoneNumber,
+          employeeName: null,
+          employeePhoneNumber: null,
+          employeeEmail: null,
+          idService,
+          idUser:userId,
+          createdIn: new Date().toISOString(),
+          updatedIn: new Date().toISOString(),
+        },
+      });
+
+      await prisma.services.update({where:{idService},data:{
+        schedulingLimit:service.schedulingLimit-1
+      }})
+     
+      return { message: 'Appointment registered successfully' };
+
+      }
+
+     
 
       await prisma.appointments.create({
         data: {
@@ -80,8 +118,10 @@ class AppointmentsController {
         error instanceof AuthorizationException ||
         error instanceof InvalidDataException
       ) {
+
         throw error;
       }
+      console.error("erro:!",error);
       throw new InternalServerErrorException('An error occurred when trying to register appointment');
     }
   }
@@ -187,7 +227,7 @@ class AppointmentsController {
         throw new AuthorizationException('Not authorized');
       }
 
-      const appointments = await prisma.appointments.findMany({ where: { idUser:userId } });
+      const appointments = await prisma.appointments.findMany({ where: { idUser:userId } ,include: { Services: true } });
 
       return AppointmentsSchemas.appointmentsResponseSchema.parse(appointments);
     } catch (error) {
@@ -197,11 +237,12 @@ class AppointmentsController {
       ) {
         throw error;
       }
+     
       throw new InternalServerErrorException('An error occurred when trying to retrieve appointments');
     }
   }
 
-  public async viewEmployee(data: any, key: any): Promise<z.infer<typeof AppointmentsSchemas.appointmentSchema>> {
+  public async viewAppointments(data: any, key: any): Promise<z.infer<typeof AppointmentsSchemas.appointmentSchema>> {
     const validatedData = await this.zodError(AppointmentsSchemas.ViewEmployeeAppointment, data);
     const validatedKey = await this.zodError(AppointmentsSchemas.tokenSchema, key);
     const { idAppointment } = validatedData;
@@ -213,7 +254,7 @@ class AppointmentsController {
         throw new AuthorizationException('Not authorized');
       }
 
-      const appointment = await prisma.appointments.findUnique({ where: { idAppointment } });
+      const appointment = await prisma.appointments.findUnique({ where: { idAppointment:Number(idAppointment) } ,include: { Services: true } });
       if (!appointment) {
         throw new ItemNotFoundException('Appointment not found');
       }
@@ -228,6 +269,7 @@ class AppointmentsController {
       ) {
         throw error;
       }
+     
       throw new InternalServerErrorException('An error occurred when trying to retrieve appointment for employee');
     }
   }

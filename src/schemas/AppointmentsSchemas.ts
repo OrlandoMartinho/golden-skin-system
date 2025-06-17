@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import ServicesSchemas  from './ServicesSchemas';
 
 class AppointmentsSchemas {
   // Schema for a single appointment
@@ -15,8 +16,9 @@ class AppointmentsSchemas {
     employeeEmail: z.string().nullable(),
     idService: z.number(),
     idUser: z.number(),
-    createdIn: z.string(),
-    updatedIn: z.string(),
+    createdIn: z.date().optional(),
+    updatedIn: z.date().nullable(),
+    Services: ServicesSchemas.serviceSchema.nullable(),
   });
 
   // Schema for registering an appointment
@@ -51,7 +53,7 @@ class AppointmentsSchemas {
 
   // Schema for viewing an appointment for an employee
   static ViewEmployeeAppointment = z.object({
-    idAppointment: z.number().int().positive("ID Appointment must be a positive integer"),
+    idAppointment: z.string().min(1, "ID Appointment is required"),
   });
 
   // Schema for adding an employee to an appointment

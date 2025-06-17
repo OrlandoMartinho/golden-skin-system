@@ -101,7 +101,7 @@ export async function appointmentsRoutes(app: FastifyTypedInstance) {
 
   // View an appointment for an employee
   app.get(
-    "/appointments/employee",
+    "/appointments/:idAppointment",
     {
       schema: {
         description: "View an appointment for an employee",
@@ -118,7 +118,7 @@ export async function appointmentsRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.viewEmployee(request.params, request.headers));
+      return reply.status(200).send(await controller.viewAppointments(request.params, request.headers));
     }
   );
 
