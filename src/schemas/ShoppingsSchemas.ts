@@ -8,8 +8,8 @@ class ShoppingsSchemas {
     name:z.string(),
     idUser: z.number(),
     status: z.string(),
-    createdIn: z.string(),
-    updatedIn: z.string(),
+    createdIn: z.date().nullable(),
+    updatedIn: z.date().nullable(),
    
     PurchaseProducts:z.array(PurchaseProductsSchemas.purchaseProductSchema)
   });
@@ -22,7 +22,7 @@ class ShoppingsSchemas {
 
   // Schema for updating a shopping
   static UpdateShopping = z.object({
-    idShopping: z.number().int().positive("ID User must be a positive integer"),
+    idShopping: z.string(),
     status: z.string(),
   });
 

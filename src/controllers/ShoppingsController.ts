@@ -63,7 +63,7 @@ class ShoppingsController {
        const purchaseProduct = await prisma.purchaseProducts.create({
           data: { 
             idShopping: shopping.idShopping,
-            idProduct: product.idProduct?.toString(),
+            idProduct: product.idProduct,
             productName: product.productName,
             priceInCents: product.priceInCents,
             paymentMethod:'prepaid',
@@ -92,17 +92,15 @@ class ShoppingsController {
         throw new AuthorizationException('Not authorized');
       }
 
-      const shopping = await prisma.shoppings.findUnique({ where: { idShopping } });
+      const shopping = await prisma.shoppings.findUnique({ where: { idShopping:Number(idShopping) } });
       if (!shopping) {
         throw new ItemNotFoundException('Shopping not found');
       }
 
-      if (shopping.idUser !== userId) {
-        throw new AuthorizationException('Not authorized to update this shopping');
-      }
+    
 
       await prisma.shoppings.update({
-        where: { idShopping },
+        where: { idShopping :Number(idShopping) },
         data: { status,
             updatedIn: new Date().toISOString()
         },
@@ -117,6 +115,7 @@ class ShoppingsController {
       ) {
         throw error;
       }
+      console.log("Error:",error)
       throw new InternalServerErrorException('An error occurred when trying to update shopping');
     }
   }

@@ -5,11 +5,14 @@ import InvalidDataException from '../errors/InvalidDataException';
 import ItemNotFoundException from '../errors/ItemNotFoundException';
 import AuthorizationException from '../errors/AuthorizationException';
 import InternalServerErrorException from '../errors/InternalServerErrorException';
+import { FastifyRequest } from 'fastify/fastify';
 import TokenService from '../services/TokensServices';
+import FileService from '../services/StorageServices';
 
 class CartProductsController {
   private tokenService: TokenService = new TokenService();
   private readonly responseSchema = CartProductsSchemas.success_response;
+  private fileService: FileService = new FileService();
 
   private async zodError(schema: z.ZodSchema, data: any): Promise<any> {
     try {
@@ -215,7 +218,7 @@ class CartProductsController {
     }
   }
 
-  public async viewAll( key: any): Promise<z.infer<typeof CartProductsSchemas.cartProductsResponseSchema>> {
+  public async viewAll( key: any,req: FastifyRequest): Promise<z.infer<typeof CartProductsSchemas.cartProductsResponseSchema>> {
 
     const validatedKey = await this.zodError(CartProductsSchemas.tokenSchema, key);
 
@@ -242,6 +245,12 @@ class CartProductsController {
       }
 
       const cartProducts = await prisma.cartProducts.findMany({ where: { idCart :cart.idCart} });
+
+      for (const product of cartProducts) { 
+        if (product.productPhoto) {
+          product.productPhoto = this.fileService.generateLink('products', req,product.productPhoto); // Normalize path for web
+        }
+      } 
 
       return CartProductsSchemas.cartProductsResponseSchema.parse(cartProducts);
     } catch (error) {

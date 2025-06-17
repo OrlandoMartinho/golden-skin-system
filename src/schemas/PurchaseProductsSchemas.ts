@@ -3,15 +3,19 @@ import { z } from 'zod';
 class PurchaseProductsSchemas {
   // Schema for a single purchase product
   static purchaseProductSchema = z.object({
-    idPurchaseProduct: z.number().optional(),
-    idShopping: z.number(),
-    idProduct: z.number(),
-    priceInCents: z.number(),
-    productName: z.string(),
-    paymentMethod: z.string(),
-    createdIn: z.string(),
-    updatedIn: z.string(),
+    idPurchaseProduct: z.number(),
+    idShopping: z.number().nullable(),
+    idProduct: z.number().nullable(),
+    priceInCents: z.number().nullable(),
+    productName: z.string().nullable(),
+    paymentMethod: z.string().nullable(),
+    createdIn: z.date().nullable(),
+    updatedIn: z.date().nullable(),
   });
+
+
+
+
 
   // Schema for registering a purchase product
   static RegisterPurchaseProduct = z.object({

@@ -118,7 +118,7 @@ export async function cartProductsRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.viewAll(request.headers));
+      return reply.status(200).send(await controller.viewAll(request.headers, request));
     }
   );
 }

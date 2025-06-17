@@ -138,7 +138,7 @@ model Shoppings {
 model PurchaseProducts {
   idPurchaseProduct Int      @id @default(autoincrement())
   idShopping        Int?
-  idProduct         String?  @db.VarChar(255)
+  idProduct         Int?  
   priceInCents      Int?
   productName       String?  @db.VarChar(255)
   paymentMethod     String?  @db.VarChar(45)
