@@ -671,6 +671,14 @@ public async updateAdmin(data: any, key: any): Promise<z.infer<typeof this.respo
 
       await prisma.messages.deleteMany({ where: { idUser: idUser as number } });
       await prisma.chats.deleteMany({ where: { idUser: idUser as number } });
+      await prisma.messages.deleteMany({ where: { idUser: idUser as number } });
+      await prisma.chats.deleteMany({ where: { idUser: idUser as number } });
+      await prisma.verificationCodes.deleteMany({ where: { email: user.email } });
+      await prisma.carts.deleteMany({ where: { idUser: idUser as number } });
+      await prisma.notifications.deleteMany({ where: { idUser: idUser as number } });
+ 
+
+
       await prisma.users.delete({ where: { idUser: idUser as number } });
 
 
@@ -684,6 +692,7 @@ public async updateAdmin(data: any, key: any): Promise<z.infer<typeof this.respo
       ) {
         throw error;
       }
+      console.log('Error in delete:', error);
       
       throw new InternalServerErrorException('An error occurred when trying to delete user');
     }
@@ -727,7 +736,7 @@ public async updateAdmin(data: any, key: any): Promise<z.infer<typeof this.respo
 
       
 
-     
+     console.log('Error in viewA:', error);
       throw new InternalServerErrorException('An error occurred when trying to retrieve user');
     }
   }
@@ -749,6 +758,8 @@ public async updateAdmin(data: any, key: any): Promise<z.infer<typeof this.respo
             role: {
               not: 0
             }
+          },include:{
+            Carts: true,
           }
         });
 

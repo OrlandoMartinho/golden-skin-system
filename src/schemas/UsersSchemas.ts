@@ -42,7 +42,7 @@ static userSchema = z.object({
   status: z.boolean(),
   createdIn: z.date(), 
   updatedIn: z.date().nullable(),
-  Carts: z.array(CartsSchemas.cartSchema).optional() 
+  Carts: CartsSchemas.cartSchema.nullable() 
 });
 
   // User ID

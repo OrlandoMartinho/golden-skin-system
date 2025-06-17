@@ -25,13 +25,18 @@ class CartProductsController {
   public async register(data: any, key: any): Promise<z.infer<typeof this.responseSchema>> {
     const validatedData = await this.zodError(CartProductsSchemas.RegisterCartProduct, data);
     const validatedKey = await this.zodError(CartProductsSchemas.tokenSchema, key);
-    const {  idCart,idProduct, productName, priceInCents, status } = validatedData;
+    const { idProduct} = validatedData;
     const { token } = validatedKey;
 
     try {
       const userId = await this.tokenService.userId(token);
       if (!userId) {
         throw new AuthorizationException('Not authorized');
+      }
+
+      const cartUser = await prisma.users.findFirst({ where: { idUser: userId } , include: { Carts: true } });
+      if (!cartUser) {
+        throw new ItemNotFoundException('Cart not found for this user');
       }
 
       const cart = await prisma.carts.findFirst({ where: { idUser:userId } });
@@ -51,12 +56,13 @@ class CartProductsController {
 
       await prisma.cartProducts.create({
         data: {
-          idCart,
+          idCart:cartUser.Carts?.idCart,
           idProduct,
-          productName,
-          priceInCents,
-          status,
+          productName:product.name,
+          priceInCents:product.priceInCents,
+          status:true,
           createdIn: new Date().toISOString(),
+          productPhoto: product.photo || null, 
         },
       });
 
@@ -209,10 +215,10 @@ class CartProductsController {
     }
   }
 
-  public async viewAll(data: any, key: any): Promise<z.infer<typeof CartProductsSchemas.cartProductsResponseSchema>> {
-    const validatedData = await this.zodError(CartProductsSchemas.ViewCartProducts, data);
+  public async viewAll( key: any): Promise<z.infer<typeof CartProductsSchemas.cartProductsResponseSchema>> {
+
     const validatedKey = await this.zodError(CartProductsSchemas.tokenSchema, key);
-    const { idCart } = validatedData;
+
     const { token } = validatedKey;
 
     try {
@@ -221,7 +227,12 @@ class CartProductsController {
         throw new AuthorizationException('Not authorized');
       }
 
-      const cart = await prisma.carts.findUnique({ where: { idCart } });
+      const cartUser = await prisma.carts.findFirst({ where: { idUser: userId } });
+      if (!cartUser) {  
+        throw new ItemNotFoundException('Cart not found for this user');
+      } 
+
+      const cart = await prisma.carts.findUnique({ where: { idCart:cartUser.idCart } });
       if (!cart) {
         throw new ItemNotFoundException('Cart not found');
       }
@@ -230,7 +241,7 @@ class CartProductsController {
         throw new AuthorizationException('Not authorized to view products in this cart');
       }
 
-      const cartProducts = await prisma.cartProducts.findMany({ where: { idCart } });
+      const cartProducts = await prisma.cartProducts.findMany({ where: { idCart :cart.idCart} });
 
       return CartProductsSchemas.cartProductsResponseSchema.parse(cartProducts);
     } catch (error) {
@@ -241,6 +252,7 @@ class CartProductsController {
       ) {
         throw error;
       }
+      console.error("Error:",error);
       throw new InternalServerErrorException('An error occurred when trying to retrieve cart products');
     }
   }

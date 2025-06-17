@@ -117,6 +117,7 @@ model CartProducts {
   priceInCents  Int?
   status        Boolean?
   createdIn     DateTime? @default(now())
+  productPhoto String?  @db.Text
 
   Products Products? @relation(fields: [idProduct], references: [idProduct])
   Carts    Carts?    @relation(fields: [idCart], references: [idCart])

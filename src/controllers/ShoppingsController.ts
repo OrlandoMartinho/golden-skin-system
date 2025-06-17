@@ -23,16 +23,20 @@ class ShoppingsController {
   }
 
   public async register(data: any): Promise<z.infer<typeof this.responseSchema>> {
-    const validatedData = await this.zodError(ShoppingsSchemas.RegisterShopping, data);
-    const { idUser,idCart} = validatedData;
+    const validatedData = await this.zodError(ShoppingsSchemas.tokenSchema, data);
+    const { token} = validatedData;
 
     try {
-      const user = await prisma.users.findUnique({ where: { idUser } });
+      const idUser = await this.tokenService.userId(token);
+      if (!idUser) {
+        throw new AuthorizationException('Not authorized');
+      }
+      const user = await prisma.users.findUnique({ where: { idUser },include: { Carts: true } });
       if (!user) {
         throw new ItemNotFoundException('User not found');
       }
 
-      const cart = await prisma.carts.findUnique({ where: { idCart } });
+      const cart = await prisma.carts.findUnique({ where: { idCart:user.Carts?.idCart } });
       if (!cart) {
         throw new ItemNotFoundException('Cart not found');
       }
@@ -48,7 +52,7 @@ class ShoppingsController {
       });
 
       const cartProducts = await prisma.cartProducts.findMany({
-        where: { idCart }
+        where: { idCart: cart.idCart },
       });
 
       if (cartProducts.length === 0) {

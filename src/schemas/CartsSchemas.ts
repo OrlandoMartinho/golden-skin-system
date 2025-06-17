@@ -5,7 +5,7 @@ class CartsSchemas {
   static cartSchema = z.object({
     idCart: z.number(),
     idUser: z.number(),
-    status: z.number(),
+    status: z.boolean(),
   });
 
   // Schema for adding a cart

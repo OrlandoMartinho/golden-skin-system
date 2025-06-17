@@ -107,7 +107,6 @@ export async function cartProductsRoutes(app: FastifyTypedInstance) {
       schema: {
         description: "View all products in a cart",
         tags: ["CartProducts"],
-        params: CartProductsSchemas.ViewCartProducts,
         headers: tokenSchema,
         response: {
           200: CartProductsSchemas.cartProductsResponseSchema,
@@ -119,7 +118,7 @@ export async function cartProductsRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.viewAll(request.params, request.headers));
+      return reply.status(200).send(await controller.viewAll(request.headers));
     }
   );
 }

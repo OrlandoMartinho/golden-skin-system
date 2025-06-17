@@ -3,23 +3,25 @@ import { z } from 'zod';
 class CartProductsSchemas {
   // Schema for a single cart product
   static cartProductSchema = z.object({
-    idCart: z.number(),
-    idProduct: z.number(),
-    description: z.string(),
-    productName: z.string(),
-    priceInCents: z.number(),
+    idCartProduct: z.number(),
+    idCart: z.number().nullable(),
+    idProduct: z.number().nullable(),
+    productName: z.string().nullable(),
+    priceInCents: z.number().nullable(),
     status: z.boolean(),
-    createdIn: z.string(),
+    createdIn: z.date().nullable(),
+    productPhoto: z.string().nullable(),
   });
+
+
+
+ 
+
+ 
 
   // Schema for registering a cart product
   static RegisterCartProduct = z.object({
-    idCart: z.number().int().positive("ID Cart must be a positive integer"),
     idProduct: z.number().int().positive("ID Product must be a positive integer"),
-    description: z.string().min(1, "Description is required"),
-    productName: z.string().min(1, "Product name is required"),
-    priceInCents: z.number().int().positive("Price in cents must be a positive integer"),
-    status: z.boolean(),
   });
 
   // Schema for deleting a cart product

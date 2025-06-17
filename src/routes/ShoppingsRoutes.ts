@@ -15,7 +15,7 @@ export async function shoppingsRoutes(app: FastifyTypedInstance) {
       schema: {
         description: "Register a new shopping for a user",
         tags: ["Shoppings"],
-        body: ShoppingsSchemas.RegisterShopping,
+        headers: tokenSchema,
         response: {
           200: ShoppingsSchemas.success_response,
           400: ResponsesSchemas.error_400_response,
@@ -25,8 +25,8 @@ export async function shoppingsRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      const { idUser } = request.body as any;
-      return reply.status(200).send(await controller.register({ idUser }));
+      
+      return reply.status(200).send(await controller.register( request.headers));
     }
   );
 
