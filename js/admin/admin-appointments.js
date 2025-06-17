@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let appointmentsData = [];
     let usersData = [];
     let servicesData = [];
+    let employeesData = [];
 
     async function initializeData() {
         try {
@@ -11,21 +12,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (usersResult === 200) {
                 const storedUsers = localStorage.getItem('users');
                 usersData = storedUsers ? JSON.parse(storedUsers) : [];
+                employeesData = usersData.filter(user => user.role === 1);
                 populateEmailDropdown(usersData);
+                populateEmployeeDropdown(employeesData);
             } else {
                 showMessageModal('error', 'Erro!', 'Falha ao carregar usuários', { buttonText: 'Entendido' });
             }
 
             // Initialize Services
             const servicesResult = await getAllServices(accessToken);
-            console.log("Services result:", servicesResult);
             if (servicesResult === 200) {
                 const storedServices = localStorage.getItem('services');
-                console.log("Stored services:", storedServices);
                 servicesData = storedServices ? JSON.parse(storedServices) : [];
                 populateServiceDropdown(servicesData);
                 populateServiceFilter(servicesData);
-                populateAppointmentDropdown(servicesData);
+                populateAppointmentDropdown(appointmentsData);
             } else {
                 showMessageModal('error', 'Erro!', 'Falha ao carregar serviços', { buttonText: 'Entendido' });
             }
@@ -37,6 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 appointmentsData = storedAppointments ? JSON.parse(storedAppointments) : [];
                 populateAppointmentsTable(appointmentsData);
                 populateEmployeeAssignmentTable(appointmentsData);
+                populateAppointmentDropdown(appointmentsData);
             } else {
                 showMessageModal('error', 'Erro!', 'Falha ao carregar agendamentos', { buttonText: 'Entendido' });
             }
@@ -110,6 +112,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             option.value = user.email;
             option.textContent = user.email;
             emailSelect.appendChild(option);
+        });
+    }
+
+    function populateEmployeeDropdown(employees) {
+        const employeeSelect = document.getElementById('employee-id');
+        if (!employeeSelect) return;
+
+        employeeSelect.innerHTML = '<option value="">Selecione um funcionário</option>';
+        employees.forEach(employee => {
+            const option = document.createElement('option');
+            option.value = employee.idUser;
+            option.textContent = `${employee.name} (${employee.email})`;
+            option.dataset.name = employee.name;
+            option.dataset.email = employee.email;
+            option.dataset.phone = employee.phoneNumber;
+            employeeSelect.appendChild(option);
         });
     }
 
@@ -371,11 +389,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         submitButton.disabled = true;
 
         const idAppointment = parseInt(document.getElementById('employee-appointment').value);
-        const employeeName = document.getElementById('employee-name').value.trim();
-        const employeeEmail = document.getElementById('employee-email').value.trim();
-        const employeePhoneNumber = document.getElementById('employee-phone').value.trim();
+        const employeeSelect = document.getElementById('employee-id');
+        const selectedOption = employeeSelect.options[employeeSelect.selectedIndex];
 
-        if (!idAppointment || !employeeName || !employeeEmail || !employeePhoneNumber) {
+        if (!idAppointment || !employeeSelect.value) {
             showMessageModal('error', 'Erro!', 'Por favor, preencha todos os campos obrigatórios.', {
                 buttonText: 'Entendido',
             });
@@ -387,9 +404,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const employeeData = {
             idAppointment,
-            employeeName,
-            employeeEmail,
-            employeePhoneNumber
+            employeeName: selectedOption.dataset.name,
+            employeeEmail: selectedOption.dataset.email,
+            employeePhoneNumber: selectedOption.dataset.phone
         };
 
         try {

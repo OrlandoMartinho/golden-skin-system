@@ -116,7 +116,7 @@ async function getAllAppointments(accessToken) {
 async function getAnyAppointment(accessToken, idAppointment) {
   try {
     console.log("Fetching with idAppointment:", idAppointment);
-    const url = `${api_host}/api/appointments/employee/${Number(idAppointment)}`;
+    const url = `${api_host}/api/appointments/${Number(idAppointment)}`;
 
     const response = await fetch(url, {
       method: 'GET',
