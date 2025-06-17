@@ -307,18 +307,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // }
 
   // Função para gerenciar o menu lateral
-  function toggleSidebar() {
-    const sidebar = document.querySelector('.sidebar');
-    const overlay = document.querySelector('.overlay');
-    sidebar.classList.toggle('active');
-    overlay.classList.toggle('active');
-    console.log('Sidebar toggled');
-  }
+  
 
   // Event listeners
-  document.querySelector('.menu-toggle').addEventListener('click', toggleSidebar);
-  document.querySelector('.close-sidebar').addEventListener('click', toggleSidebar);
-  document.querySelector('.overlay').addEventListener('click', toggleSidebar);
+  // document.querySelector('.menu-toggle').addEventListener('click', toggleSidebar);
+  // document.querySelector('.close-sidebar').addEventListener('click', toggleSidebar);
+  // document.querySelector('.overlay').addEventListener('click', toggleSidebar);
 
   // Busca inicial de dados
   async function initializeDashboard() {
