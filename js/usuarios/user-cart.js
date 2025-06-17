@@ -48,7 +48,7 @@ async function registerAnyCartItem(accessToken, cartItemData) {
     }
 }
 
-async function deleteCartItem(accessToken, idCart, idProduct, reduceQuantity = false, newQuantity = 0) {
+async function deleteCartItem(accessToken,idProduct) {
     try {
         const url = `${api_host}/api/cart-products`;
         const response = await fetch(url, {
@@ -57,19 +57,11 @@ async function deleteCartItem(accessToken, idCart, idProduct, reduceQuantity = f
                 'Content-Type': 'application/json',
                 'token': accessToken
             },
-            body: JSON.stringify({ idCart, idProduct })
+            body: JSON.stringify({  idProduct })
         });
         const result = await response.json();
         if (response.ok) {
-            if (reduceQuantity && newQuantity > 0) {
-                for (let i = 0; i < newQuantity; i++) {
-                    const addResponse = await registerAnyCartItem(accessToken, { idProduct });
-                    if (addResponse.status !== 200) {
-                        console.warn("Error re-adding item:", addResponse.status, addResponse.error?.message);
-                        return addResponse;
-                    }
-                }
-            }
+          
             return { status: response.status, data: result };
         }
         console.warn("Error deleting cart item:", response.status, result.message);
@@ -103,14 +95,18 @@ async function getProduct(accessToken, idProduct) {
     }
 }
 
-function removeItem(button) {
+async function removeItem(button) {
     try {
         window.itemToRemove = button.closest('.cart-item');
         if (!window.itemToRemove) {
             throw new Error("Cart item not found");
         }
         openModal('remove-item-modal');
-        console.log("Item marked for removal:", window.itemToRemove.dataset.idProduct);
+       
+        console.log("Opening remove item modal for product ID:", window.itemToRemove.dataset);
+        const idProduct = parseInt(window.itemToRemove.dataset.idProduct);
+        const accessToken = localStorage.getItem('accessToken');
+        await deleteCartItem(accessToken, idProduct);
     } catch (error) {
         console.error("Error in removeItem:", error.message, error.stack);
         showMessageModal('error', 'Erro!', 'Falha ao marcar item para remoção', { buttonText: 'Entendido' });
@@ -252,6 +248,7 @@ async function proceedToCheckout(accessToken, cartItems) {
         console.log("Proceeding to checkout with response:", response);
         if (response.status === 200) {
             showMessageModal('success', 'Sucesso!', 'Compra realizada com sucesso!', { buttonText: 'Entendido' });
+            await initializeCart();
         } else {
             console.warn("Error in checkout:", response.status, response.error?.message);
             showMessageModal('error', 'Erro!', 'Falha ao realizar a compra', { buttonText: 'Entendido' });
