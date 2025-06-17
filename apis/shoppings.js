@@ -5,9 +5,10 @@ async function addAnyShopping(accessToken) {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+      
         token: accessToken
       },
+
     });
 
     const result = await response.json();

@@ -61,11 +61,10 @@ async function deleteCartItem(accessToken, idCart, idProduct, reduceQuantity = f
         });
         const result = await response.json();
         if (response.ok) {
-            // If reducing quantity, re-add the item with the new quantity
             if (reduceQuantity && newQuantity > 0) {
                 for (let i = 0; i < newQuantity; i++) {
                     const addResponse = await registerAnyCartItem(accessToken, { idProduct });
-                    if (!addResponse.status === 200) {
+                    if (addResponse.status !== 200) {
                         console.warn("Error re-adding item:", addResponse.status, addResponse.error?.message);
                         return addResponse;
                     }
@@ -132,13 +131,11 @@ async function confirmRemoveItem(accessToken, idCart) {
         }
 
         if (currentQuantity > 1) {
-            // Reduce quantity by 1
             const response = await deleteCartItem(accessToken, idCart, idProduct, true, currentQuantity - 1);
             if (response.status === 200) {
                 currentQuantity--;
                 quantityElement.dataset.quantity = currentQuantity;
                 quantityElement.textContent = `Quantidade: ${currentQuantity}`;
-                // Update subtotal for this item
                 const priceElement = window.itemToRemove.querySelector('.cart-item-price');
                 const price = parseFloat(priceElement.textContent.replace('AOA ', '').replace(',', '.'));
                 const subtotalElement = window.itemToRemove.querySelector('.cart-item-subtotal');
@@ -152,7 +149,6 @@ async function confirmRemoveItem(accessToken, idCart) {
                 showMessageModal('error', 'Erro!', 'Falha ao reduzir quantidade', { buttonText: 'Entendido' });
             }
         } else {
-            // Remove item entirely
             const response = await deleteCartItem(accessToken, idCart, idProduct);
             if (response.status === 200) {
                 window.itemToRemove.remove();
@@ -252,7 +248,8 @@ async function proceedToCheckout(accessToken, cartItems) {
             showMessageModal('error', 'Erro!', 'O carrinho está vazio', { buttonText: 'Entendido' });
             return;
         }
-        const response = await registerAnyCartItem(accessToken, { idProduct: cartItems[0].idProduct });
+        const response = await addAnyShopping(accessToken);
+        console.log("Proceeding to checkout with response:", response);
         if (response.status === 200) {
             showMessageModal('success', 'Sucesso!', 'Compra realizada com sucesso!', { buttonText: 'Entendido' });
         } else {

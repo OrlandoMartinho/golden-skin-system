@@ -1,56 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const accessToken = localStorage.getItem('accessToken');
     let salesData = [
-        {
-            idShopping: 1,
-            idUser: 1,
-            name: "João Silva",
-            status: "completed",
-            createdIn: "2025-06-01T10:00:00Z",
-            updatedIn: "2025-06-01T12:00:00Z",
-            PurchaseProducts: [
-                {
-                    idPurchaseProduct: 1,
-                    idShopping: 1,
-                    idProduct: 101,
-                    productName: "Creme Hidratante",
-                    priceInCents: 500000,
-                    paymentMethod: "credit_card",
-                    createdIn: "2025-06-01T10:00:00Z",
-                    updatedIn: "2025-06-01T10:00:00Z"
-                },
-                {
-                    idPurchaseProduct: 2,
-                    idShopping: 1,
-                    idProduct: 102,
-                    productName: "Óleo de Massagem",
-                    priceInCents: 300000,
-                    paymentMethod: "credit_card",
-                    createdIn: "2025-06-01T10:00:00Z",
-                    updatedIn: "2025-06-01T10:00:00Z"
-                }
-            ]
-        },
-        {
-            idShopping: 2,
-            idUser: 2,
-            name: "Maria Oliveira",
-            status: "pending",
-            createdIn: "2025-06-02T14:30:00Z",
-            updatedIn: "2025-06-02T15:00:00Z",
-            PurchaseProducts: [
-                {
-                    idPurchaseProduct: 3,
-                    idShopping: 2,
-                    idProduct: 103,
-                    productName: "Kit Aromaterapia",
-                    priceInCents: 750000,
-                    paymentMethod: "bank_transfer",
-                    createdIn: "2025-06-02T14:30:00Z",
-                    updatedIn: "2025-06-02T14:30:00Z"
-                }
-            ]
-        }
+        
     ];
 
     const salesTableBody = document.querySelector('.sales-table tbody');
@@ -67,9 +18,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('Resultado da requisição getAllShoppings:', result);
 
         if (result.status === 200) {
-            salesData = JSON.parse(localStorage.getItem('sales')) || [];
+            salesData = result.data;
             console.log('Dados de vendas carregados do localStorage:', salesData);
-            
             populateSalesTable(salesData);
             console.log('Tabela de vendas populada com sucesso.');
         } else {
