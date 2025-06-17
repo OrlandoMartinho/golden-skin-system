@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/global.css">
     <link rel="stylesheet" href="../../css/usuarios/user-cart.css">
+ 
 </head>
 <body>
     <div class="container">
@@ -15,28 +16,23 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo">
-                <img src="../../assets/img/logo.png" alt="">
+                <img src="../../assets/img/logo.png" alt="Pele Douro Logo">
             </div>
-
-            <button class="close-sidebar">
-                <i class="fa-solid fa-x .close-sidebar"></i>
+            <button class="close-sidebar" aria-label="Fechar sidebar">
+                <i class="fa-solid fa-x"></i>
             </button>
-            
             <a href="user-home.html" class="nav-item">
                 <i class="far fa-calendar-alt"></i>
                 <span>Agendamentos</span>
             </a>
-            
             <a href="user-product.html" class="nav-item">
                 <i class="fas fa-store"></i>
                 <span>Loja de Produtos</span>
             </a>
-
             <a href="user-chat.html" class="nav-item">
                 <i class="far fa-comments"></i>
                 <span>Chat</span>
             </a>
-
             <a href="user-service.html" class="nav-item">
                 <i class="fas fa-concierge-bell"></i>
                 <span>Serviços</span>
@@ -46,7 +42,7 @@
         <!-- Main Content -->
         <main class="main-content">
             <div class="header">
-                <button class="menu-toggle">
+                <button class="menu-toggle" aria-label="Abrir menu">
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="page-title">
@@ -56,19 +52,20 @@
                 <div class="header-icons">
                     <div class="notification-icon">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-badge">2</span>
+                        <span class="notification-badge" id="TotalDeNotificacoes">2</span>
+                        <div id="notification-container"></div>
                     </div>
                     <div class="cart-icon">
                         <a href="user-cart.html"><i class="fas fa-shopping-cart"></i></a>
-                        <span class="cart-count">3</span> 
-                     </div>
+                        <span class="cart-count" id="cart-count">0</span>
+                    </div>
                     <div class="user-profile">
                         <i class="fa-solid fa-user"></i>
-                        <span>Admin <i class="fas fa-chevron-down"></i></span>
+                        <span id="user-name">Admin <i class="fas fa-chevron-down"></i></span>
                         <div class="dropdown-content">
                             <a href="user-history.html"><i class="fa-solid fa-clock-rotate-left"></i> Histórico</a>
                             <a href="user-settings.html"><i class="fas fa-cog"></i> Definições</a>
-                              <a href="#"  id="logout"><i class="fas fa-sign-out-alt" id="logout"></i> Terminar sessão</a>
+                            <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Terminar sessão</a>
                         </div>
                     </div>
                 </div>
@@ -77,105 +74,34 @@
             <!-- Conteúdo do Carrinho -->
             <section class="cart-section">
                 <div class="cart-items-container">
-                    <h2>Seus Produtos <span>(3 itens)</span></h2>
-                    
-                    <!-- Item do Carrinho 1 -->
-                    <div class="cart-item">
-                        <div class="cart-item-image">
-                            <img src="../../assets/img/product-1.png" alt="Creme Hidratante 24h">
-                        </div>
-                        <div class="cart-item-details">
-                            <h3>Creme Hidratante 24h</h3>
-                            <div class="cart-item-price">AOA 89,90</div>
-                            <div class="cart-item-quantity">
-                                <button class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
-                                <input type="number" value="1" min="1" class="quantity-input">
-                                <button class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
-                            </div>
-                        </div>
-                        <div class="cart-item-actions">
-                            <button class="remove-btn" onclick="removeItem(this)">
-                                <i class="fas fa-trash"></i> Remover
-                            </button>
-                            <div class="cart-item-subtotal">AOA 89,90</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Item do Carrinho 2 -->
-                    <div class="cart-item">
-                        <div class="cart-item-image">
-                            <img src="../../assets/img/product-2.png" alt="Óleo Corporal Relaxante">
-                        </div>
-                        <div class="cart-item-details">
-                            <h3>Óleo Corporal Relaxante</h3>
-                            <div class="cart-item-price">AOA 59,90</div>
-                            <div class="cart-item-quantity">
-                                <button class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
-                                <input type="number" value="2" min="1" class="quantity-input">
-                                <button class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
-                            </div>
-                        </div>
-                        <div class="cart-item-actions">
-                            <button class="remove-btn" onclick="removeItem(this)">
-                                <i class="fas fa-trash"></i> Remover
-                            </button>
-                            <div class="cart-item-subtotal">AOA 119,80</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Item do Carrinho 3 -->
-                    <div class="cart-item">
-                        <div class="cart-item-image">
-                            <img src="../../assets/img/product-3.png" alt="Protetor Solar FPS 50">
-                        </div>
-                        <div class="cart-item-details">
-                            <h3>Protetor Solar FPS 50</h3>
-                            <div class="cart-item-price">AOA 79,90</div>
-                            <div class="cart-item-quantity">
-                                <button class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
-                                <input type="number" value="1" min="1" class="quantity-input">
-                                <button class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
-                            </div>
-                        </div>
-                        <div class="cart-item-actions">
-                            <button class="remove-btn" onclick="removeItem(this)">
-                                <i class="fas fa-trash"></i> Remover
-                            </button>
-                            <div class="cart-item-subtotal">AOA 79,90</div>
-                        </div>
-                    </div>
-                    
+                    <h2>Seus Produtos <span id="item-count">(0 itens)</span></h2>
+                    <div id="cart-items"></div>
                     <div class="cart-actions">
                         <button class="continue-shopping" onclick="window.location.href='user-product.html'">
                             <i class="fas fa-arrow-left"></i> Continuar Comprando
                         </button>
-                        <button class="clear-cart" onclick="clearCart()">
+                        <button class="clear-cart" aria-label="Limpar carrinho">
                             <i class="fas fa-trash"></i> Limpar Carrinho
                         </button>
                     </div>
                 </div>
-                
                 <div class="cart-summary">
                     <h2>Resumo do Pedido</h2>
                     <div class="summary-row">
                         <span>Subtotal</span>
-                        <span>AOA 289,60</span>
+                        <span id="subtotal">AOA 0,00</span>
                     </div>
                     <div class="summary-row">
                         <span>Frete</span>
-                        <span>AOA 15,00</span>
+                        <span id="shipping">AOA 15,00</span>
                     </div>
-                  
                     <div class="summary-row total">
                         <span>Total</span>
-                        <span>AOA 274,60</span>
+                        <span id="total">AOA 15,00</span>
                     </div>
-                    
-                    
-                    <button class="checkout-btn" onclick="proceedToCheckout()">
+                    <button class="checkout-btn" aria-label="Finalizar compra">
                         Finalizar Compra <i class="fas fa-arrow-right"></i>
                     </button>
-                    
                     <div class="payment-methods">
                         <h3>Métodos de Pagamento</h3>
                         <div class="payment-icons">
@@ -190,33 +116,45 @@
         </main>
 
         <!-- Modal de Confirmação de Limpeza do Carrinho -->
-        <div id="clear-cart-modal" class="modal">
+        <div id="clear-cart-modal" class="modal" role="dialog" aria-labelledby="clear-cart-title">
             <div class="modal-content">
-                <span class="close" onclick="closeModal('clear-cart-modal')">&times;</span>
-                <h3>Limpar carrinho?</h3>
+                <span class="close" onclick="closeModal('clear-cart-modal')" aria-label="Fechar modal">×</span>
+                <h3 id="clear-cart-title">Limpar carrinho?</h3>
                 <p>Tem certeza que deseja remover todos os itens do seu carrinho?</p>
                 <div class="modal-buttons">
                     <button class="cancel" onclick="closeModal('clear-cart-modal')">Cancelar</button>
-                    <button class="confirm" onclick="confirmClearCart()">Limpar</button>
+                    <button class="confirm" aria-label="Confirmar limpeza do carrinho">Limpar</button>
                 </div>
             </div>
         </div>
 
         <!-- Modal de Confirmação de Remoção de Item -->
-        <div id="remove-item-modal" class="modal">
+        <div id="remove-item-modal" class="modal" role="dialog" aria-labelledby="remove-item-title">
             <div class="modal-content">
-                <span class="close" onclick="closeModal('remove-item-modal')">&times;</span>
-                <h3>Remover item?</h3>
+                <span class="close" onclick="closeModal('remove-item-modal')" aria-label="Fechar modal">×</span>
+                <h3 id="remove-item-title">Remover item?</h3>
                 <p>Tem certeza que deseja remover este item do seu carrinho?</p>
                 <div class="modal-buttons">
                     <button class="cancel" onclick="closeModal('remove-item-modal')">Cancelar</button>
-                    <button class="confirm" onclick="confirmRemoveItem()">Remover</button>
+                    <button class="confirm" aria-label="Confirmar remoção do item">Remover</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Mensagens (para erros e sucessos) -->
+        <div id="message-modal" class="modal" role="dialog" aria-labelledby="message-modal-title">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('message-modal')" aria-label="Feerrar modal">×</span>
+                <h3 id="message-modal-title"></h3>
+                <p id="message-modal-text"></p>
+                <div class="modal-buttons">
+                    <button id="message-modal-button" onclick="closeModal('message-modal')">Entendido</button>
                 </div>
             </div>
         </div>
 
         <!-- Notificações Dropdown -->
-        <div class="notifications-dropdown">
+        <div class="notifications-dropdown" id="notificationsDropdown">
             <div class="notification-item">
                 <i class="fas fa-calendar-check"></i>
                 <div>
@@ -234,11 +172,14 @@
         </div>
 
         <script src="../../js/global.js"></script>
+        <script src="../../js/messageModal.js"></script>
+        <script src="../../apis/generalSection.js"></script>
+        <script src="../../apis/users.js"></script>
+        <script src="../../apis/cartsProducts.js"></script>
+        <script src="../../apis/shoppings.js"></script>
         <script src="../../js/usuarios/user-cart.js"></script>
-         <script src="../../apis/generalSection.js"></script>
-    <script src="../../apis/users.js"></script>
         <script src="../../js/sessoes/logout.js"></script>
-     <script src="../../js/messageModal.js"></script>
+       
     </div>
 </body>
 </html>

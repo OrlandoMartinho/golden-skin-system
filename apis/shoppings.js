@@ -1,4 +1,4 @@
-async function addAnyShopping(accessToken, shoppingData) {
+async function addAnyShopping(accessToken) {
   try {
     const url = `${api_host}/api/shoppings/register`;
 
@@ -8,7 +8,6 @@ async function addAnyShopping(accessToken, shoppingData) {
         'Content-Type': 'application/json',
         token: accessToken
       },
-      body: JSON.stringify(shoppingData)
     });
 
     const result = await response.json();
