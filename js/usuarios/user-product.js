@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 productsData = JSON.parse(localStorage.getItem('products')) || [];
                 console.log('Products data loaded:', productsData.length, 'products');
                 populateProductsSection(productsData);
-                updateCartCount(0); // Sync cart count with stored items
+                // updateCartCount(0); // Sync cart count with stored items
                 updateCartDropdown();
             } else {
                 console.error('Failed to load products, status:', productsResult);
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', async () => {
        
 
         console.log('Updated cart items:', cartItems);
-        updateCartCount(quantity);
+        
         updateCartDropdown();
         openModal('add-to-cart-modal');
     }
@@ -203,13 +203,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    function updateCartCount(quantityToAdd) {
-        const cartCountElement = document.querySelector('.cart-count');
-        let currentCount = parseInt(cartCountElement.textContent) || 0;
-        const newCount = currentCount + quantityToAdd;
-        console.log('Updating cart count:', currentCount, '->', newCount);
-        cartCountElement.textContent = newCount > 0 ? newCount : 0;
-    }
+    // function updateCartCount(quantityToAdd) {
+    //     const cartCountElement = document.querySelector('.cart-count');
+    //     let currentCount = parseInt(cartCountElement.textContent) || 0;
+    //     const newCount = currentCount + quantityToAdd;
+    //     console.log('Updating cart count:', currentCount, '->', newCount);
+    //     cartCountElement.textContent = newCount > 0 ? newCount : 0;
+    // }
 
     function updateCartDropdown() {
         console.log('Updating cart dropdown');
@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (itemIndex !== -1) {
             const removedItem = cartItems.splice(itemIndex, 1)[0];
             console.log('Removed item:', removedItem);
-            updateCartCount(-removedItem.quantity);
+            // updateCartCount(-removedItem.quantity);
             updateCartDropdown();
         } else {
             console.warn('Item not found in cart:', productId);

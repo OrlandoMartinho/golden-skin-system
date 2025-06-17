@@ -225,22 +225,22 @@ function updateCartSummary() {
     }
 }
 
-function updateCartCount() {
-    try {
-        const cartCountElement = document.getElementById('cart-count');
-        const itemCountElement = document.getElementById('item-count');
-        const cartIcon = document.querySelector('.cart-icon');
-        if (!cartCountElement || !itemCountElement || !cartIcon) {
-            throw new Error("Cart count elements not found");
-        }
-        const count = document.querySelectorAll('.cart-item').length;
-        cartCountElement.textContent = count;
-        itemCountElement.textContent = `(${count} itens)`;
-        cartIcon.classList.toggle('active', count > 0);
-    } catch (error) {
-        console.error("Error in updateCartCount:", error.message, error.stack);
-    }
-}
+// function updateCartCount() {
+//     try {
+//         const cartCountElement = document.getElementById('cart-count');
+//         const itemCountElement = document.getElementById('item-count');
+//         const cartIcon = document.querySelector('.cart-icon');
+//         if (!cartCountElement || !itemCountElement || !cartIcon) {
+//             throw new Error("Cart count elements not found");
+//         }
+//         const count = document.querySelectorAll('.cart-item').length;
+//         cartCountElement.textContent = count;
+//         itemCountElement.textContent = `(${count} itens)`;
+//         cartIcon.classList.toggle('active', count > 0);
+//     } catch (error) {
+//         console.error("Error in updateCartCount:", error.message, error.stack);
+//     }
+// }
 
 async function proceedToCheckout(accessToken, cartItems) {
     try {
@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }, []);
                 populateCartItems(cartItems);
                 updateCartSummary();
-                updateCartCount();
+                // updateCartCount();
                 console.log("Cart initialized with", cartItems.length, "items.");
             } else {
                 console.warn("Error initializing cart:", response.status, response.error?.message);
