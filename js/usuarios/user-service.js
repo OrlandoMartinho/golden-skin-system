@@ -1,188 +1,217 @@
-/**
- * user-service.js
- * Scripts para a página de serviços (Pele Douro)
- * Funcionalidades: controle de modais, filtros, sidebar, notificações, carrinho e perfil
- */
+document.addEventListener('DOMContentLoaded', async () => {
+    const accessToken = localStorage.getItem('accessToken');
+    let servicesData = [];
+    let userData = {};
 
-// Função para abrir um modal pelo ID
-function openModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden'; // Impede rolagem da página
-    }
-}
+    async function initializeData() {
+        try {
+            // Initialize User Info
+            userData = JSON.parse(localStorage.getItem('user')) || {};
+            document.getElementById('user-name').textContent = userData.name || 'Usuário';
+            document.getElementById('schedule-name').value = userData.name || '';
+            document.getElementById('schedule-email').value = userData.email || '';
+            document.getElementById('schedule-phone').value = userData.phoneNumber || '';
 
-// Função para fechar um modal pelo ID
-function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = ''; // Restaura rolagem da página
-    }
-}
-
-// Função para confirmar o agendamento
-function confirmSchedule() {
-    const service = document.getElementById('service-selected').value;
-    const date = document.getElementById('schedule-date').value;
-    const time = document.getElementById('schedule-time').value;
-    const professional = document.getElementById('professional').value;
-    const observations = document.getElementById('observations').value;
-
-    // Validação básica
-    if (!date || !time) {
-        alert('Por favor, selecione uma data e horário.');
-        return;
+            // Initialize Services
+            const servicesResult = await getAllServices(accessToken);
+            if (servicesResult === 200) {
+                servicesData = JSON.parse(localStorage.getItem('services')) || [];
+                populateServicesSection(servicesData);
+            } else {
+                showMessageModal('error', 'Erro!', 'Falha ao carregar serviços', { buttonText: 'Entendido' });
+            }
+        } catch (error) {
+            console.error('Erro ao inicializar dados:', error);
+            showMessageModal('error', 'Erro!', 'Falha ao inicializar a página', { buttonText: 'Entendido' });
+        }
     }
 
-    // Aqui você pode adicionar lógica para enviar os dados do agendamento ao backend
-    console.log('Agendamento confirmado:', {
-        service,
-        date,
-        time,
-        professional,
-        observations
-    });
+    function populateServicesSection(services) {
+        const section = document.querySelector('.section-services');
+        if (!section) return;
 
-    closeModal('schedule-modal');
-    openModal('confirmation-modal');
-}
+        section.innerHTML = '';
+        if (services.length === 0) {
+            section.innerHTML = '<p>Nenhum serviço encontrado.</p>';
+            return;
+        }
 
-// Manipulação da sidebar
-document.querySelector('.menu-toggle').addEventListener('click', () => {
-    document.querySelector('.sidebar').classList.add('active');
-    document.querySelector('.overlay').style.display = 'block';
-});
-
-document.querySelector('.close-sidebar').addEventListener('click', () => {
-    document.querySelector('.sidebar').classList.remove('active');
-    document.querySelector('.overlay').style.display = 'none';
-});
-
-document.querySelector('.overlay').addEventListener('click', () => {
-    document.querySelector('.sidebar').classList.remove('active');
-    document.querySelector('.overlay').style.display = 'none';
-});
-
-// Manipulação do dropdown de notificações
-document.querySelector('.notification-icon').addEventListener('click', (e) => {
-    e.stopPropagation();
-    const dropdown = document.querySelector('.notifications-dropdown');
-    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-    document.querySelector('.cart-dropdown').style.display = 'none'; // Fecha o carrinho
-    document.querySelector('.dropdown-content').style.display = 'none'; // Fecha o perfil
-});
-
-// Manipulação do dropdown do carrinho
-document.querySelector('.cart-icon').addEventListener('click', (e) => {
-    e.stopPropagation();
-    const dropdown = document.querySelector('.cart-dropdown');
-    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-    document.querySelector('.notifications-dropdown').style.display = 'none'; // Fecha notificações
-    document.querySelector('.dropdown-content').style.display = 'none'; // Fecha o perfil
-});
-
-// Manipulação do dropdown de perfil
-document.querySelector('.user-profile').addEventListener('click', (e) => {
-    e.stopPropagation();
-    const dropdown = document.querySelector('.dropdown-content');
-    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-    document.querySelector('.notifications-dropdown').style.display = 'none'; // Fecha notificações
-    document.querySelector('.cart-dropdown').style.display = 'none'; // Fecha o carrinho
-});
-
-// Fechar dropdowns ao clicar fora
-document.addEventListener('click', () => {
-    document.querySelector('.notifications-dropdown').style.display = 'none';
-    document.querySelector('.cart-dropdown').style.display = 'none';
-    document.querySelector('.dropdown-content').style.display = 'none';
-});
-
-// Manipulação da pesquisa
-document.querySelector('.search-box input').addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase();
-    const services = document.querySelectorAll('.service-card');
-    services.forEach(service => {
-        const title = service.querySelector('h3').textContent.toLowerCase();
-        service.style.display = title.includes(query) ? 'block' : 'none';
-    });
-});
-
-// Manipulação do filtro de categoria
-document.querySelector('.filter-dropdown select[aria-label="Filtrar por categoria"]').addEventListener('change', (e) => {
-    const category = e.target.value;
-    const services = document.querySelectorAll('.service-card');
-    services.forEach(service => {
-        // Adicione um atributo data-category ao HTML dos cartões para filtragem
-        // Exemplo: data-category="facial" no elemento .service-card
-        const serviceCategory = service.dataset.category || '';
-        service.style.display = !category || serviceCategory === category ? 'block' : 'none';
-    });
-});
-
-// Manipulação do filtro de ordenação
-document.querySelector('.filter-dropdown select[aria-label="Ordenar serviços"]').addEventListener('change', (e) => {
-    const sortBy = e.target.value;
-    const servicesContainer = document.querySelector('.section-services');
-    const services = Array.from(document.querySelectorAll('.service-card'));
-
-    if (sortBy === 'preco-asc') {
-        services.sort((a, b) => {
-            const priceA = parseFloat(a.querySelector('.price').textContent.replace('R$ ', '').replace(',', '.'));
-            const priceB = parseFloat(b.querySelector('.price').textContent.replace('R$ ', '').replace(',', '.'));
-            return priceA - priceB;
-        });
-    } else if (sortBy === 'preco-desc') {
-        services.sort((a, b) => {
-            const priceA = parseFloat(a.querySelector('.price').textContent.replace('R$ ', '').replace(',', '.'));
-            const priceB = parseFloat(b.querySelector('.price').textContent.replace('R$ ', '').replace(',', '.'));
-            return priceB - priceA;
-        });
-    } else if (sortBy === 'popular') {
-        services.sort((a, b) => {
-            const ratingA = parseInt(a.querySelector('.rating span').textContent.replace(/[^0-9]/g, ''));
-            const ratingB = parseInt(b.querySelector('.rating span').textContent.replace(/[^0-9]/g, ''));
-            return ratingB - ratingA;
-        });
-    } else if (sortBy === 'duracao') {
-        services.sort((a, b) => {
-            const durationA = a.querySelector('.service-meta span').textContent.match(/(\d+ min|\d+ horas)/)[0];
-            const durationB = b.querySelector('.service-meta span').textContent.match(/(\d+ min|\d+ horas)/)[0];
-            const minutesA = durationA.includes('horas') ? parseInt(durationA) * 60 : parseInt(durationA);
-            const minutesB = durationB.includes('horas') ? parseInt(durationB) * 60 : parseInt(durationB);
-            return minutesA - minutesB;
+        services.forEach(service => {
+            const card = document.createElement('div'); // Initialize card here
+            card.classList.add('service-card');
+            const rating = calculateRating(service.rating || 0);
+            card.innerHTML = `
+                <div class="service-image">
+                    <img src="${service.photo || '../../assets/img/placeholder.png'}" alt="${service.name}">
+                </div>
+                <div class="service-info">
+                    <h3>${service.name || '-'}</h3>
+                    <div class="rating">
+                        ${rating.stars}
+                        <span>(${service.reviews || 0})</span>
+                    </div>
+                    <div class="price">AOA ${(service.priceInCents / 100).toFixed(2)}</div>
+                    <div class="service-actions">
+                        <button class="view-more" onclick="openDetailsModal(${service.idService})">
+                            <i class="fas fa-eye"></i> Ver Mais
+                        </button>
+                        <button class="schedule-service" onclick="openScheduleModal(${service.idService})">
+                            <i class="fas fa-calendar-alt"></i> Agendar
+                        </button>
+                    </div>
+                </div>
+            `;
+            section.appendChild(card);
         });
     }
 
-    servicesContainer.innerHTML = '';
-    services.forEach(service => servicesContainer.appendChild(service));
-});
+    function calculateRating(rating) {
+        const fullStars = Math.floor(rating);
+        const halfStar = rating % 1 >= 0.5 ? 1 : 0;
+        const emptyStars = 5 - fullStars - halfStar;
+        let stars = '';
+        for (let i = 0; i < fullStars; i++) stars += '<i class="fas fa-star"></i>';
+        if (halfStar) stars += '<i class="fas fa-star-half-alt"></i>';
+        for (let i = 0; i < emptyStars; i++) stars += '<i class="far fa-star"></i>';
+        return { stars, rating };
+    }
 
-// Manipulação dos botões de remoção do carrinho
-document.querySelectorAll('.cart-item button').forEach(button => {
-    button.addEventListener('click', () => {
-        const item = button.closest('.cart-item');
-        item.remove();
-        updateCartCount();
+    window.openModal = function(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) modal.classList.add('active');
+    };
+
+    window.closeModal = function(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) modal.classList.remove('active');
+    };
+
+    window.openDetailsModal = function(idService) {
+        const modal = document.getElementById('details-modal');
+        const service = servicesData.find(s => s.idService === idService);
+        if (modal && service) {
+            document.getElementById('details-image').src = service.photo || '../../assets/img/placeholder.png';
+            document.getElementById('details-name').textContent = service.name || '-';
+            document.getElementById('details-rating').innerHTML = calculateRating(service.rating || 0).stars + `<span>(${service.reviews || 0})</span>`;
+            document.getElementById('details-price').textContent = `AOA ${(service.priceInCents / 100).toFixed(2)}`;
+            document.getElementById('details-description').textContent = service.description || 'Sem descrição disponível';
+            document.getElementById('details-duration').textContent = service.duration || '-';
+            document.getElementById('details-category').textContent = service.category || '-';
+            document.getElementById('details-updated').textContent = service.updatedIn ? new Date(service.updatedIn).toLocaleDateString('pt-BR') : '-';
+            const benefitsList = document.getElementById('details-benefits');
+            benefitsList.innerHTML = '';
+            ((service.benefits).split(",") || []).forEach(benefit => {
+                const li = document.createElement('li');
+                li.textContent = benefit;
+                benefitsList.appendChild(li);
+            });
+            modal.dataset.idService = idService;
+            modal.classList.add('active');
+        }
+    };
+
+    window.openScheduleModal = function(idService) {
+        const modal = document.getElementById('schedule-modal');
+        const form = document.getElementById('schedule-form');
+        if (modal && form) {
+            form.dataset.idService = idService;
+            modal.classList.add('active');
+        }
+    };
+
+    window.goToAppointments = function() {
+        window.location.href = 'user-home.html';
+    };
+
+    window.scheduleFromDetails = function() {
+        const modal = document.getElementById('details-modal');
+        const idService = parseInt(modal.dataset.idService);
+        openScheduleModal(idService);
+        closeModal('details-modal');
+    };
+
+    document.getElementById('schedule-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalText = submitButton.innerHTML;
+
+        submitButton.innerHTML = `<span class="button-loader"></span>Processando...`;
+        submitButton.disabled = true;
+
+        const idService = parseInt(form.dataset.idService);
+        const name = document.getElementById('schedule-name').value.trim();
+        const email = document.getElementById('schedule-email').value.trim();
+        const phoneNumber = document.getElementById('schedule-phone').value.trim();
+        const appointmentDate = document.getElementById('schedule-date').value;
+        const appointmentTime = document.getElementById('schedule-time').value;
+        const status = true;
+
+        if (!name || !email || !phoneNumber || !appointmentDate || !appointmentTime || !idService) {
+            showMessageModal('error', 'Erro!', 'Por favor, preencha todos os campos obrigatórios.', { buttonText: 'Entendido' });
+            submitButton.innerHTML = originalText;
+            submitButton.disabled = false;
+            return;
+        }
+
+        const appointmentData = {
+            name,
+            email,
+            phoneNumber,
+            appointmentDate,
+            appointmentTime,
+            idService,
+            status
+        };
+
+        try {
+            const response = await addAnyAppointment(accessToken, appointmentData);
+            if (response.status === 200) {
+                closeModal('schedule-modal');
+                openModal('schedule-success-modal');
+                form.reset();
+                document.getElementById('schedule-name').value = userData.name || '';
+                document.getElementById('schedule-email').value = userData.email || '';
+                document.getElementById('schedule-phone').value = userData.phoneNumber || '';
+            } else {
+                showMessageModal('error', 'Erro!', 'Falha ao agendar o serviço', { buttonText: 'Entendido' });
+            }
+        } catch (error) {
+            showMessageModal('error', 'Erro!', 'Ocorreu um erro ao processar o agendamento', { buttonText: 'Entendido' });
+        } finally {
+            submitButton.innerHTML = originalText;
+            submitButton.disabled = false;
+        }
     });
-});
 
-// Função para atualizar a contagem do carrinho
-function updateCartCount() {
-    const cartItems = document.querySelectorAll('.cart-item').length;
-    const cartCount = document.querySelector('.cart-count');
-    cartCount.textContent = cartItems;
-    cartCount.style.display = cartItems > 0 ? 'block' : 'none';
-}
+    function filterServices() {
+        const searchInput = document.getElementById('search-input').value.toLowerCase().trim();
+        const categoryFilter = document.getElementById('category-filter').value;
+        const sortFilter = document.getElementById('sort-filter').value;
 
-// Inicialização
-document.addEventListener('DOMContentLoaded', () => {
-    updateCartCount();
-    // Adicione data-category aos cartões de serviço para filtragem
-    // Exemplo: você pode fazer isso dinamicamente com base nos dados do backend
-    document.querySelectorAll('.service-card').forEach((card, index) => {
-        const categories = ['facial', 'corporal', 'spa', 'esteticos', 'corporal', 'spa'];
-        card.dataset.category = categories[index % categories.length];
-    });
+        let filteredServices = servicesData.filter(service => {
+            const matchesSearch = (service.name || '').toLowerCase().includes(searchInput) ||
+                                 (service.description || '').toLowerCase().includes(searchInput);
+            const matchesCategory = categoryFilter === 'all' || (service.category || '').toLowerCase() === categoryFilter;
+            return matchesSearch && matchesCategory;
+        });
+
+        if (sortFilter !== 'default') {
+            filteredServices.sort((a, b) => {
+                if (sortFilter === 'price-asc') return a.priceInCents - b.priceInCents;
+                if (sortFilter === 'price-desc') return b.priceInCents - a.priceInCents;
+                if (sortFilter === 'rating-desc') return (b.rating || 0) - (a.rating || 0);
+                if (sortFilter === 'newest') return new Date(b.updatedIn) - new Date(a.updatedIn);
+                return 0;
+            });
+        }
+
+        populateServicesSection(filteredServices);
+    }
+
+    document.getElementById('search-input').addEventListener('input', filterServices);
+    document.getElementById('category-filter').addEventListener('change', filterServices);
+    document.getElementById('sort-filter').addEventListener('change', filterServices);
+
+    await initializeData();
 });

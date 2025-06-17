@@ -15,28 +15,23 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo">
-                <img src="../../assets/img/logo.png" alt="">
+                <img src="../../assets/img/logo.png" alt="Logo Pele Douro">
             </div>
-
             <button class="close-sidebar">
-                <i class="fa-solid fa-x .close-sidebar"></i>
+                <i class="fa-solid fa-x"></i>
             </button>
-            
             <a href="#" class="nav-item active">
                 <i class="far fa-calendar-alt"></i>
                 <span>Agendamentos</span>
             </a>
-            
             <a href="user-product.html" class="nav-item">
                 <i class="fas fa-store"></i>
                 <span>Loja de Produtos</span>
             </a>
-
             <a href="user-chat.html" class="nav-item">
                 <i class="far fa-comments"></i>
                 <span>Chat</span>
             </a>
-
             <a href="user-service.html" class="nav-item">
                 <i class="fas fa-concierge-bell"></i>
                 <span>Serviços</span>
@@ -56,21 +51,22 @@
                 <div class="header-icons">
                     <div class="notification-icon">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-badge">2</span>
+                        <span class="notification-badge" id="TotalDeNotificacoes">0</span>
+                        <div id="notification-container"></div>
                     </div>
                     <div class="cart-icon">
                         <a href="user-cart.html"><i class="fas fa-shopping-cart"></i></a>
-                        <span class="cart-count">3</span> 
-                     </div>
-                  <div class="user-profile">
-                    <i class="fa-solid fa-user"></i>
-                    <span>Admin <i class="fas fa-chevron-down"></i></span>
-                    <div class="dropdown-content">
-                        <a href="user-history.html"><i class="fa-solid fa-clock-rotate-left"></i> Histórico</a>
-                        <a href="user-settings.html"><i class="fas fa-cog"></i> Definições</a>
-                         <a href="#"  id="logout"><i class="fas fa-sign-out-alt" id="logout"></i> Terminar sessão</a>
+                        <span class="cart-count">0</span> 
                     </div>
-                </div>
+                    <div class="user-profile">
+                        <i class="fa-solid fa-user"></i>
+                        <span id="user-name">Usuário <i class="fas fa-chevron-down"></i></span>
+                        <div class="dropdown-content">
+                            <a href="user-history.html"><i class="fa-solid fa-clock-rotate-left"></i> Histórico</a>
+                            <a href="user-settings.html"><i class="fas fa-cog"></i> Definições</a>
+                            <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Terminar sessão</a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -78,187 +74,36 @@
             <div class="search-filter-container">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Pesquisar agendamentos...">
+                    <input type="text" placeholder="Pesquisar agendamentos..." id="search-input">
                 </div>
                 <div class="filter-dropdown">
-                    <select>
-                        <option value="">Todos os status</option>
-                        <option value="ativo">Ativo</option>
-                        <option value="pendente">Pendente</option>
-                        <option value="concluido">Concluído</option>
+                    <select id="status-filter">
+                        <option value="all">Todos os status</option>
+                        <option value="active">Ativo</option>
+                        <option value="inactive">Inativo</option>
                     </select>
                 </div>
                 <div class="date-filter">
-                    <input type="date" id="filter-date">
+                    <input type="date" id="date-filter">
                 </div>
             </div>
             
             <hr>
             
             <section class="section-agendaments">
-                <!-- Card 1 -->
-                <div class="card">
-                    <h3>Detalhes do agendamento</h3>
-                    <label>Data e Hora</label>
-                    <div class="field">12/01/2025 - 14:30</div>
-                    <label>Tipo de Serviço</label>
-                    <div class="field">Spa & Relaxamento em Casa</div>
-                    <label>Informações do serviço</label>
-                    <p class="info">
-                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
-                    </p>
-                    <label>Status</label>
-                    <div class="status ativo">Ativo</div>
-                    <div class="buttons">
-                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
-                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
-                    </div>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="card">
-                    <h3>Detalhes do agendamento</h3>
-                    <label>Data e Hora</label>
-                    <div class="field">12/01/2025 - 14:30</div>
-                    <label>Tipo de Serviço</label>
-                    <div class="field">Spa & Relaxamento em Casa</div>
-                    <label>Informações do serviço</label>
-                    <p class="info">
-                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
-                    </p>
-                    <label>Status</label>
-                    <div class="status ativo">Ativo</div>
-                    <div class="buttons">
-                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
-                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
-                    </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="card">
-                    <h3>Detalhes do agendamento</h3>
-                    <label>Data e Hora</label>
-                    <div class="field">12/01/2025 - 14:30</div>
-                    <label>Tipo de Serviço</label>
-                    <div class="field">Spa & Relaxamento em Casa</div>
-                    <label>Informações do serviço</label>
-                    <p class="info">
-                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
-                    </p>
-                    <label>Status</label>
-                    <div class="status ativo">Ativo</div>
-                    <div class="buttons">
-                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
-                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
-                    </div>
-                </div>
-
-                <!-- Card 4 -->
-                <div class="card">
-                    <h3>Detalhes do agendamento</h3>
-                    <label>Data e Hora</label>
-                    <div class="field">12/01/2025 - 14:30</div>
-                    <label>Tipo de Serviço</label>
-                    <div class="field">Spa & Relaxamento em Casa</div>
-                    <label>Informações do serviço</label>
-                    <p class="info">
-                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
-                    </p>
-                    <label>Status</label>
-                    <div class="status ativo">Ativo</div>
-                    <div class="buttons">
-                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
-                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
-                    </div>
-                </div>
-
-                <!-- Card 5 -->
-                <div class="card">
-                    <h3>Detalhes do agendamento</h3>
-                    <label>Data e Hora</label>
-                    <div class="field">12/01/2025 - 14:30</div>
-                    <label>Tipo de Serviço</label>
-                    <div class="field">Spa & Relaxamento em Casa</div>
-                    <label>Informações do serviço</label>
-                    <p class="info">
-                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
-                    </p>
-                    <label>Status</label>
-                    <div class="status ativo">Ativo</div>
-                    <div class="buttons">
-                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
-                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
-                    </div>
-                </div>
-
-                <!-- Card 6 -->
-                <div class="card">
-                    <h3>Detalhes do agendamento</h3>
-                    <label>Data e Hora</label>
-                    <div class="field">12/01/2025 - 14:30</div>
-                    <label>Tipo de Serviço</label>
-                    <div class="field">Spa & Relaxamento em Casa</div>
-                    <label>Informações do serviço</label>
-                    <p class="info">
-                        Transforme sua rotina de beleza em um verdadeiro ritual de bem-estar!
-                    </p>
-                    <label>Status</label>
-                    <div class="status ativo">Ativo</div>
-                    <div class="buttons">
-                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
-                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button> 
-                    </div>
-                </div>
-
-                <!-- Card 7 -->
-                <div class="card">
-                    <h3>Detalhes do agendamento</h3>
-                    <label>Data e Hora</label>
-                    <div class="field">15/01/2025 - 10:00</div>
-                    <label>Tipo de Serviço</label>
-                    <div class="field">Massagem Terapêutica</div>
-                    <label>Informações do serviço</label>
-                    <p class="info">
-                        Massagem profissional para alívio de tensões musculares e relaxamento profundo.
-                    </p>
-                    <label>Status</label>
-                    <div class="status pendente">Pendente</div>
-                    <div class="buttons">
-                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
-                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
-                    </div>
-                </div>
-
-                <!-- Card 8 -->
-                <div class="card">
-                    <h3>Detalhes do agendamento</h3>
-                    <label>Data e Hora</label>
-                    <div class="field">20/01/2025 - 16:45</div>
-                    <label>Tipo de Serviço</label>
-                    <div class="field">Tratamento Facial Premium</div>
-                    <label>Informações do serviço</label>
-                    <p class="info">
-                        Tratamento completo para rejuvenescimento e hidratação facial profunda.
-                    </p>
-                    <label>Status</label>
-                    <div class="status concluido">Concluído</div>
-                    <div class="buttons">
-                        <button class="excluir" onclick="openModal('excluir-modal')">Excluir</button>
-                        <button class="reagendar" onclick="openModal('reagendar-modal')">Reagendar</button>
-                    </div>
-                </div>
+                <!-- Dynamic appointment cards will be populated by JavaScript -->
             </section>
         </main>
 
         <!-- Modal de Exclusão -->
         <div id="excluir-modal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeModal('excluir-modal')">&times;</span>
+                <span class="close" onclick="closeModal('excluir-modal')">×</span>
                 <h3>Confirmar Exclusão</h3>
                 <p>Tem certeza que deseja excluir este agendamento?</p>
                 <div class="modal-buttons">
                     <button class="cancel" onclick="closeModal('excluir-modal')">Cancelar</button>
-                    <button class="confirm">Confirmar</button>
+                    <button class="confirm" id="confirm-delete">Confirmar</button>
                 </div>
             </div>
         </div>
@@ -266,39 +111,28 @@
         <!-- Modal de Reagendamento -->
         <div id="reagendar-modal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeModal('reagendar-modal')">&times;</span>
+                <span class="close" onclick="closeModal('reagendar-modal')">×</span>
                 <h3>Reagendar Serviço</h3>
-                <div class="form-group">
-                    <label>Nova Data</label>
-                    <input type="date">
-                </div>
-                <div class="form-group">
-                    <label>Novo Horário</label>
-                    <input type="time">
-                </div>
-                <div class="modal-buttons">
-                    <button class="cancel" onclick="closeModal('reagendar-modal')">Cancelar</button>
-                    <button class="confirm">Confirmar</button>
-                </div>
+                <form id="reagendar-form">
+                    <div class="form-group">
+                        <label>Nova Data</label>
+                        <input type="date" id="new-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Novo Horário</label>
+                        <input type="time" id="new-time" required>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" class="cancel" onclick="closeModal('reagendar-modal')">Cancelar</button>
+                        <button type="submit" class="confirm">Confirmar</button>
+                    </div>
+                </form>
             </div>
         </div>
 
         <!-- Notificações Dropdown -->
-        <div class="notifications-dropdown">
-            <div class="notification-item">
-                <i class="fas fa-calendar-check"></i>
-                <div>
-                    <p>Novo agendamento confirmado</p>
-                    <small>10 minutos atrás</small>
-                </div>
-            </div>
-            <div class="notification-item">
-                <i class="fas fa-shopping-cart"></i>
-                <div>
-                    <p>Seu pedido foi enviado</p>
-                    <small>Ontem, 15:30</small>
-                </div>
-            </div>
+        <div class="notifications-dropdown" id="notificationsDropdown">
+            <div class="notification-item"></div>
         </div>
 
         <!-- Carrinho Dropdown -->
@@ -311,25 +145,21 @@
                 </div>
                 <i class="fas fa-times"></i>
             </div>
-            <div class="cart-item">
-                <img src="https://via.placeholder.com/50" alt="Produto">
-                <div>
-                    <p>Óleo Corporal</p>
-                    <small>2x R$ 39,90</small>
-                </div>
-                <i class="fas fa-times"></i>
-            </div>
             <div class="cart-total">
-                <p>Total: R$ 139,70</p>
+                <p>Total: R$ 0,00</p>
                 <button>Finalizar Compra</button>
             </div>
         </div>
     </div>
     <script src="../../js/global.js"></script>
     <script src="../../js/usuarios/user-home.js"></script>
-     <script src="../../apis/generalSection.js"></script>
+    <script src="../../apis/generalSection.js"></script>
     <script src="../../apis/users.js"></script>
-     <script src="../../js/messageModal.js"></script>
-         <script src="../../js/sessoes/logout.js"></script>
+    <script src="../../apis/services.js"></script>
+    <script src="../../apis/appointments.js"></script>
+    <script src="../../js/messageModal.js"></script>
+    <script src="../../apis/notificacoes.js"></script>
+    <script src="../../js/notificacoes.js"></script>
+    <script src="../../js/sessoes/logout.js"></script>
 </body>
 </html>
