@@ -22,7 +22,7 @@ model Users {
   updatedIn     DateTime?
 
   Notifications Notifications[]
-  Carts         Carts[]
+  Carts         Carts?
   Shoppings     Shoppings[]
   Appointments  Appointments[] @relation("UserAppointments")
   EmployeeAppointments Appointments[] @relation("EmployeeAppointments")
@@ -102,9 +102,9 @@ model Appointments {
 
 model Carts {
   idCart    Int      @id @default(autoincrement())
-  idUser    Int?
+  idUser    Int? @unique
   status    Boolean?
-
+  createdIn DateTime? @default(now())
   Users         Users?         @relation(fields: [idUser], references: [idUser])
   CartProducts  CartProducts[]
 }

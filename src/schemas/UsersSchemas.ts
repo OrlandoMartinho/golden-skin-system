@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import CartsSchemas from './CartsSchemas';
 
 class UserSchemas {
   // Authentication
@@ -40,7 +41,8 @@ static userSchema = z.object({
   path: z.string().nullable(),
   status: z.boolean(),
   createdIn: z.date(), 
-  updatedIn: z.date().nullable(), 
+  updatedIn: z.date().nullable(),
+  Carts: z.array(CartsSchemas.cartSchema).optional() 
 });
 
   // User ID

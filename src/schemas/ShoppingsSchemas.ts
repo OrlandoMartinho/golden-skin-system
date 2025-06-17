@@ -10,12 +10,14 @@ class ShoppingsSchemas {
     status: z.string(),
     createdIn: z.string(),
     updatedIn: z.string(),
+   
     PurchaseProducts:z.array(PurchaseProductsSchemas.purchaseProductSchema)
   });
 
   // Schema for registering a shopping
   static RegisterShopping = z.object({
     idUser: z.number().int().positive("ID User must be a positive integer"),
+    idCart: z.number(),
   });
 
   // Schema for updating a shopping

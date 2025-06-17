@@ -24,7 +24,7 @@ class ShoppingsController {
 
   public async register(data: any): Promise<z.infer<typeof this.responseSchema>> {
     const validatedData = await this.zodError(ShoppingsSchemas.RegisterShopping, data);
-    const { idUser } = validatedData;
+    const { idUser,idCart} = validatedData;
 
     try {
       const user = await prisma.users.findUnique({ where: { idUser } });
@@ -32,7 +32,12 @@ class ShoppingsController {
         throw new ItemNotFoundException('User not found');
       }
 
-      await prisma.shoppings.create({
+      const cart = await prisma.carts.findUnique({ where: { idCart } });
+      if (!cart) {
+        throw new ItemNotFoundException('Cart not found');
+      }
+
+      const shopping = await prisma.shoppings.create({
         data: {
           idUser,
           status: "pendente",
@@ -41,6 +46,26 @@ class ShoppingsController {
           updatedIn: new Date().toISOString(),
         },
       });
+
+      const cartProducts = await prisma.cartProducts.findMany({
+        where: { idCart }
+      });
+
+      if (cartProducts.length === 0) {
+        throw new ItemNotFoundException('No products found in the cart');
+      }
+
+     for (const product of cartProducts) {
+       const purchaseProduct = await prisma.purchaseProducts.create({
+          data: { 
+            idShopping: shopping.idShopping,
+            idProduct: product.idProduct?.toString(),
+            productName: product.productName,
+            priceInCents: product.priceInCents,
+            paymentMethod:'prepaid',
+          },
+        });
+      }
 
       return { message: 'Shopping registered successfully' };
     } catch (error) {

@@ -346,6 +346,13 @@ class Users {
       }
     })
 
+    await prisma.carts.create({
+        data: {
+          idUser: newUser.idUser,
+          status:true,
+        },
+      });
+
       return {
         message: 'User registered successfully',
         accessToken: token,
@@ -393,7 +400,7 @@ class Users {
           email,
           status: true,
           phoneNumber,
-          role: role,
+          role: 1,
           createdIn: new Date(),
         },
       });
@@ -699,7 +706,7 @@ public async updateAdmin(data: any, key: any): Promise<z.infer<typeof this.respo
         throw new AuthorizationException('Invalid user ID');
       }
 
-      const user = await prisma.users.findUnique({ where: { idUser: userId as number } });
+      const user = await prisma.users.findUnique({ where: { idUser: userId as number } ,include: { Carts: true }});
       if (!user) {
         throw new ItemNotFoundException('User not found');
       }

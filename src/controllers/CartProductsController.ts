@@ -34,7 +34,7 @@ class CartProductsController {
         throw new AuthorizationException('Not authorized');
       }
 
-      const cart = await prisma.carts.findUnique({ where: { idCart } });
+      const cart = await prisma.carts.findFirst({ where: { idUser:userId } });
       if (!cart) {
         throw new ItemNotFoundException('Cart not found');
       }
