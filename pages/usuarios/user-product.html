@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pele Douro - Loja de Produtos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../../css/global.css">
+    <link rel="shortcut icon" href="../../assets/img/logo.png" type="image/x-icon">
     <link rel="stylesheet" href="../../css/usuarios/user-product.css">
 </head>
 <body>
@@ -15,28 +15,23 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo">
-                <img src="../../assets/img/logo.png" alt="">
+                <img src="../../assets/img/logo.png" alt="Logo Pele Douro">
             </div>
-
             <button class="close-sidebar">
-                <i class="fa-solid fa-x .close-sidebar"></i>
+                <i class="fa-solid fa-x"></i>
             </button>
-            
             <a href="user-home.html" class="nav-item">
                 <i class="far fa-calendar-alt"></i>
                 <span>Agendamentos</span>
             </a>
-            
             <a href="user-product.html" class="nav-item active">
                 <i class="fas fa-store"></i>
                 <span>Loja de Produtos</span>
             </a>
-
             <a href="user-chat.html" class="nav-item">
                 <i class="far fa-comments"></i>
                 <span>Chat</span>
             </a>
-
             <a href="user-service.html" class="nav-item">
                 <i class="fas fa-concierge-bell"></i>
                 <span>Serviços</span>
@@ -56,19 +51,20 @@
                 <div class="header-icons">
                     <div class="notification-icon">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-badge">2</span>
+                        <span class="notification-badge" id="TotalDeNotificacoes">0</span>
+                        <div id="notification-container"></div>
                     </div>
                     <div class="cart-icon">
                         <a href="user-cart.html"><i class="fas fa-shopping-cart"></i></a>
-                        <span class="cart-count">3</span> 
-                     </div>
+                        <span class="cart-count">0</span> 
+                    </div>
                     <div class="user-profile">
                         <i class="fa-solid fa-user"></i>
-                        <span>Admin <i class="fas fa-chevron-down"></i></span>
+                        <span id="user-name">Usuário <i class="fas fa-chevron-down"></i></span>
                         <div class="dropdown-content">
                             <a href="user-history.html"><i class="fa-solid fa-clock-rotate-left"></i> Histórico</a>
                             <a href="user-settings.html"><i class="fas fa-cog"></i> Definições</a>
-                             <a href="#"  id="logout"><i class="fas fa-sign-out-alt" id="logout"></i> Terminar sessão</a>
+                            <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Terminar sessão</a>
                         </div>
                     </div>
                 </div>
@@ -78,11 +74,11 @@
             <div class="search-filter-container">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Pesquisar produtos...">
+                    <input type="text" placeholder="Pesquisar produtos..." id="search-input">
                 </div>
                 <div class="filter-dropdown">
-                    <select>
-                        <option value="">Todas as categorias</option>
+                    <select id="category-filter">
+                        <option value="all">Todas as categorias</option>
                         <option value="hidratantes">Hidratantes</option>
                         <option value="limpeza">Limpeza Facial</option>
                         <option value="anti-idade">Anti-idade</option>
@@ -90,12 +86,12 @@
                     </select>
                 </div>
                 <div class="filter-dropdown">
-                    <select>
-                        <option value="">Ordenar por</option>
-                        <option value="preco-asc">Preço: menor para maior</option>
-                        <option value="preco-desc">Preço: maior para menor</option>
-                        <option value="avaliacao">Melhor avaliados</option>
-                        <option value="novidades">Novidades</option>
+                    <select id="sort-filter">
+                        <option value="default">Ordenar por</option>
+                        <option value="price-asc">Preço: menor para maior</option>
+                        <option value="price-desc">Preço: maior para menor</option>
+                        <option value="rating-desc">Melhor avaliados</option>
+                        <option value="newest">Novidades</option>
                     </select>
                 </div>
             </div>
@@ -104,170 +100,28 @@
             
             <!-- Lista de Produtos -->
             <section class="section-products">
-                <!-- Produto 1 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="../../assets/img/product-1.png" alt="Creme Hidratante 24h">
-                    </div>
-                    <div class="product-info">
-                        <h3>Creme Hidratante 24h</h3>
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>(128)</span>
-                        </div>
-                        <div class="price">AOA 89,90</div>
-                        <button class="add-to-cart" onclick="openModal('product-detail-modal')">
-                            <i class="fas fa-shopping-cart"></i> Adicionar
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Produto 2 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="../../assets/img/product-2.png" alt="Óleo Corporal Relaxante">
-                    </div>
-                    <div class="product-info">
-                        <h3>Óleo Corporal Relaxante</h3>
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                            <span>(76)</span>
-                        </div>
-                        <div class="price">AOA 59,90</div>
-                        <button class="add-to-cart" onclick="openModal('product-detail-modal')">
-                            <i class="fas fa-shopping-cart"></i> Adicionar
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Produto 3 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="../../assets/img/product-3.png" alt="Protetor Solar FPS 50">
-                    </div>
-                    <div class="product-info">
-                        <h3>Protetor Solar FPS 50</h3>
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span>(215)</span>
-                        </div>
-                        <div class="price">AOA 79,90</div>
-                        <button class="add-to-cart" onclick="openModal('product-detail-modal')">
-                            <i class="fas fa-shopping-cart"></i> Adicionar
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Produto 4 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="../../assets/img/product-4.png" alt="Sérum Anti-idade">
-                    </div>
-                    <div class="product-info">
-                        <h3>Sérum Anti-idade</h3>
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>(94)</span>
-                        </div>
-                        <div class="price">AOA 129,90</div>
-                        <button class="add-to-cart" onclick="openModal('product-detail-modal')">
-                            <i class="fas fa-shopping-cart"></i> Adicionar
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Produto 5 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="../../assets/img/product-5.png" alt="Gel de Limpeza Facial">
-                    </div>
-                    <div class="product-info">
-                        <h3>Gel de Limpeza Facial</h3>
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                            <span>(187)</span>
-                        </div>
-                        <div class="price">AOA 49,90</div>
-                        <button class="add-to-cart" onclick="openModal('product-detail-modal')">
-                            <i class="fas fa-shopping-cart"></i> Adicionar
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Produto 6 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="../../assets/img/product-1.png" alt="Máscara Facial Hidratante">
-                    </div>
-                    <div class="product-info">
-                        <h3>Máscara Facial Hidratante</h3>
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span>(142)</span>
-                        </div>
-                        <div class="price">AOA 69,90</div>
-                        <button class="add-to-cart" onclick="openModal('product-detail-modal')">
-                            <i class="fas fa-shopping-cart"></i> Adicionar
-                        </button>
-                    </div>
-                </div>
+                <!-- Dynamic product cards will be populated by JavaScript -->
             </section>
         </main>
 
         <!-- Modal de Detalhes do Produto -->
         <div id="product-detail-modal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeModal('product-detail-modal')">&times;</span>
+                <span class="close" onclick="closeModal('product-detail-modal')">×</span>
                 <div class="product-detail-container">
                     <div class="product-detail-image">
-                        <img src="../../assets/img/product-1.png" alt="Creme Hidratante 24h">
+                        <img src="" alt="" id="product-image">
                     </div>
                     <div class="product-detail-info">
-                        <h3>Creme Hidratante 24h</h3>
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>128 avaliações</span>
-                        </div>
-                        <div class="product-detail-price">AOA 89,90</div>
-                        <p class="product-detail-description">
-                            O Creme Hidratante 24h oferece hidratação intensa e duradoura para todos os tipos de pele. 
-                            Formulado com ácido hialurônico e ceramidas, ajuda a restaurar a barreira natural da pele, 
-                            mantendo-a macia e suave por até 24 horas. Livre de óleo e não comedogênico, é perfeito 
-                            para uso diário, proporcionando conforto imediato e hidratação prolongada.
-                        </p>
+                        <h3 id="product-name"></h3>
+                        <div class="rating" id="product-rating"></div>
+                        <div class="product-detail-price" id="product-price"></div>
+                        <p class="product-detail-description" id="product-description"></p>
                         <div class="product-detail-meta">
-                            <div><strong>Marca:</strong> Pele Douro</div>
-                            <div><strong>Volume:</strong> 50ml</div>
-                            <div><strong>Tipo de pele:</strong> Todos os tipos</div>
-                            <div><strong>Ingredientes principais:</strong> Ácido Hialurônico, Ceramidas, Vitamina E</div>
+                            <div><strong>Marca:</strong> <span id="product-brand"></span></div>
+                            <div><strong>Volume:</strong> <span id="product-volume"></span></div>
+                            <div><strong>Tipo de pele:</strong> <span id="product-skin-type"></span></div>
+                            <div><strong>Ingredientes principais:</strong> <span id="product-ingredients"></span></div>
                         </div>
                         <div class="quantity-selector">
                             <button onclick="decreaseQuantity()">-</button>
@@ -285,7 +139,7 @@
         <!-- Modal de Confirmação de Adição ao Carrinho -->
         <div id="add-to-cart-modal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeModal('add-to-cart-modal')">&times;</span>
+                <span class="close" onclick="closeModal('add-to-cart-modal')">×</span>
                 <h3>Produto adicionado ao carrinho!</h3>
                 <div class="modal-buttons">
                     <button class="cancel" onclick="closeModal('add-to-cart-modal')">Continuar comprando</button>
@@ -295,54 +149,26 @@
         </div>
 
         <!-- Notificações Dropdown -->
-        <div class="notifications-dropdown">
-            <div class="notification-item">
-                <i class="fas fa-calendar-check"></i>
-                <div>
-                    <p>Novo agendamento confirmado</p>
-                    <small>10 minutos atrás</small>
-                </div>
-            </div>
-            <div class="notification-item">
-                <i class="fas fa-shopping-cart"></i>
-                <div>
-                    <p>Seu pedido foi enviado</p>
-                    <small>Ontem, 15:30</small>
-                </div>
-            </div>
+        <div class="notifications-dropdown" id="notificationsDropdown">
+            <div class="notification-item"></div>
         </div>
 
         <!-- Carrinho Dropdown -->
         <div class="cart-dropdown">
-            <div class="cart-item">
-                <img src="../../assets/img/product-2.png" alt="Produto">
-                <div>
-                    <p>Creme Hidratante</p>
-                    <small>1x AOA 59,90</small>
-                </div>
-                <i class="fas fa-times"></i>
-            </div>
-            <div class="cart-item">
-                <img src="../../assets/img/product-3.png" alt="Produto">
-                <div>
-                    <p>Óleo Corporal</p>
-                    <small>2x AOA 39,90</small>
-                </div>
-                <i class="fas fa-times"></i>
-            </div>
             <div class="cart-total">
-                <p>Total: AOA 139,70</p>
+                <p>Total: AOA 0,00</p>
                 <button>Finalizar Compra</button>
             </div>
         </div>
-
-        
     </div>
+    <script src="../../js/global.js"></script>
+    <script src="../../js/usuarios/user-product.js"></script>
+    <script src="../../apis/generalSection.js"></script>
+    <script src="../../apis/users.js"></script>
+    <script src="../../apis/products.js"></script>
+    <script src="../../js/messageModal.js"></script>
+    <script src="../../apis/notificacoes.js"></script>
+    <script src="../../js/notificacoes.js"></script>
+    <script src="../../js/sessoes/logout.js"></script>
 </body>
-        <script src="../../js/global.js"></script>
-        <script src="../../js/usuarios/user-product.js"></script>
-         <script src="../../apis/generalSection.js"></script>
-         <script src="../../apis/users.js"></script>
-         <script src="../../js/messageModal.js"></script>
-             <script src="../../js/sessoes/logout.js"></script>
 </html>
