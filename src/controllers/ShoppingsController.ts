@@ -71,6 +71,8 @@ class ShoppingsController {
         });
       }
 
+      await prisma.cartProducts.deleteMany({ where: { idCart: cart.idCart } });
+
       return { message: 'Shopping registered successfully' };
     } catch (error) {
       if (error instanceof ItemNotFoundException || error instanceof InvalidDataException) {
@@ -134,7 +136,7 @@ class ShoppingsController {
         throw new AuthorizationException('Not authorized');
       }
 
-      const shopping = await prisma.shoppings.findUnique({ where: { idShopping:idShopping } });
+      const shopping = await prisma.shoppings.findUnique({ where: { idShopping:Number(idShopping) } });
       if (!shopping) {
         throw new ItemNotFoundException('Shopping not found');
       }
@@ -143,7 +145,7 @@ class ShoppingsController {
         throw new AuthorizationException('Not authorized to delete this shopping');
       }
 
-      await prisma.shoppings.delete({ where: { idShopping } });
+      await prisma.shoppings.delete({ where: { idShopping :Number(idShopping) } });
 
       return { message: 'Shopping deleted successfully' };
     } catch (error) {

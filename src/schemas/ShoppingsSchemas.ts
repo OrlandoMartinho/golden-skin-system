@@ -28,7 +28,7 @@ class ShoppingsSchemas {
 
   // Schema for deleting a shopping
   static DeleteShopping = z.object({
-    idShopping: z.number().int().positive("ID User must be a positive integer"),
+    idShopping: z.string(),
   });
 
   // Schema for viewing a single shopping

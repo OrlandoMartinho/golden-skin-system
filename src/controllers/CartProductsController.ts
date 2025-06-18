@@ -85,7 +85,7 @@ class CartProductsController {
   public async delete(data: any, key: any): Promise<z.infer<typeof this.responseSchema>> {
     const validatedData = await this.zodError(CartProductsSchemas.DeleteCartProduct, data);
     const validatedKey = await this.zodError(CartProductsSchemas.tokenSchema, key);
-    const { idCartProduct } = validatedData;
+    const { idProduct } = validatedData;
     const { token } = validatedKey;
 
     try {
@@ -94,9 +94,20 @@ class CartProductsController {
         throw new AuthorizationException('Not authorized');
       }
 
-       const cartProduct = await prisma.cartProducts.findUnique({
-        where: { idCartProduct:  idCartProduct  },
+      const userCart = await prisma.users.findFirst({ where: { idUser: userId }, include: { Carts: true } });
+      if (!userCart) {
+        throw new ItemNotFoundException('Cart not found for this user');
+      }
+
+      const cartProductExisting = await prisma.cartProducts.findFirst({
+        where: { idProduct, idCart: userCart.Carts?.idCart },
       });
+      if (!cartProductExisting) {
+        throw new ItemNotFoundException('Cart product not found');
+      }
+
+       const cartProduct = await prisma.cartProducts.findUnique({
+        where: { idCartProduct:  cartProductExisting.idCartProduct } });
       if (!cartProduct) {
         throw new ItemNotFoundException('Cart product not found');
       }
@@ -113,8 +124,7 @@ class CartProductsController {
      
 
       await prisma.cartProducts.delete({
-        where: { idCartProduct:  idCartProduct  },
-      });
+        where: { idCartProduct:  cartProductExisting.idCartProduct },});
 
       return { message: 'Cart product deleted successfully' };
     } catch (error) {

@@ -26,7 +26,6 @@ class CartProductsSchemas {
 
   // Schema for deleting a cart product
   static DeleteCartProduct = z.object({
-    idCart: z.number().int().positive("ID Cart must be a positive integer"),
     idProduct: z.number().int().positive("ID Product must be a positive integer"),
   });
 
