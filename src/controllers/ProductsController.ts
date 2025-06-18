@@ -209,16 +209,11 @@ class ProductsController {
     }
   }
 
-  public async viewAll(key: any,req:FastifyRequest): Promise<z.infer<typeof ProductsSchemas.productsResponseSchema>> {
-    const validatedKey = await this.zodError(ProductsSchemas.tokenSchema, key);
-    const { token } = validatedKey;
+  public async viewAll(req:FastifyRequest): Promise<z.infer<typeof ProductsSchemas.productsResponseSchema>> {
+    
 
     try {
-      const userId = await this.tokenService.userId(token);
-      if (!userId) {
-        throw new AuthorizationException('Not authorized');
-      }
-
+     
       const products = await prisma.products.findMany();
 
       for(const product of products){

@@ -116,7 +116,7 @@ export async function productsRoutes(app: FastifyTypedInstance) {
       schema: {
         description: "View all products",
         tags: ["Products"],
-        headers: tokenSchema,
+      
         response: {
           200: ProductsSchemas.productsResponseSchema,
           400: ResponsesSchemas.error_400_response,
@@ -126,7 +126,7 @@ export async function productsRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.viewAll(request.headers,request));
+      return reply.status(200).send(await controller.viewAll(request));
     }
   );
 

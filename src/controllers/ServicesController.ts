@@ -224,15 +224,11 @@ class ServicesController {
   }
 
   public async viewAll(
-    key: any,
     req: FastifyRequest
   ): Promise<z.infer<typeof ServicesSchemas.servicesResponseSchema>> {
-    const validatedKey = await this.validateSchema(ServicesSchemas.tokenSchema, key);
-    const { token } = validatedKey;
-
+   
     try {
-      await this.verifyAuthorization(token);
-
+      
       const services = await prisma.services.findMany();
 
       const servicesWithLinks = services.map(service => ({

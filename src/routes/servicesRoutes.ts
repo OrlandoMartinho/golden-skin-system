@@ -115,7 +115,6 @@ export async function servicesRoutes(app: FastifyTypedInstance) {
       schema: {
         description: "View all services",
         tags: ["Services"],
-        headers: tokenSchema,
         response: {
           200: ServicesSchemas.servicesResponseSchema,
           400: ResponsesSchemas.error_400_response,
@@ -125,7 +124,7 @@ export async function servicesRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.viewAll(request.headers, request));
+      return reply.status(200).send(await controller.viewAll(request));
     }
   );
 

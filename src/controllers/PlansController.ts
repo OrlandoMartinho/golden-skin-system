@@ -159,14 +159,11 @@ class PlansController {
     }
   }
 
-  public async viewAllPlans(data: any, key: any): Promise<z.infer<typeof PlansSchemas.plansResponseSchema>> {
-    const validatedKey = await this.zodError(PlansSchemas.tokenSchema, key);
+  public async viewAllPlans(): Promise<z.infer<typeof PlansSchemas.plansResponseSchema>> {
+    
 
     try {
-      const userId = await this.tokenService.userId(validatedKey.token);
-      if (!userId) {
-        throw new AuthorizationException('Not authorized');
-      }
+      
 
       const plans = await prisma.plans.findMany();
   

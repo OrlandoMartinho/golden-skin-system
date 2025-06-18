@@ -106,7 +106,6 @@ export async function plansRoutes(app: FastifyTypedInstance) {
       schema: {
         description: "View all plans",
         tags: ["Plans"],
-        headers: PlansSchemas.tokenSchema,
         response: {
           200: PlansSchemas.plansResponseSchema,
           400: ResponsesSchemas.error_400_response,
@@ -116,7 +115,7 @@ export async function plansRoutes(app: FastifyTypedInstance) {
       },
     },
     async (request, reply) => {
-      return reply.status(200).send(await controller.viewAllPlans(request.params, request.headers));
+      return reply.status(200).send(await controller.viewAllPlans());
     }
   );
 }
