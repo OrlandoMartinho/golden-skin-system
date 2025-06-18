@@ -53,7 +53,7 @@ async function initializeData() {
        
         const subscribersResult = await getAllSubscribers(accessToken);
   
-        if (subscribersResult === 200) {
+        if (subscribersResult.status === 200) {
             const storedSubscribers = localStorage.getItem('subscribers');
             subscribersData = storedSubscribers ? JSON.parse(storedSubscribers) : [];
         
@@ -95,32 +95,42 @@ async function initializeData() {
             tbody.appendChild(row);
         });
     }
+function populateSubscribersTable(subscribers) {
+    const tbody = document.querySelector('.subscribers-table tbody');
+    if (!tbody) return;
 
-    function populateSubscribersTable(subscribers) {
-        const tbody = document.querySelector('.subscribers-table tbody');
-        if (!tbody) return;
+    tbody.innerHTML = '';
+    subscribers.forEach((subscriber) => {
+        const plan = plansData.find(p => p.idPlan === subscriber.planId) || {};
+        const row = document.createElement('tr');
+            console.log('subscriber', subscriber);
+        row.innerHTML = `
+            <td title="${subscriber.subscriberName || '-'}">${subscriber.subscriberName && subscriber.subscriberName.length > 20 ? subscriber.subscriberName.substring(0, 17) + '...' : subscriber.subscriberName || '-'}</td>
+            <td title="${subscriber.email || '-'}">${subscriber.email && subscriber.email.length > 20 ? subscriber.email.substring(0, 17) + '...' : subscriber.email || '-'}</td>
+           <td title="${subscriber.planName || '-'}">
+            ${subscriber.planName && subscriber.planName.length > 15
+                ? subscriber.planName.substring(0, 12) + '...'
+                : subscriber.planName || '-'}
+            </td>
 
-        tbody.innerHTML = '';
-        subscribers.forEach((subscriber) => {
-            const plan = plansData.find(p => p.idPlan === subscriber.planId) || {};
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${subscriber.email || '-'}</td>
-                <td>${plan.name || '-'}</td>
-                <td>${subscriber.startDate ? new Date(subscriber.startDate).toLocaleDateString('pt-BR') : '-'}</td>
-                <td><span class="status-${subscriber.status}">${subscriber.status === 'active' ? 'Ativo' : subscriber.status === 'inactive' ? 'Inativo' : 'Cancelado'}</span></td>
-                <td>
-                    <button class="action-btn" onclick="editSubscriber(${subscriber.idSubscriber})">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="action-btn" onclick="deleteSubscriber(${subscriber.idSubscriber})">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </td>
-            `;
-            tbody.appendChild(row);
-        });
-    }
+            <td>${subscriber.startDate ? new Date(subscriber.startDate).toLocaleDateString('pt-BR') : '-'}</td>
+            <td>${subscriber.endDate ? new Date(subscriber.endDate).toLocaleDateString('pt-BR') : '-'}</td>
+            <td><span class="status-${subscriber.status === true ? 'active' : subscriber.status === false ? 'inactive' : 'cancelled'}">
+                ${subscriber.status === true ? 'Ativo' : subscriber.status === false ? 'Inativo' : 'Cancelado'}
+            </span></td>
+            <td class="actions-cell">
+                <button class="action-btn" onclick="editSubscriber(${subscriber.idSubscriber})">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="action-btn" onclick="deleteSubscriber(${subscriber.idSubscriber})">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        `;
+
+        tbody.appendChild(row);
+    });
+}
 
     function populateServicesDropdown(services) {
         const servicesSelect = document.getElementById('plan-services');
@@ -221,7 +231,7 @@ async function initializeData() {
             } else if (action.startsWith('deleteSubscriber-')) {
                 const subscriberId = parseInt(action.split('-')[1]);
                 const result = await deleteAnySubscriber(accessToken, subscriberId);
-                if (result === 200) {
+                if (result.status === 200) {
                     subscribersData = subscribersData.filter(s => s.idSubscriber !== subscriberId);
                     populateSubscribersTable(subscribersData);
                     showMessageModal('success', 'Sucesso!', 'Assinante eliminado com sucesso', { buttonText: 'Ótimo!' });
@@ -323,7 +333,7 @@ async function initializeData() {
 
         try {
             const result = await getSubscriber(accessToken, subscriberId);
-            if (result === 200) {
+            if (result.status === 200) {
                 const subscriber = JSON.parse(localStorage.getItem('subscriber'));
                 if (subscriber) {
                     localStorage.setItem('idSubscriber', subscriber.idSubscriber);
@@ -461,9 +471,10 @@ async function initializeData() {
         const email = document.getElementById('subscriber-email').value;
         const planId = parseInt(document.getElementById('subscriber-plan').value);
         const startDate = document.getElementById('subscriber-start-date').value;
+        const endDate = document.getElementById('subscriber-end-date').value || null;
         const status = document.getElementById('subscriber-status').value;
 
-        if (!email || !planId || !startDate) {
+        if (!email || !planId || !startDate || !endDate|| !status) {
             showMessageModal('error', 'Erro!', 'Por favor, preencha todos os campos obrigatórios.', {
                 buttonText: 'Entendido',
             });
@@ -473,18 +484,21 @@ async function initializeData() {
             return;
         }
 
+        console.log('subscriberId', subscriberId);
+
         const subscriberData = {
             email,
-            planId,
+            idPlan:planId,
             startDate,
-            status,
+            endDate,
+            status:status === 'active' ? true : false,
         };
 
         try {
             if (subscriberId) {
                 subscriberData.idSubscriber = subscriberId;
                 const response = await editAnySubscriber(accessToken, subscriberData);
-                if (response === 200) {
+                if (response.status === 200) {
                     const index = subscribersData.findIndex(s => s.idSubscriber === subscriberId);
                     if (index !== -1) {
                         subscribersData[index] = { ...subscribersData[index], ...subscriberData, updatedIn: new Date().toISOString() };
@@ -495,8 +509,8 @@ async function initializeData() {
                     showMessageModal('error', 'Erro!', 'Falha ao atualizar o assinante', { buttonText: 'Entendido' });
                 }
             } else {
-                const response = await addSubscriber(accessToken, subscriberData);
-                if (response === 200) {
+                const response = await registerSubscriber(accessToken, subscriberData);
+                if (response.status === 200) {
                     await getAllSubscribers(accessToken);
                     subscribersData = JSON.parse(localStorage.getItem('subscribers')) || [];
                     populateSubscribersTable(subscribersData);

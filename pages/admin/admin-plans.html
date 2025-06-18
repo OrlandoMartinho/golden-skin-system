@@ -185,10 +185,13 @@
                     <div class="subscribers-table">
                         <table>
                             <thead>
+                         
                                 <tr>
+                                    <th>Nome do Subscritor</th>
                                     <th>Email</th>
                                     <th>Plano</th>
                                     <th>Data de Início</th>
+                                    <th>Data de Término</th>
                                     <th>Status</th>
                                     <th>Ações</th>
                                 </tr>
@@ -270,12 +273,17 @@
                             <label for="subscriber-start-date">Data de Início</label>
                             <input type="date" id="subscriber-start-date" required>
                         </div>
+
+                        <div class="form-group">
+                            <label for="subscriber-end-date">Data de Término</label>
+                            <input type="date" id="subscriber-end-date" required>
+                        </div>
+
                         <div class="form-group">
                             <label for="subscriber-status">Status</label>
                             <select id="subscriber-status" required>
                                 <option value="active">Ativo</option>
                                 <option value="inactive">Inativo</option>
-                                <option value="cancelled">Cancelado</option>
                             </select>
                         </div>
                         <div class="modal-buttons">
@@ -315,7 +323,8 @@
     <script src="../../apis/subscribers.js"></script>
     <script src="../../js/messageModal.js"></script>
     <script src="../../apis/notificacoes.js"></script>
-     <script src="../../js/notificacoes.js"></script>
+    <script src="../../js/notificacoes.js"></script>
+    <script src="../../js/sessoes/logout.js"></script>
     
 </body>
 </html>

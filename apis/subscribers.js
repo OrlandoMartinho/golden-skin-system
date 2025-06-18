@@ -2,6 +2,7 @@
 // Registrar um novo assinante
 async function registerSubscriber(accessToken, subscriberData) {
   try {
+    console.log("Subscriber data:", subscriberData);
     const url = `${api_host}/api/subscribers/register`;
     const response = await fetch(url, {
       method: 'POST',
@@ -26,7 +27,7 @@ async function registerSubscriber(accessToken, subscriberData) {
 }
 
 // Atualizar um assinante
-async function updateSubscriber(accessToken, subscriberData) {
+async function editAnySubscriber(accessToken, subscriberData) {
   try {
     const url = `${api_host}/api/subscribers`;
     const response = await fetch(url, {
@@ -52,7 +53,7 @@ async function updateSubscriber(accessToken, subscriberData) {
 }
 
 // Deletar um assinante
-async function deleteSubscriber(accessToken, idSubscriber) {
+async function deleteAnySubscriber(accessToken, idSubscriber) {
   try {
     const url = `${api_host}/api/subscribers`;
     const response = await fetch(url, {
