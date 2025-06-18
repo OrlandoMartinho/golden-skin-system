@@ -10,6 +10,7 @@ class SubscribersSchemas {
     idUser: z.number(),
     idPlan:z.number(),
     planName: z.string().nullable(),
+    email: z.string().email("Invalid email format").nullable(),
     createdIn: z.date(),
     updatedIn: z.date().nullable(),
     startDate: z.string().nullable(),

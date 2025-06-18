@@ -211,9 +211,10 @@ model Subscribers {
   idPlan          Int
   createdIn       DateTime
   updatedIn       DateTime?
-  startDate     String?  @db.VarChar(45)
-  endDate       String?  @db.VarChar(45) 
-  planName      String?  @db.VarChar(255) 
+  email           String?  @db.VarChar(255)
+  startDate       String?  @db.VarChar(45)
+  endDate        String?  @db.VarChar(45) 
+  planName       String?  @db.VarChar(255) 
   status        Boolean
 
   plan            Plans     @relation(fields: [idPlan], references: [idPlan])
