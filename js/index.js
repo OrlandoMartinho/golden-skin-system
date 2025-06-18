@@ -193,24 +193,34 @@ const loadServices = () => {
 
 // Função para criar um card de plano
 const createPlanCard = (plan) => {
+
+    
     const card = document.createElement('div');
     card.className = `plan-card ${plan.popular ? 'popular' : ''}`;
     card.innerHTML = `
-        <h3>${plan.title}</h3>
-        <div class="plan-price">${plan.price}</div>
+        <h3>${plan.description}</h3>
+        <div class="plan-price">${plan.priceInCents/100}</div>
         <ul class="plan-features">
-            ${plan.features.map(feature => `<li>${feature}</li>`).join('')}
+            ${plan.services.split(",").map(feature => `<li>${feature}</li>`).join('')}
         </ul>
-        <a href="#" class="btn ${plan.popular ? '' : 'btn-outline'}">Assinar Agora</a>
+        <a href="#" class="btn ${plan.type ? '' : 'btn-outline'}">Assinar Agora</a>
     `;
     return card;
 };
 
 // Função para carregar os planos
-const loadPlans = () => {
+const loadPlans = async () => {
     const plansContainer = document.querySelector('.plans-grid');
     if (!plansContainer) return;
+
+    const resultPlans = await getAllPlanss("accessToken");
+    let plansApiData = [];
+    if (resultPlans.status == 200) {
+        plansApiData = resultPlans.status == 200 ? localStorage.getItem('plans') ? JSON.parse(localStorage.getItem('plans')) : [] : [];
+    }
     
+
+    console.log("plansApiData:", plansApiData);
     const plansData = [
         {
             title: 'Plano Essencial',
@@ -248,7 +258,7 @@ const loadPlans = () => {
     ];
     
     plansContainer.innerHTML = '';
-    plansData.forEach(plan => {
+    plansApiData.forEach(plan => {
         plansContainer.appendChild(createPlanCard(plan));
     });
 };
