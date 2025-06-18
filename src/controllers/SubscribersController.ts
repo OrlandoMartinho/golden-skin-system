@@ -119,11 +119,13 @@ class SubscribersController {
         throw new AuthorizationException('Not authorized');
       }
 
+      const userRole = await this.tokenService.userRole(token);
+
       const subscriber = await prisma.subscribers.findUnique({ where: { idSubscriber } });
       if (!subscriber) {
         throw new ItemNotFoundException('Subscriber not found');
       }
-      if (subscriber.idUser !== userId) {
+      if (subscriber.idUser !== userId && userRole !== 0) {
         throw new AuthorizationException('Not authorized to delete this subscriber');
       }
 
@@ -154,11 +156,13 @@ class SubscribersController {
         throw new AuthorizationException('Not authorized');
       }
 
+      const userRole = await this.tokenService.userRole(token);
+
       const subscriber = await prisma.subscribers.findUnique({ where: { idSubscriber } });
       if (!subscriber) {
         throw new ItemNotFoundException('Subscriber not found');
       }
-      if (subscriber.idUser !== userId) {
+      if (subscriber.idUser !== userId && userRole !== 0) {
         throw new AuthorizationException('Not authorized to update this subscriber');
       }
 
@@ -206,11 +210,13 @@ class SubscribersController {
         throw new AuthorizationException('Not authorized');
       }
 
-      const subscriber = await prisma.subscribers.findUnique({ where: { idSubscriber } });
+      const userRole = await this.tokenService.userRole(token);
+
+      const subscriber = await prisma.subscribers.findUnique({ where: { idSubscriber :Number(idSubscriber)} });
       if (!subscriber) {
         throw new ItemNotFoundException('Subscriber not found');
       }
-      if (subscriber.idUser !== userId) {
+      if (subscriber.idUser !== userId && userRole !== 0) {
         throw new AuthorizationException('Not authorized to view this subscriber');
       }
 

@@ -78,7 +78,7 @@ export async function subscribersRoutes(app: FastifyTypedInstance) {
 
   // View a single subscriber
   app.get(
-    "/subscribers/view",
+    "/subscribers/view/:idSubscriber",
     {
       schema: {
         description: "View a single subscriber",

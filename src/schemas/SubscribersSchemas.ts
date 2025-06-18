@@ -45,7 +45,7 @@ class SubscribersSchemas {
 
   // Schema for viewing a single subscriber
   static ViewSubscriber = z.object({
-    idSubscriber: z.number().int().positive("Subscriber ID must be a positive integer"),
+    idSubscriber: z.string().min(1, "Subscriber ID is required")  ,
   });
 
   // Schema for viewing all subscribers
