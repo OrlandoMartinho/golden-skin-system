@@ -1,5 +1,7 @@
-
 const api_host = "http://localhost:3000";
+
+
+
 // Smooth Scrolling for Anchor Links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
@@ -76,7 +78,10 @@ window.addEventListener('scroll', animateOnScroll);
 window.addEventListener('load', () => {
     const loader = document.querySelector('.loader');
     if (loader) {
-        loader.style.display = 'none';
+        loader.classList.add('fade-out');
+        setTimeout(() => {
+            loader.style.display = 'none';
+        }, 800);
     }
     
     // Adiciona folhas caindo
@@ -143,67 +148,100 @@ document.addEventListener('DOMContentLoaded', () => {
 // Função para criar um card de serviço
 const createServiceCard = (service) => {
     const card = document.createElement('div');
-    card.className = `service-card ${service.highlight ? 'highlight' : ''}`;
+    card.className = `service-card ${service.status ? '' : 'disabled'}`;
     card.innerHTML = `
-        <i class="${service.icon}"></i>
-        <h3>${service.title}</h3>
-        <p>${service.description}</p>
-        ${service.highlight ? '<span class="badge">Destaque</span>' : ''}
+        ${service.photo && service.photo.startsWith('http') ? 
+            `<img src="${service.photo}" alt="${service.name || service.title}" class="service-image">` : 
+            `<i class="${service.icon || 'fas fa-spa'} service-icon"></i>`}
+        <div class="service-info">
+            <h3>${service.name || service.title}</h3>
+            <p class="service-description">${service.description}</p>
+            ${service.priceInCents ? `
+                <div class="service-meta">
+                    <span class="service-price">${(service.priceInCents / 100).toFixed(2)} Kz</span>
+                    ${service.duration ? `<span class="service-duration">${service.duration} min</span>` : ''}
+                </div>
+            ` : ''}
+            ${service.category || service.reviews ? `
+                <div class="service-details">
+                    ${service.category ? `<span class="service-category">${service.category}</span>` : ''}
+                    ${service.reviews ? `<span class="service-reviews">★ ${service.reviews.toFixed(1)}</span>` : ''}
+                </div>
+            ` : ''}
+            ${service.benefits && Array.isArray((service.benefits).split(",")) && service.benefits.length > 0 ? `
+                <div class="service-benefits">
+                    <strong>Benefícios:</strong>
+                    <ul>
+                        ${(service.benefits).split(",").map(benefit => `<li>${benefit}</li>`).join('')}
+                    </ul>
+                </div>
+            ` : ''}
+            ${service.schedulingLimit ? `<p class="service-limit"><em>Limite de agendamento: ${service.schedulingLimit} pessoas por dia</em></p>` : ''}
+            ${service.updatedIn ? `<p class="service-updated">Atualizado em: ${new Date(service.updatedIn).toLocaleDateString()}</p>` : ''}
+            ${!service.status ? '<span class="service-unavailable">Indisponível</span>' : ''}
+        </div>
     `;
     return card;
 };
 
 // Função para carregar os serviços
-const loadServices = () => {
+const loadServices = async () => {
     const servicesContainer = document.querySelector('.services-grid');
     if (!servicesContainer) return;
-    
+
     const servicesData = [
         {
             title: 'Consultoria de Skincare',
             description: 'Descubra quais produtos são ideais para o seu tipo de pele! Nossa equipe especializada analisa suas necessidades e recomenda a rotina perfeita.',
             icon: 'fas fa-spa',
-            highlight: true
+            status: true
         },
         {
             title: 'Tratamentos Faciais',
             description: 'Oferecemos tratamentos personalizados para revitalizar sua pele, com ingredientes naturais do Douro.',
             icon: 'fas fa-leaf',
-            highlight: false
+            status: true
         },
         {
             title: 'Cuidados Capilares',
             description: 'Soluções para fortalecer e hidratar seus cabelos, com fórmulas livres de sulfatos.',
             icon: 'fas fa-tint',
-            highlight: false
+            status: true
         },
         {
             title: 'Workshops de Beleza',
             description: 'Participe de nossos workshops para aprender a cuidar da pele e dos cabelos de forma natural.',
             icon: 'fas fa-chalkboard-teacher',
-            highlight: false
+            status: false
         }
     ];
-    
+
+    let servicesApiData = [];
+    const apiResponse = await getAllServices("accessToken");
+    if (apiResponse === 200) {
+        servicesApiData = JSON.parse(localStorage.getItem("services")) || [];
+    } else {
+        console.error("Failed to load services:", apiResponse.status);
+        servicesApiData = servicesData;
+    }
+
     servicesContainer.innerHTML = '';
-    servicesData.forEach(service => {
+    servicesApiData.forEach(service => {
         servicesContainer.appendChild(createServiceCard(service));
     });
 };
 
 // Função para criar um card de plano
 const createPlanCard = (plan) => {
-
-    
     const card = document.createElement('div');
     card.className = `plan-card ${plan.popular ? 'popular' : ''}`;
     card.innerHTML = `
-        <h3>${plan.description}</h3>
-        <div class="plan-price">${plan.priceInCents/100}</div>
+        <h3>${plan.name || plan.title}</h3>
+        <div class="plan-price">${plan.priceInCents ? `${(plan.priceInCents / 100).toFixed(2)} Kz/mês` : plan.price}</div>
         <ul class="plan-features">
-            ${plan.services.split(",").map(feature => `<li>${feature}</li>`).join('')}
+            ${((plan.services).split(",") || plan.features || []).map(feature => `<li>${feature}</li>`).join('')}
         </ul>
-        <a href="pages/sessoes/login.html" class="btn ${false ? '' : 'btn-outline'}">Assinar Agora</a>
+        <a href="pages/sessoes/login.html" class="btn ${plan.popular ? '' : 'btn-outline'}">Assinar Agora</a>
     `;
     return card;
 };
@@ -213,18 +251,10 @@ const loadPlans = async () => {
     const plansContainer = document.querySelector('.plans-grid');
     if (!plansContainer) return;
 
-    const resultPlans = await getAllPlanss("accessToken");
-    let plansApiData = [];
-    if (resultPlans.status == 200) {
-        plansApiData = resultPlans.status == 200 ? localStorage.getItem('plans') ? JSON.parse(localStorage.getItem('plans')) : [] : [];
-    }
-    
-
-    console.log("plansApiData:", plansApiData);
     const plansData = [
         {
             title: 'Plano Essencial',
-            price: '39,90KZ/mês',
+            price: '39.90 Kz/mês',
             features: [
                 '2 produtos básicos de skincare ou cabelo',
                 'Acesso a dicas e tutoriais exclusivos',
@@ -234,7 +264,7 @@ const loadPlans = async () => {
         },
         {
             title: 'Plano Premium',
-            price: '59,90KZ/mês',
+            price: '59.90 Kz/mês',
             features: [
                 '3 produtos selecionados para sua pele e cabelos',
                 'Acesso antecipado a lançamentos',
@@ -245,7 +275,7 @@ const loadPlans = async () => {
         },
         {
             title: 'Plano Luxo',
-            price: '89,90KZ/mês',
+            price: '89.90 Kz/mês',
             features: [
                 '5 produtos premium personalizados',
                 'Consultoria de skincare exclusiva',
@@ -256,7 +286,16 @@ const loadPlans = async () => {
             popular: false
         }
     ];
-    
+
+    let plansApiData = [];
+    const resultPlans = await getAllPlanss("accessToken");
+    if (resultPlans.status === 200) {
+        plansApiData = resultPlans.data || [];
+    } else {
+        console.error("Failed to load plans:", resultPlans.status);
+        plansApiData = plansData;
+    }
+
     plansContainer.innerHTML = '';
     plansApiData.forEach(plan => {
         plansContainer.appendChild(createPlanCard(plan));
@@ -266,22 +305,20 @@ const loadPlans = async () => {
 // Função para criar um card de produto
 const createProductCard = (product) => {
     const card = document.createElement('div');
-   
     card.className = 'product-card';
     card.innerHTML = `
         <div class="product-img">
-            <img src="${product.photo}" alt="${product.title}">
+            <img src="${product.photo || product.image}" alt="${product.name || product.title}">
         </div>
         <div class="product-info">
-            <h3>${product.name}</h3>
-            <p>Descrição:${product.description}</p>
-      
-            <p>Stock:${product.amount} </p>
-           <div class="product-price">
-            ${product.priceInCents / 100} Kz
-            ${product.priceInCents > 50000 
-                ? `<del>${(product.priceInCents + 500) / 100} Kz</del>` 
-                : ''}
+            <h3>${product.name || product.title}</h3>
+            <p>${product.description}</p>
+            <p>Stock: ${product.amount || 'N/A'}</p>
+            <div class="product-price">
+                ${product.priceInCents ? `${(product.priceInCents / 100).toFixed(2)} Kz` : product.price}
+                ${product.priceInCents && product.priceInCents > 50000 ? 
+                    `<del>${((product.priceInCents + 500) / 100).toFixed(2)} Kz</del>` : 
+                    product.oldPrice ? `<del>${product.oldPrice}</del>` : ''}
             </div>
             <a href="pages/sessoes/login.html" class="btn">Comprar Agora</a>
         </div>
@@ -293,46 +330,47 @@ const createProductCard = (product) => {
 const loadProducts = async () => {
     const productsContainer = document.querySelector('.products-grid');
     if (!productsContainer) return;
-    const product = await getAllProducts("accessToken");
-    let productsApiData = [];
-    if(product== 200){
-        productsApiData = localStorage.getItem('products') ? JSON.parse(localStorage.getItem('products')) : [];
-    }
 
-    
-
-    console.log("productsApiData:", productsApiData);
     const productsData = [
         {
             title: 'Máscara Facial Detox',
             description: 'Carvão Ativado & Argila Verde - Remove impurezas e deixa a pele fresca e renovada.',
-            price: '25,000 AOA',
-            oldPrice: '37,500 AOA',
+            price: '25000 Kz',
+            oldPrice: '37500 Kz',
             image: 'assets/img/product-1.png'
         },
         {
             title: 'Creme Hidratante Nutritivo',
             description: 'Com Azeite do Douro e manteiga de karité - Hidrata intensamente e protege contra o ressecamento.',
-            price: '23,000 AOA',
+            price: '23000 Kz',
             oldPrice: null,
             image: 'assets/img/product-2.png'
         },
         {
             title: 'Espuma de Limpeza Facial',
             description: 'Com aloe vera e camomila - Remove impurezas e maquiagem sem agredir a pele.',
-            price: '23,000 AOA',
+            price: '23000 Kz',
             oldPrice: null,
             image: 'assets/img/product-3.png'
         },
         {
             title: 'Shampoo Hidratante',
             description: 'Combina alecrim e camomila para uma limpeza suave que fortalece os fios.',
-            price: '23,000 AOA',
+            price: '23000 Kz',
             oldPrice: null,
             image: 'assets/img/product-4.png'
         }
     ];
-    
+
+    let productsApiData = [];
+    const apiResponse = await getAllProducts("accessToken");
+    if (apiResponse === 200) {
+        productsApiData = JSON.parse(localStorage.getItem("products")) || [];
+    } else {
+        console.error("Failed to load products:", apiResponse.status);
+        productsApiData = productsData;
+    }
+
     productsContainer.innerHTML = '';
     productsApiData.forEach(product => {
         productsContainer.appendChild(createProductCard(product));
