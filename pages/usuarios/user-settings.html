@@ -57,9 +57,10 @@
                     <p>Gerencie suas informações pessoais e de segurança</p>
                 </div>
                 <div class="header-icons">
-                    <div class="notification-icon">
+                      <div class="notification-icon">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-badge">2</span>
+                        <span class="notification-badge" id="TotalDeNotificacoes">0</span>
+                        <div id="notification-container"></div>
                     </div>
                   
                     <div class="cart-icon">
@@ -121,7 +122,7 @@
                         <div class="form-group">
                             <label for="user-photo">Foto de Perfil</label>
                             <div class="profile-photo-upload">
-                                <img src="https://via.placeholder.com/100" alt="Foto de Perfil" id="profile-photo-preview">
+                                <img src="../../assets/img/avatar.svg" alt="Foto de Perfil" id="profile-photo-preview">
                                 <input type="file" id="user-photo" accept="image/*" onchange="previewPhoto(event)">
                                 <button class="upload-btn" onclick="uploadPhoto()">Atualizar Foto</button>
                             </div>
@@ -171,24 +172,8 @@
             </div>
         </div>
 
-        <!-- Notifications Dropdown -->
-        <div class="notifications-dropdown">
-            <div class="notification-item">
-                <i class="fas fa-calendar-check"></i>
-                <div>
-                    <p>Novo agendamento confirmado</p>
-                    <small>10 minutos atrás</small>
-                </div>
-            </div>
-            <div
-
- class="notification-item">
-                <i class="fas fa-shopping-cart"></i>
-                <div>
-                    <p>Seu pedido foi enviado</p>
-                    <small>Ontem, 15:30</small>
-                </div>
-            </div>
+       <div class="notifications-dropdown" id="notificationsDropdown">
+            <div class="notification-item"></div>
         </div>
 
      
@@ -197,7 +182,9 @@
     <script src="../../js/global.js"></script>
     <script src="../../js/usuarios/user-settings.js"></script>
     <script src="../../js/global.js"></script>
-    <script src="../../js/usuarios/user-product.js"></script>
-        <script src="../../js/sessoes/logout.js"></script>
+   
+    <script src="../../js/sessoes/logout.js"></script>
+    <script src="../../apis/notificacoes.js"></script>
+    <script src="../../js/notificacoes.js"></script>
 </body>
 </html>
