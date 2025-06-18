@@ -224,6 +224,7 @@ function populateSubscribersTable(subscribers) {
                     populatePlansTable(plansData);
                     populatePlanDropdown(plansData);
                     populateSubscriberPlanFilter(plansData);
+                    populateSubscribersTable(subscribersData);
                     showMessageModal('success', 'Sucesso!', 'Plano eliminado com sucesso', { buttonText: 'Ótimo!' });
                 } else {
                     showMessageModal('error', 'Erro!', 'Falha ao excluir o plano', { buttonText: 'Entendido' });
