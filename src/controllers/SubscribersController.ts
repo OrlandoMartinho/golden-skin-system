@@ -25,7 +25,7 @@ class SubscribersController {
   public async registerSubscriber(data: any, key: any): Promise<z.infer<typeof this.responseSchema>> {
     const validatedData = await this.zodError(SubscribersSchemas.RegisterSubscriber, data);
     const validatedKey = await this.zodError(SubscribersSchemas.tokenSchema, key);
-    const {idPlan } = validatedData;
+    const {idPlan,email } = validatedData;
     const { token } = validatedKey;
 
     try {
@@ -33,7 +33,36 @@ class SubscribersController {
       if (!currentUserId) {
         throw new AuthorizationException('Not authorized');
       }
-     
+
+      const userRole = await this.tokenService.userRole(token);
+
+      const plan = await prisma.plans.findUnique({ where: { idPlan } });
+      if (!plan) {
+        throw new ItemNotFoundException('Plan not found');
+      }
+      if (userRole === 0) {
+        if (!email) {
+          throw new InvalidDataException('Email is required for admin users');
+        }
+        const user = await prisma.users.findUnique({ where: { email } });
+        if (!user) {
+          throw new ItemNotFoundException('User not found');
+        }
+        const subscriberName = user.name;
+        await prisma.subscribers.create({
+          data: {
+            subscriberName,
+            idUser: user.idUser,
+            idPlan,
+            planName: plan.name,
+            status: true,
+            createdIn: new Date().toISOString(),
+            updatedIn: new Date().toISOString(),
+          },
+        });
+        return { message: 'Subscriber registered successfully' };
+      }else{
+
       const user =  await prisma.users.findUnique({where:{idUser:currentUserId}})
       if(!user){
         throw new ItemNotFoundException("User not found")
@@ -43,6 +72,8 @@ class SubscribersController {
         data: {
           subscriberName,
           idUser:currentUserId,
+          status: true,
+          planName: plan.name,
           idPlan,
           createdIn: new Date().toISOString(),
           updatedIn: new Date().toISOString(),
@@ -50,6 +81,8 @@ class SubscribersController {
       });
 
       return { message: 'Subscriber registered successfully' };
+      }
+     
     } catch (error) {
       if (
         error instanceof ItemNotFoundException ||
@@ -100,7 +133,7 @@ class SubscribersController {
   public async updateSubscriber(data: any, key: any): Promise<z.infer<typeof this.responseSchema>> {
     const validatedData = await this.zodError(SubscribersSchemas.UpdateSubscriber, data);
     const validatedKey = await this.zodError(SubscribersSchemas.tokenSchema, key);
-    const { idSubscriber, idPlan } = validatedData;
+    const { idSubscriber, idPlan,status } = validatedData;
     const { token } = validatedKey;
 
     try {
@@ -125,7 +158,7 @@ class SubscribersController {
 
       await prisma.subscribers.update({
         where: { idSubscriber },
-        data: {idPlan, updatedIn: new Date().toISOString(),subscriberName },
+        data: {idPlan, updatedIn: new Date().toISOString(),subscriberName,status },
       });
 
       return { message: 'Subscriber updated successfully' };

@@ -56,6 +56,7 @@ class PlansController {
       ) {
         throw error;
       }
+      console.error('Error registering plan:', error);
       throw new InternalServerErrorException('An error occurred when trying to register plan');
     }
   }

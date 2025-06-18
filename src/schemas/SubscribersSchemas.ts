@@ -7,13 +7,18 @@ class SubscribersSchemas {
     subscriberName: z.string(),
     idUser: z.number(),
     idPlan:z.number(),
-    createdIn: z.string(),
-    updatedIn: z.string(),
+    planName: z.string(),
+    createdIn: z.date(),
+    updatedIn: z.date().nullable(),
+    status: z.boolean(),
   });
+
+
 
   // Schema for registering a subscriber
   static RegisterSubscriber = z.object({
     idPlan:z.number(),
+    email: z.string().email("Invalid email format").min(1, "Email is required").optional(),
   });
 
   // Schema for deleting a subscriber

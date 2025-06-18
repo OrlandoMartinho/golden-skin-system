@@ -211,6 +211,8 @@ model Subscribers {
   idPlan          Int
   createdIn       DateTime
   updatedIn       DateTime?
+  planName      String?  @db.VarChar(255) 
+  status        Boolean
 
   plan            Plans     @relation(fields: [idPlan], references: [idPlan])
 }
