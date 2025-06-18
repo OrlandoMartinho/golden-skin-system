@@ -106,7 +106,14 @@ async function removeItem(button) {
         console.log("Opening remove item modal for product ID:", window.itemToRemove.dataset);
         const idProduct = parseInt(window.itemToRemove.dataset.idProduct);
         const accessToken = localStorage.getItem('accessToken');
-        await deleteCartItem(accessToken, idProduct);
+       const resut = await deleteCartItem(accessToken, idProduct);
+        if(resut.status === 200) {
+           showMessageModal('success', 'Sucesso!', 'Item Removido com sucesso', { buttonText: 'Entendido' });
+            await initializeCart();
+            
+        }else{
+            showMessageModal('error', 'Erro!', 'Falha ao remover item', { buttonText: 'Entendido' });
+        }
     } catch (error) {
         console.error("Error in removeItem:", error.message, error.stack);
         showMessageModal('error', 'Erro!', 'Falha ao marcar item para remoção', { buttonText: 'Entendido' });
@@ -127,7 +134,7 @@ async function confirmRemoveItem(accessToken, idCart) {
         }
 
         if (currentQuantity > 1) {
-            const response = await deleteCartItem(accessToken, idCart, idProduct, true, currentQuantity - 1);
+            const response = await deleteCartItem(accessToken, idProduct);
             if (response.status === 200) {
                 currentQuantity--;
                 quantityElement.dataset.quantity = currentQuantity;
@@ -136,10 +143,10 @@ async function confirmRemoveItem(accessToken, idCart) {
                 const price = parseFloat(priceElement.textContent.replace('AOA ', '').replace(',', '.'));
                 const subtotalElement = window.itemToRemove.querySelector('.cart-item-subtotal');
                 subtotalElement.textContent = `AOA ${(price * currentQuantity).toFixed(2).replace('.', ',')}`;
-                updateCartSummary();
-                updateCartCount();
+             
                 closeModal('remove-item-modal');
-                console.log("Quantity reduced for product:", idProduct, "to", currentQuantity);
+                console.log("Quantity reduced for product:", idProduct, "to", currentQuantity);~
+                showMessageModal('success', 'Sucesso!', 'Quantidade reduzida com sucesso', { buttonText: 'Entendido' });
             } else {
                 console.warn("Error reducing quantity:", response.status, response.error?.message);
                 showMessageModal('error', 'Erro!', 'Falha ao reduzir quantidade', { buttonText: 'Entendido' });
@@ -148,10 +155,7 @@ async function confirmRemoveItem(accessToken, idCart) {
             const response = await deleteCartItem(accessToken, idCart, idProduct);
             if (response.status === 200) {
                 window.itemToRemove.remove();
-                updateCartCount();
-                updateCartSummary();
-                closeModal('remove-item-modal');
-                await initializeCart(accessToken, idCart);
+               
                 console.log("Item removed:", idProduct);
             } else {
                 console.warn("Error removing item:", response.status, response.error?.message);
