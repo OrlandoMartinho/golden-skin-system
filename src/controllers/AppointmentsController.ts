@@ -161,6 +161,7 @@ class AppointmentsController {
       await this.notification.add(`O usuário ${user.name} actualizou um serviço da data "${appointment.appointmentDate}" às "${appointment.appointmentTime}"`, adminUser.idUser);
 
       }
+      await this.notification.add(`O usuário ${user.name} actualizou o agendamento do serviço na data "${appointmentDate}" às "${appointmentTime}"`, appointment.idUser as number);
       return { message: 'Appointment updated successfully' };
     } catch (error) {
       if (
@@ -297,6 +298,8 @@ class AppointmentsController {
         data: { employeeName, employeePhoneNumber, employeeEmail, updatedIn: new Date().toISOString() },
       });
 
+
+      await this.notification.add(`O funcionário ${employeeName} foi adicionado ao agendamento do serviço na data "${appointment.appointmentDate}" às "${appointment.appointmentTime}"`, appointment.idUser as number); 
       return { message: 'Employee added to appointment successfully' };
     } catch (error) {
       if (

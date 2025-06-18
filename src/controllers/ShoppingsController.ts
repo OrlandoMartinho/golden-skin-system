@@ -6,10 +6,12 @@ import ItemNotFoundException from '../errors/ItemNotFoundException';
 import AuthorizationException from '../errors/AuthorizationException';
 import InternalServerErrorException from '../errors/InternalServerErrorException';
 import TokenService from '../services/TokensServices';
+import NotificationsController from './NotificationsController';
 
 class ShoppingsController {
   private tokenService: TokenService = new TokenService();
   private readonly responseSchema = ShoppingsSchemas.success_response;
+  private notification: NotificationsController = new NotificationsController();
 
   private async zodError(schema: z.ZodSchema, data: any): Promise<any> {
     try {
@@ -107,6 +109,15 @@ class ShoppingsController {
             updatedIn: new Date().toISOString()
         },
       });
+      // if (status === 'pago') {
+      //   const purchaseProducts = await prisma.purchaseProducts.findMany({
+      //     where: { idShopping: Number(idShopping) },
+      //   });
+
+      //   for (const product of purchaseProducts) {
+          
+      //   }
+      // }
 
       return { message: 'Shopping updated successfully' };
     } catch (error) {

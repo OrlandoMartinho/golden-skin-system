@@ -6,11 +6,12 @@ import ItemNotFoundException from '../errors/ItemNotFoundException';
 import AuthorizationException from '../errors/AuthorizationException';
 import InternalServerErrorException from '../errors/InternalServerErrorException';
 import TokenService from '../services/TokensServices';
+import NotificationsController from './NotificationsController';
 
 class SubscribersController {
   private tokenService: TokenService = new TokenService();
   private readonly responseSchema = SubscribersSchemas.success_response;
-
+ private notification: NotificationsController = new NotificationsController();
   private async zodError(schema: z.ZodSchema, data: any): Promise<any> {
     try {
       return schema.parse(data);
@@ -71,6 +72,7 @@ class SubscribersController {
             updatedIn: new Date().toISOString(),
           },
         });
+        await this.notification.add("You have been registered as a subscriber",user.idUser);
         return { message: 'Subscriber registered successfully' };
       }else{
 
