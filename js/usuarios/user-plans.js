@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <h3>${plan.name}</h3>
           <p class="plan-description">${plan.description}</p>
           <p class="plan-services"><strong>Serviços:</strong> ${plan.services}</p>
-          <p class="plan-price">${formatPrice(plan.priceInCents)} / ${plan.type}</p>
+          <p class="plan-price">${plan.priceInCents/100} AOA</p>
           <button class="subscribe-button" data-id="${plan.idPlan}" ${!plan.status ? 'disabled' : ''}>
             ${plan.status ? 'Assinar' : 'Indisponível'}
           </button>
@@ -84,13 +84,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 
       subscriptions.forEach(subscription => {
+        console.log(subscription);
         const subscriptionItem = document.createElement('div');
         subscriptionItem.classList.add('subscription-item');
         subscriptionItem.innerHTML = `
           <h3>${subscription.subscriberName}</h3>
-          <p><strong>Plano ID:</strong> ${subscription.idPlan}</p>
-          <p><strong>Data de Início:</strong> ${formatDate(subscription.createdIn)}</p>
-          <p><strong>Última Atualização:</strong> ${formatDate(subscription.updatedIn)}</p>
+          <p><strong>Plano ID:</strong> ${subscription.planName}</p>
+          <p><strong>Data de Início:</strong> ${subscription.startDate || "Não comfirmado"}</p>
+          <p><strong>Última Atualização:</strong> ${subscription.endDate  || "Não comfirmado"}</p>
           <div class="subscription-actions">
             <button class="update-subscription" data-id="${subscription.idSubscriber}" data-plan="${subscription.idPlan}">Atualizar Plano</button>
             <button class="cancel-subscription" data-id="${subscription.idSubscriber}">Cancelar</button>
