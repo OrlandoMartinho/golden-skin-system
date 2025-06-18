@@ -526,7 +526,7 @@ header.scrolled {
     padding: 40px 30px;
     box-shadow: var(--shadow);
     transition: var(--transition);
-    text-align: center;
+    text-align: left;
     position: relative;
 }
 
