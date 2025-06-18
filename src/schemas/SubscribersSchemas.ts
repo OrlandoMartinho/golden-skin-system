@@ -1,3 +1,5 @@
+import { end } from 'pdfkit';
+import { start } from 'repl';
 import { z } from 'zod';
 
 class SubscribersSchemas {
@@ -7,10 +9,12 @@ class SubscribersSchemas {
     subscriberName: z.string(),
     idUser: z.number(),
     idPlan:z.number(),
-    planName: z.string(),
+    planName: z.string().nullable(),
     createdIn: z.date(),
     updatedIn: z.date().nullable(),
-    status: z.boolean(),
+    startDate: z.string().nullable(),
+    endDate: z.string().nullable(),
+    status: z.boolean().nullable(),
   });
 
 
@@ -19,6 +23,9 @@ class SubscribersSchemas {
   static RegisterSubscriber = z.object({
     idPlan:z.number(),
     email: z.string().email("Invalid email format").min(1, "Email is required").optional(),
+    startDate: z.string().min(1, "Start date is required").optional(),
+    endDate: z.string().min(1, "End date is required").optional(),
+    subscriberName: z.string().min(1, "Subscriber name is required").optional(),
   });
 
   // Schema for deleting a subscriber
@@ -29,6 +36,10 @@ class SubscribersSchemas {
   // Schema for updating a subscriber
   static UpdateSubscriber = z.object({
     idPlan:z.number(),
+    startDate: z.string().min(1, "Start date is required").optional(),
+    subscriberName: z.string().min(1, "Subscriber name is required").optional(),
+    status: z.boolean().optional(),
+    idSubscriber: z.number().int().positive("Subscriber ID must be a positive integer"),
   });
 
   // Schema for viewing a single subscriber

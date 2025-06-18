@@ -25,7 +25,7 @@ class SubscribersController {
   public async registerSubscriber(data: any, key: any): Promise<z.infer<typeof this.responseSchema>> {
     const validatedData = await this.zodError(SubscribersSchemas.RegisterSubscriber, data);
     const validatedKey = await this.zodError(SubscribersSchemas.tokenSchema, key);
-    const {idPlan,email } = validatedData;
+    const {idPlan,email,startDate,endDate } = validatedData;
     const { token } = validatedKey;
 
     try {
@@ -44,10 +44,18 @@ class SubscribersController {
         if (!email) {
           throw new InvalidDataException('Email is required for admin users');
         }
+        if (!startDate) {
+          throw new InvalidDataException('Start date is required for admin users');
+        }
+        if (!endDate) {
+          throw new InvalidDataException('End date is required for admin users');
+        }
         const user = await prisma.users.findUnique({ where: { email } });
         if (!user) {
           throw new ItemNotFoundException('User not found');
         }
+
+
         const subscriberName = user.name;
         await prisma.subscribers.create({
           data: {
@@ -56,6 +64,8 @@ class SubscribersController {
             idPlan,
             planName: plan.name,
             status: true,
+            startDate: startDate ,
+            endDate: endDate,
             createdIn: new Date().toISOString(),
             updatedIn: new Date().toISOString(),
           },
@@ -133,7 +143,7 @@ class SubscribersController {
   public async updateSubscriber(data: any, key: any): Promise<z.infer<typeof this.responseSchema>> {
     const validatedData = await this.zodError(SubscribersSchemas.UpdateSubscriber, data);
     const validatedKey = await this.zodError(SubscribersSchemas.tokenSchema, key);
-    const { idSubscriber, idPlan,status } = validatedData;
+    const { idSubscriber, idPlan,status ,startDate,endDate} = validatedData;
     const { token } = validatedKey;
 
     try {
@@ -158,7 +168,15 @@ class SubscribersController {
 
       await prisma.subscribers.update({
         where: { idSubscriber },
-        data: {idPlan, updatedIn: new Date().toISOString(),subscriberName,status },
+        data: 
+          {
+          idPlan, 
+          updatedIn: new Date().toISOString(),
+          subscriberName,
+          status,
+          startDate: startDate|| subscriber.startDate,
+          endDate: endDate || subscriber.endDate, 
+        },
       });
 
       return { message: 'Subscriber updated successfully' };
@@ -230,7 +248,7 @@ class SubscribersController {
       ) {
         throw error;
       }
-
+    
       throw new InternalServerErrorException('An error occurred when trying to retrieve subscribers');
     }
   }
