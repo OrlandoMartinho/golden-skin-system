@@ -89,6 +89,7 @@ class PlansController {
       ) {
         throw error;
       }
+      console.error('Error deleting plan:', error);
       throw new InternalServerErrorException('An error occurred when trying to delete plan');
     }
   }
