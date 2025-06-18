@@ -203,7 +203,7 @@ const createPlanCard = (plan) => {
         <ul class="plan-features">
             ${plan.services.split(",").map(feature => `<li>${feature}</li>`).join('')}
         </ul>
-        <a href="#" class="btn ${plan.type ? '' : 'btn-outline'}">Assinar Agora</a>
+        <a href="pages/sessoes/login.html" class="btn ${false ? '' : 'btn-outline'}">Assinar Agora</a>
     `;
     return card;
 };
