@@ -1,240 +1,151 @@
-    // Função para abrir o chat
-    function openChat(chatId) {
-        document.getElementById('chat-window').style.display = 'flex';
-        document.querySelector('.chat-list').style.display = 'none';
-        
-        // Simulação de carregamento de chat diferente
-        if(chatId === 1) {
-            document.getElementById('chat-name').textContent = 'Ana Silva - Massagista';
-            document.getElementById('chat-status').textContent = 'Online';
-            document.getElementById('chat-avatar').src = '../../assets/img/Elipse 51.png';
-            
-            // Limpar mensagens existentes
-            const messagesContainer = document.getElementById('chat-messages');
-            messagesContainer.innerHTML = `
-                <div class="message received">
-                    <div class="message-content">
-                        Olá, como posso ajudar você hoje?
-                    </div>
-                    <div class="message-time">10:30</div>
-                </div>
-                
-                <div class="message sent">
-                    <div class="message-content">
-                        Olá Ana, gostaria de confirmar meu horário de amanhã
-                    </div>
-                    <div class="message-time">10:32</div>
-                </div>
-                
-                <div class="message received">
-                    <div class="message-content">
-                        Seu horário está confirmado para amanhã às 14h. Poderia chegar 10 minutos antes?
-                    </div>
-                    <div class="message-time">10:33</div>
-                </div>
-                
-                <div class="message sent">
-                    <div class="message-content">
-                        Claro, sem problemas! Obrigado pela confirmação.
-                    </div>
-                    <div class="message-time">10:35</div>
-                </div>
-            `;
-        } else if(chatId === 2) {
-            document.getElementById('chat-name').textContent = 'Carlos Mendes - Esteticista';
-            document.getElementById('chat-status').textContent = 'Online há 2h';
-            document.getElementById('chat-avatar').src = '../../assets/img/Elipse 51.png';
-            
-            const messagesContainer = document.getElementById('chat-messages');
-            messagesContainer.innerHTML = `
-                <div class="message received">
-                    <div class="message-content">
-                        Bom dia! Seu produto já está disponível para retirada.
-                    </div>
-                    <div class="message-time">09:15</div>
-                </div>
-                
-                <div class="message sent">
-                    <div class="message-content">
-                        Ótimo! Posso passar amanhã no período da tarde?
-                    </div>
-                    <div class="message-time">09:20</div>
-                </div>
-                
-                <div class="message received">
-                    <div class="message-content">
-                        Sim, estamos abertos das 10h às 18h. Não esqueça de trazer seu comprovante.
-                    </div>
-                    <div class="message-time">09:22</div>
-                </div>
-            `;
-        }
-        
-        // Rolagem para baixo
-        // messagesContainer.scrollTop = messagesContainer.scrollHeight;
+document.addEventListener('DOMContentLoaded', async () => {
+  const accessToken = localStorage.getItem('accessToken'); // Supondo que o token esteja armazenado no localStorage
+  const api_host = 'https://your-api-url.com'; // Substitua pela URL real da API
+  let currentChatId = null;
+
+  // Função para formatar datas
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  };
+
+  // Função para carregar chats
+  async function loadChats() {
+    const response = await getAllChats(accessToken);
+    const chatList = document.querySelector('.chat-list-items');
+    chatList.innerHTML = ''; // Limpa a lista
+
+    if (response === 200) {
+      const chats = JSON.parse(localStorage.getItem('chats')) || [];
+      if (chats.length === 0) {
+        chatList.innerHTML = `
+          <div class="no-chats">
+            <i class="fas fa-comments"></i>
+            <p>Nenhuma conversa encontrada</p>
+          </div>`;
+        return;
+      }
+
+      chats.forEach(chat => {
+        const item = document.createElement('div');
+        item.classList.add('chat-item');
+        item.dataset.id = chat.idChat;
+        item.innerHTML = `
+          <img src="${chat.userPhoto2 || 'https://via.placeholder.com/50'}" alt="Foto do usuário" class="chat-avatar">
+          <div class="chat-info">
+            <h3>${chat.userName2}</h3>
+            <p>${chat.lastMessage || 'Nenhuma mensagem'}</p>
+            <small>${formatDate(chat.lastMessageDate)}</small>
+          </div>
+        `;
+        item.addEventListener('click', () => selectChat(chat.idChat, chat.userName2));
+        chatList.appendChild(item);
+      });
+    } else {
+      chatList.innerHTML = `
+        <div class="no-chats">
+          <i class="fas fa-exclamation-triangle"></i>
+          <p>Erro ao carregar conversas</p>
+        </div>`;
     }
-    
-    // Função para fechar o chat
-    function closeChat() {
-        document.getElementById('chat-window').style.display = 'none';
-        document.querySelector('.chat-list').style.display = 'block';
+  }
+
+  // Função para selecionar um chat e carregar mensagens
+  async function selectChat(idChat, userName) {
+    currentChatId = idChat;
+    const chatTitle = document.getElementById('chat-title');
+    const messagesContainer = document.querySelector('.messages-container');
+    const deleteChatButton = document.querySelector('.delete-chat');
+
+    chatTitle.textContent = `Conversa com ${userName}`;
+    deleteChatButton.style.display = 'block';
+    messagesContainer.innerHTML = '';
+
+    const response = await getChat(accessToken, idChat);
+    if (response === 200) {
+      const chat = JSON.parse(localStorage.getItem('chat'));
+      const messages = chat.Messages || [];
+      if (messages.length === 0) {
+        messagesContainer.innerHTML = `
+          <div class="no-messages">
+            <p>Nenhuma mensagem nesta conversa</p>
+          </div>`;
+        return;
+      }
+
+      messages.forEach(message => {
+        const isSentByUser = message.idUser === chat.idUser;
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', isSentByUser ? 'sent' : 'received');
+        messageElement.innerHTML = `
+          <p>${message.description}</p>
+          <small>${formatDate(message.createdIn)}</small>
+        `;
+        messagesContainer.appendChild(messageElement);
+      });
+
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    } else {
+      messagesContainer.innerHTML = `
+        <div class="no-messages">
+          <i class="fas fa-exclamation-triangle"></i>
+          <p>Erro ao carregar mensagens</p>
+        </div>`;
     }
-    
-    // Função para enviar mensagem
-    function sendMessage() {
-        const input = document.getElementById('message-input');
-        const message = input.value.trim();
-        
-        if(message) {
-            const messagesContainer = document.getElementById('chat-messages');
-            
-            // Adiciona a nova mensagem
-            const newMessage = document.createElement('div');
-            newMessage.className = 'message sent';
-            newMessage.innerHTML = `
-                <div class="message-content">${message}</div>
-                <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
-            `;
-            
-            messagesContainer.appendChild(newMessage);
-            input.value = '';
-            
-            // Simula resposta após 1 segundo
-            setTimeout(() => {
-                const replyMessage = document.createElement('div');
-                replyMessage.className = 'message received';
-                replyMessage.innerHTML = `
-                    <div class="message-content">Obrigado pela sua mensagem. Responderei em breve.</div>
-                    <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
-                `;
-                messagesContainer.appendChild(replyMessage);
-                
-                // Rolagem para baixo
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            }, 1000);
-            
-            // Rolagem para baixo
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
+  }
+
+  // Função para enviar mensagem
+  async function sendMessage() {
+    const messageText = document.getElementById('message-text').value.trim();
+    if (!currentChatId || !messageText) return;
+
+    const messageData = {
+      idChat: currentChatId,
+      description: messageText
+    };
+
+    const response = await registerMessage(accessToken, messageData);
+    if (response === 200) {
+      document.getElementById('message-text').value = '';
+      await selectChat(currentChatId, document.getElementById('chat-title').textContent.replace('Conversa com ', '')); // Recarrega mensagens
+      await loadChats(); // Atualiza lista de chats
+    } else {
+      alert('Erro ao enviar mensagem');
     }
-    
-    // Permitir enviar mensagem com Enter
-    document.getElementById('message-input').addEventListener('keypress', function(e) {
-        if(e.key === 'Enter') {
-            sendMessage();
-        }
+  }
+
+  // Função para excluir chat
+  async function deleteSelectedChat() {
+    if (!currentChatId) return;
+
+    const response = await deleteChat(accessToken, currentChatId);
+    if (response === 200) {
+      currentChatId = null;
+      document.getElementById('chat-title').textContent = 'Selecione uma conversa';
+      document.querySelector('.delete-chat').style.display = 'none';
+      document.querySelector('.messages-container').innerHTML = '';
+      await loadChats();
+    } else {
+      alert('Erro ao excluir conversa');
+    }
+  }
+
+  // Função para filtrar chats
+  function filterChats() {
+    const searchValue = document.getElementById('chat-search').value.toLowerCase();
+    const chatItems = document.querySelectorAll('.chat-item');
+
+    chatItems.forEach(item => {
+      const userName = item.querySelector('h3').textContent.toLowerCase();
+      item.style.display = userName.includes(searchValue) ? 'flex' : 'none';
     });
+  }
 
+  // Inicializar carregamento
+  await loadChats();
 
-        // Adicionando funcionalidade de gravação de áudio
-        document.addEventListener('DOMContentLoaded', function() {
-            const recordButton = document.getElementById('record-button');
-            const stopButton = document.getElementById('stop-button');
-            const playButton = document.getElementById('play-button');
-            const sendAudioButton = document.getElementById('send-audio-button');
-            const cancelAudioButton = document.getElementById('cancel-audio-button');
-            
-            let mediaRecorder;
-            let audioChunks = [];
-            let audioBlob;
-            let audioUrl;
-            
-            recordButton.addEventListener('click', async function() {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    mediaRecorder = new MediaRecorder(stream);
-                    
-                    mediaRecorder.ondataavailable = function(e) {
-                        if (e.data.size > 0) {
-                            audioChunks.push(e.data);
-                        }
-                    };
-                    
-                    mediaRecorder.onstop = function() {
-                        audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
-                        audioUrl = URL.createObjectURL(audioBlob);
-                        
-                        // Mostrar botões de controle
-                        playButton.style.display = 'inline-block';
-                        sendAudioButton.style.display = 'inline-block';
-                        cancelAudioButton.style.display = 'inline-block';
-                    };
-                    
-                    mediaRecorder.start();
-                    audioChunks = [];
-                    
-                    // Mostrar botão de parar e esconder o de gravar
-                    recordButton.style.display = 'none';
-                    stopButton.style.display = 'inline-block';
-                    
-                } catch (error) {
-                    console.error('Erro ao acessar o microfone:', error);
-                    alert('Não foi possível acessar o microfone. Por favor, verifique as permissões.');
-                }
-            });
-            
-            stopButton.addEventListener('click', function() {
-                mediaRecorder.stop();
-                stopButton.style.display = 'none';
-                
-                // Parar todas as tracks do stream
-                mediaRecorder.stream.getTracks().forEach(track => track.stop());
-            });
-            
-            playButton.addEventListener('click', function() {
-                const audioPreview = new Audio(audioUrl);
-                audioPreview.play();
-            });
-            
-            sendAudioButton.addEventListener('click', function() {
-                // Aqui você implementaria o envio do áudio para o servidor
-                // Por enquanto, apenas simularemos adicionando uma mensagem de áudio ao chat
-                const chatMessages = document.getElementById('chat-messages');
-                
-                const audioMessage = document.createElement('div');
-                audioMessage.className = 'message sent audio-message';
-                audioMessage.innerHTML = `
-                    <div class="message-content">
-                        <audio controls>
-                            <source src="${audioUrl}" type="audio/mp3">
-                            Seu navegador não suporta o elemento de áudio.
-                        </audio>
-                        <div class="audio-duration">0:45</div>
-                    </div>
-                    <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
-                `;
-                
-                chatMessages.appendChild(audioMessage);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                
-                // Resetar a interface
-                resetAudioInterface();
-            });
-            
-            cancelAudioButton.addEventListener('click', function() {
-                // Parar a gravação se estiver em andamento
-                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                    mediaRecorder.stop();
-                    mediaRecorder.stream.getTracks().forEach(track => track.stop());
-                }
-                
-                // Resetar a interface
-                resetAudioInterface();
-            });
-            
-            function resetAudioInterface() {
-                recordButton.style.display = 'inline-block';
-                stopButton.style.display = 'none';
-                playButton.style.display = 'none';
-                sendAudioButton.style.display = 'none';
-                cancelAudioButton.style.display = 'none';
-                
-                // Limpar dados da gravação
-                audioChunks = [];
-                audioBlob = null;
-                if (audioUrl) {
-                    URL.revokeObjectURL(audioUrl);
-                    audioUrl = null;
-                }
-            }
-        });
+  // Event listeners
+  document.getElementById('chat-search').addEventListener('input', filterChats);
+  document.getElementById('send-message').addEventListener('click', sendMessage);
+  document.querySelector('.delete-chat').addEventListener('click', deleteSelectedChat);
+});

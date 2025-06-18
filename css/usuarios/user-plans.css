@@ -1,0 +1,285 @@
+@import url('../global.css');
+
+.plans-container {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  margin-top: 20px;
+  min-height: calc(100vh - 200px);
+}
+
+.plans-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.plans-tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.plans-tab.active {
+  border-bottom: 3px solid #8b4513;
+  color: #8b4513;
+}
+
+.plans-tab:hover:not(.active) {
+  background: #f9f9f9;
+}
+
+.plans-content {
+  display: none;
+}
+
+.plans-content.active {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 15px;
+}
+
+.plans-header {
+  display: grid;
+  place-items: start;
+}
+
+.plans-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.plans-list,
+.subscriptions-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.plan-item,
+.subscription-item {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  display: grid;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.plan-item:hover,
+.subscription-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.plan-item h3,
+.subscription-item h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.plan-description,
+.plan-services,
+.plan-price {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.subscribe-button,
+.update-subscription,
+.cancel-subscription {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.subscribe-button {
+  background: #8b4513;
+  color: white;
+}
+
+.subscribe-button:hover {
+  background: #6b3510;
+}
+
+.subscribe-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.subscription-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.update-subscription {
+  background: #8b4513;
+  color: white;
+}
+
+.update-subscription:hover {
+  background: #6b3510;
+}
+
+.cancel-subscription {
+  background: #e74c3c;
+  color: white;
+}
+
+.cancel-subscription:hover {
+  background: #c0392b;
+}
+
+.no-plans,
+.no-subscriptions {
+  text-align: center;
+  padding: 50px;
+  color: #888;
+  display: grid;
+  place-items: center;
+}
+
+.no-plans i,
+.no-subscriptions i {
+  font-size: 50px;
+  margin-bottom: 20px;
+  color: #ddd;
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+  .plans-container {
+    padding: 15px;
+    min-height: calc(100vh - 180px);
+  }
+
+  .plans-list,
+  .subscriptions-list {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .plan-item h3,
+  .subscription-item h3 {
+    font-size: 15px;
+  }
+
+  .plan-description,
+  .plan-services,
+  .plan-price {
+    font-size: 13px;
+  }
+
+  .subscribe-button,
+  .update-subscription,
+  .cancel-subscription {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .plans-container {
+    padding: 10px;
+    min-height: auto;
+  }
+
+  .plans-tabs {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .plans-tab {
+    padding: 8px 15px;
+  }
+
+  .plans-list,
+  .subscriptions-list {
+    grid-template-columns: 1fr;
+  }
+
+  .plan-item,
+  .subscription-item {
+    padding: 15px;
+  }
+
+  .plan-item h3,
+  .subscription-item h3 {
+    font-size: 14px;
+  }
+
+  .plan-description,
+  .plan-services,
+  .plan-price {
+    font-size: 12px;
+  }
+
+  .subscribe-button,
+  .update-subscription,
+  .cancel-subscription {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .subscription-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .plans-container {
+    padding: 8px;
+  }
+
+  .plans-header h2 {
+    font-size: 16px;
+  }
+
+  .plan-item,
+  .subscription-item {
+    padding: 10px;
+  }
+
+  .plan-item h3,
+  .subscription-item h3 {
+    font-size: 13px;
+  }
+
+  .plan-description,
+  .plan-services,
+  .plan-price {
+    font-size: 11px;
+  }
+
+  .subscribe-button,
+  .update-subscription,
+  .cancel-subscription {
+    padding: 6px;
+    font-size: 11px;
+  }
+
+  .no-plans,
+  .no-subscriptions {
+    padding: 30px;
+  }
+
+  .no-plans i,
+  .no-subscriptions i {
+    font-size: 40px;
+  }
+}

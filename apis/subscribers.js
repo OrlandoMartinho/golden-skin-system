@@ -1,83 +1,60 @@
-async function addSubscriber(accessToken, subscriberData) {
-  const data = new FormData();
 
-  // Add subscriber data manually to FormData
-  for (const key in subscriberData) {
-    if (subscriberData.hasOwnProperty(key)) {
-      data.append(key, subscriberData[key]);
-    }
-  }
-
+// Registrar um novo assinante
+async function registerSubscriber(accessToken, subscriberData) {
   try {
-    const url = `${api_host}/api/subscribers/add`;
-
+    const url = `${api_host}/api/subscribers/register`;
     const response = await fetch(url, {
       method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
         token: accessToken
       },
-      body: data
+      body: JSON.stringify(subscriberData)
     });
 
+    const result = await response.json();
     if (response.ok) {
-      const result = await response.json();
-      return response.status;
+      return { status: response.status, data: result };
     } else {
-      console.warn("Erro ao adicionar assinante:", response.status);
-      return response.status;
+      console.warn('Error registering subscriber:', response.status, result.message);
+      return { status: response.status, error: result };
     }
   } catch (error) {
-    console.error("Erro no addSubscriber:", error.message, error.stack);
-    return 500;
+    console.error('Error in registerSubscriber:', error.message, error.stack);
+    return { status: 500, error: { message: 'Internal server error' } };
   }
 }
 
-async function editAnySubscriber(accessToken, subscriberData) {
-  console.log('Starting editSubscriber, accessToken:', accessToken, 'subscriberData:', subscriberData);
+// Atualizar um assinante
+async function updateSubscriber(accessToken, subscriberData) {
   try {
-    const url = `${api_host}/api/subscribers/edit`;
-    console.log('API URL:', url);
-
-    const data = new FormData();
-    console.log('Creating FormData for subscriber update');
-
-    // Add subscriber data manually to FormData
-    for (const key in subscriberData) {
-      if (subscriberData.hasOwnProperty(key)) {
-        data.append(key, subscriberData[key]);
-        console.log(`Appending to FormData: ${key}=${subscriberData[key]}`);
-      }
-    }
-
-    console.log('Sending PUT request to API');
+    const url = `${api_host}/api/subscribers`;
     const response = await fetch(url, {
       method: 'PUT',
       headers: {
+        'Content-Type': 'application/json',
         token: accessToken
       },
-      body: data
+      body: JSON.stringify(subscriberData)
     });
 
-    console.log('Response received, status:', response.status, 'ok:', response.ok);
+    const result = await response.json();
     if (response.ok) {
-      const result = await response.json();
-      console.log('editSubscriber response data:', result);
-      return response.status;
+      return { status: response.status, data: result };
     } else {
-      console.warn('editSubscriber failed with status:', response.status, 'statusText:', response.statusText);
-      return response.status;
+      console.warn('Error updating subscriber:', response.status, result.message);
+      return { status: response.status, error: result };
     }
   } catch (error) {
-    console.error('Error in editSubscriber:', error.message, error.stack);
-    return 500;
+    console.error('Error in updateSubscriber:', error.message, error.stack);
+    return { status: 500, error: { message: 'Internal server error' } };
   }
 }
 
-async function deleteAnySubscriber(accessToken, idSubscriber) {
-  console.log("deleteSubscriber called with accessToken:", accessToken, "idSubscriber:", idSubscriber);
+// Deletar um assinante
+async function deleteSubscriber(accessToken, idSubscriber) {
   try {
     const url = `${api_host}/api/subscribers`;
-    console.log("Deleting subscriber at URL:", url);
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
@@ -87,69 +64,67 @@ async function deleteAnySubscriber(accessToken, idSubscriber) {
       body: JSON.stringify({ idSubscriber })
     });
 
-    console.log("deleteSubscriber response status:", response.status);
+    const result = await response.json();
     if (response.ok) {
-      const result = await response.json();
-      console.log("deleteSubscriber response data:", result);
-      return response.status;
+      return { status: response.status, data: result };
     } else {
-      console.warn("deleteSubscriber failed with status:", response.status);
-      return response.status;
+      console.warn('Error deleting subscriber:', response.status, result.message);
+      return { status: response.status, error: result };
     }
   } catch (error) {
-    console.error("Error in deleteSubscriber:", error.message, error.stack);
-    return 500;
+    console.error('Error in deleteSubscriber:', error.message, error.stack);
+    return { status: 500, error: { message: 'Internal server error' } };
   }
 }
 
+// Visualizar todos os assinantes
 async function getAllSubscribers(accessToken) {
   try {
     const url = `${api_host}/api/subscribers`;
-
     const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         token: accessToken
-      },
+      }
     });
 
+    const result = await response.json();
     if (response.ok) {
-      const result = await response.json();
-      localStorage.setItem("subscribers", JSON.stringify(result));
-      return response.status;
+      localStorage.setItem('subscribers', JSON.stringify(result));
+      return { status: response.status, data: result };
     } else {
-      console.warn("getAllSubscribers failed with status:", response.status);
-      return response.status;
+      console.warn('Error getting all subscribers:', response.status, result.message);
+      return { status: response.status, error: result };
     }
   } catch (error) {
-    console.error("Error in getAllSubscribers:", error.message, error.stack);
-    return 500;
+    console.error('Error in getAllSubscribers:', error.message, error.stack);
+    return { status: 500, error: { message: 'Internal server error' } };
   }
 }
 
+// Visualizar um único assinante
 async function getSubscriber(accessToken, idSubscriber) {
   try {
-    const url = `${api_host}/api/subscribers/${Number(idSubscriber)}`;
-
+    const url = `${api_host}/api/subscribers/view/${idSubscriber}`;
     const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         token: accessToken
-      },
+      }
     });
 
+    const result = await response.json();
     if (response.ok) {
-      const result = await response.json();
-      localStorage.setItem("subscriber", JSON.stringify(result));
-      return response.status;
+      localStorage.setItem('subscriber', JSON.stringify(result));
+      return { status: response.status, data: result };
     } else {
-      console.warn("getSubscriber failed with status:", response.status);
-      return response.status;
+      console.warn('Error getting subscriber:', response.status, result.message);
+      return { status: response.status, error: result };
     }
   } catch (error) {
-    console.error("Error in getSubscriber:", error.message, error.stack);
-    return 500;
+    console.error('Error in getSubscriber:', error.message, error.stack);
+    return { status: 500, error: { message: 'Internal server error' } };
   }
 }
