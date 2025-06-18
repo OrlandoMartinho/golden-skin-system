@@ -41,7 +41,7 @@ model Notifications {
   createdIn        DateTime? @default(now())
   updatedIn        DateTime?
 
-  Users Users? @relation(fields: [idUser], references: [idUser])
+  Users Users? @relation(fields: [idUser], references: [idUser], onDelete: Cascade)
 }
 
 model Services {
@@ -95,9 +95,9 @@ model Appointments {
   createdIn           DateTime @default(now())
   updatedIn           DateTime?
 
-  Services Services? @relation(fields: [idService], references: [idService])
-  Users    Users?    @relation("UserAppointments", fields: [idUser], references: [idUser])
-  Employee Users?    @relation("EmployeeAppointments", fields: [idEmployee], references: [idUser])
+  Services Services? @relation(fields: [idService], references: [idService], onDelete: Cascade)
+  Users    Users?    @relation("UserAppointments", fields: [idUser], references: [idUser], onDelete: Cascade)
+  Employee Users?    @relation("EmployeeAppointments", fields: [idEmployee], references: [idUser], onDelete: Cascade)
 }
 
 model Carts {
@@ -105,7 +105,7 @@ model Carts {
   idUser    Int? @unique
   status    Boolean?
   createdIn DateTime? @default(now())
-  Users         Users?         @relation(fields: [idUser], references: [idUser])
+  Users         Users?         @relation(fields: [idUser], references: [idUser], onDelete: Cascade)
   CartProducts  CartProducts[]
 }
 
@@ -119,8 +119,8 @@ model CartProducts {
   createdIn     DateTime? @default(now())
   productPhoto String?  @db.Text
 
-  Products Products? @relation(fields: [idProduct], references: [idProduct])
-  Carts    Carts?    @relation(fields: [idCart], references: [idCart])
+  Products Products? @relation(fields: [idProduct], references: [idProduct], onDelete: Cascade)
+  Carts    Carts?    @relation(fields: [idCart], references: [idCart], onDelete: Cascade)
 }
 
 model Shoppings {
@@ -131,7 +131,7 @@ model Shoppings {
   createdIn  DateTime? @default(now())
   updatedIn  DateTime?
 
-  Users             Users?             @relation(fields: [idUser], references: [idUser])
+  Users             Users?             @relation(fields: [idUser], references: [idUser], onDelete: Cascade)
   PurchaseProducts  PurchaseProducts[]
 }
 
@@ -145,7 +145,7 @@ model PurchaseProducts {
   createdIn         DateTime? @default(now())
   updatedIn         DateTime?
 
-  Shoppings Shoppings? @relation(fields: [idShopping], references: [idShopping])
+  Shoppings Shoppings? @relation(fields: [idShopping], references: [idShopping], onDelete: Cascade)
 
   Products Products[]
 }
@@ -162,8 +162,8 @@ model Chats {
   lastMessageDate String?  @db.VarChar(45)
   lastMessage  String?  @db.Text
 
-  user1 Users? @relation("ChatUser1", fields: [idUser], references: [idUser])
-  user2 Users? @relation("ChatUser2", fields: [idUser2], references: [idUser])
+  user1 Users? @relation("ChatUser1", fields: [idUser], references: [idUser], onDelete: Cascade)
+  user2 Users? @relation("ChatUser2", fields: [idUser2], references: [idUser], onDelete: Cascade)
 
   Messages Messages[]
 }
@@ -177,8 +177,8 @@ model Messages {
   idChat      Int
   username    String?  @db.VarChar(255)
 
-  Users Users? @relation(fields: [idUser], references: [idUser])
-  Chats Chats? @relation(fields: [idChat], references: [idChat])
+  Users Users? @relation(fields: [idUser], references: [idUser], onDelete: Cascade)
+  Chats Chats? @relation(fields: [idChat], references: [idChat], onDelete: Cascade)
 }
 
 model VerificationCodes {
@@ -217,5 +217,5 @@ model Subscribers {
   planName       String?  @db.VarChar(255) 
   status        Boolean
 
-  plan            Plans     @relation(fields: [idPlan], references: [idPlan])
+  plan            Plans     @relation(fields: [idPlan], references: [idPlan],onDelete: Cascade)
 }
