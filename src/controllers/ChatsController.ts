@@ -6,11 +6,12 @@ import ItemNotFoundException from '../errors/ItemNotFoundException';
 import AuthorizationException from '../errors/AuthorizationException';
 import InternalServerErrorException from '../errors/InternalServerErrorException';
 import TokenService from '../services/TokensServices';
-
+import { FastifyRequest } from 'fastify';
+import FileService from '../services/StorageServices';
 class ChatsController {
   private tokenService: TokenService = new TokenService();
   private readonly responseSchema = ChatsSchemas.success_response;
-
+  private fileService: FileService = new FileService();
   private async zodError(schema: z.ZodSchema, data: any): Promise<any> {
     try {
       return schema.parse(data);
@@ -130,7 +131,7 @@ class ChatsController {
     }
   }
 
-  public async viewA(data: any, key: any): Promise<z.infer<typeof ChatsSchemas.chatSchema>> {
+  public async viewA(data: any, key: any,req: FastifyRequest): Promise<z.infer<typeof ChatsSchemas.chatSchema>> {
     const validatedData = await this.zodError(ChatsSchemas.ViewChat, data);
     const validatedKey = await this.zodError(ChatsSchemas.tokenSchema, key);
     const { idChat } = validatedData;
@@ -150,6 +151,24 @@ class ChatsController {
       if (chat.idUser !== userId && chat.idUser2 !== userId) {
         throw new AuthorizationException('Not authorized to view this chat');
       }
+
+      const user1 = await prisma.users.findUnique({ where: { idUser: chat.idUser as number } });
+      const user2 = await prisma.users.findUnique({ where: { idUser: chat.idUser2 as number } });
+
+      if (!user1 || !user2) {
+        throw new ItemNotFoundException('One or both users not found');
+      }
+
+      if(user1.photo ) {
+        chat.userPhoto1 =  user1.photo = this.fileService.generateLink('/users/' + user1.path as string, req, user1.photo as string);
+       
+      }
+
+      if(user2.photo) {
+        chat.userPhoto2 = user2.photo = this.fileService.generateLink('/users/' + user2.path as string, req, user2.photo as string);
+      }
+
+     
 
       return ChatsSchemas.chatSchema.parse(chat);
     } catch (error) {
