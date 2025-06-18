@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         item.classList.add('chat-item');
         item.dataset.id = chat.idChat;
         item.innerHTML = `
-          <img src="${chat.userPhoto2 || 'https://via.placeholder.com/50'}" alt="Foto do usuário" class="chat-avatar">
+          <img src="${chat.userPhoto2 || '../../assets/img/avatar.svg'}" alt="Foto do usuário" class="chat-avatar">
           <div class="chat-info">
             <h3>${chat.userName2}</h3>
             <p>${chat.lastMessage || 'Nenhuma mensagem'}</p>
